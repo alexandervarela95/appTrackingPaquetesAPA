@@ -14,8 +14,6 @@ API backend para el sistema de trazabilidad de envíos internos de Almacén Páj
 - cors
 - helmet
 - morgan
-- bcryptjs
-- jsonwebtoken
 
 ## Comandos
 
@@ -48,6 +46,11 @@ npm run start
 
 Copiar `.env.example` a `.env` y configurar los valores locales.
 
+- `PUERTO`: Puerto donde escucha el backend.
+- `MONGO_URI`: Conexion a MongoDB.
+- `REDIS_URL`: Conexion a Redis.
+- `CORS_ORIGINS`: Origenes permitidos para el frontend.
+
 ## Puerto
 
-El backend se expone en `http://localhost:3090`.
+El backend se expone en `http://localhost:<PUERTO>`.

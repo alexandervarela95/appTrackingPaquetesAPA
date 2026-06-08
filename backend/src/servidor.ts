@@ -2,12 +2,12 @@ import { crearApp } from './app';
 import { conectarMongo } from './config/conexionMongo';
 import { conectarRedis } from './config/conexionRedis';
 import { configuracionEntorno } from './config/configuracionEntorno';
-import { cargarDatosIniciales } from './semillas/datosIniciales';
+import { cargarEstadosIniciales } from './semillas/estadosSemilla';
 
 const iniciarServidor = async (): Promise<void> => {
   await conectarMongo();
   await conectarRedis();
-  await cargarDatosIniciales();
+  await cargarEstadosIniciales();
 
   const app = crearApp();
   app.listen(configuracionEntorno.puerto, () => {

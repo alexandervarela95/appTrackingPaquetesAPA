@@ -1,0 +1,1 @@
+export { crearApp } from './app';

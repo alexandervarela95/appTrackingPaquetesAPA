@@ -1,7 +1,10 @@
 import { PaqueteModelo } from '../modelos/paquete.model';
 import { TrackingServicio } from './tracking.servicio';
-import { generarNumeroGuia } from '../utilidades/generadorCodigo';
+import { generarNumeroGuia } from '../utilidades/generarNumeroGuia';
 import { EstadoModelo } from '../modelos/estado.model';
+import { obtenerClienteRedis } from '../config/conexionRedis';
+
+const CLAVE_CACHE_GUIA = (numeroGuia: string) => `paquete:guia:${numeroGuia}`;
 
 export class PaqueteServicio {
   public static async listarPaquetes() {
@@ -13,19 +16,40 @@ export class PaqueteServicio {
   }
 
   public static async obtenerPaquetePorGuia(numeroGuia: string) {
-    return PaqueteModelo.findOne({ numeroGuia }).lean();
+    const clienteRedis = obtenerClienteRedis();
+    const clave = CLAVE_CACHE_GUIA(numeroGuia);
+    const paqueteCache = await clienteRedis.get(clave);
+
+    if (paqueteCache) {
+      return JSON.parse(paqueteCache);
+    }
+
+    const paquete = await PaqueteModelo.findOne({ numeroGuia }).lean();
+    if (paquete) {
+      await clienteRedis.set(clave, JSON.stringify(paquete), { EX: 30 });
+    }
+
+    return paquete;
   }
 
   public static async crearPaquete(datos: any) {
-    const numeroGuia = datos.numeroGuia?.trim() || generarNumeroGuia();
+    let numeroGuia = datos.numeroGuia?.trim();
+
+    if (!numeroGuia) {
+      numeroGuia = generarNumeroGuia();
+    }
+
     const estadoInicial = await EstadoModelo.findOne({ nombre: 'Creado', estado: true });
+    if (!estadoInicial) {
+      throw new Error('Estado inicial Creado no encontrado');
+    }
 
     const paquete = new PaqueteModelo({
       numeroGuia,
       descripcion: datos.descripcion || '',
       tipoPaquete: datos.tipoPaquete,
       prioridad: datos.prioridad || 'media',
-      estadoActualId: datos.estadoActualId || estadoInicial?._id,
+      estadoActualId: datos.estadoActualId || estadoInicial._id,
       lugarOrigenId: datos.lugarOrigenId,
       lugarDestinoId: datos.lugarDestinoId,
       usuarioRemitenteId: datos.usuarioRemitenteId,
@@ -44,6 +68,9 @@ export class PaqueteServicio {
       lugarActualId: paqueteGuardado.lugarOrigenId,
       usuarioResponsableId: paqueteGuardado.usuarioRemitenteId
     });
+
+    const clienteRedis = obtenerClienteRedis();
+    await clienteRedis.set(CLAVE_CACHE_GUIA(paqueteGuardado.numeroGuia), JSON.stringify(paqueteGuardado), { EX: 30 });
 
     return paqueteGuardado;
   }
@@ -82,10 +109,20 @@ export class PaqueteServicio {
       });
     }
 
+    if (paqueteActualizado) {
+      const clienteRedis = obtenerClienteRedis();
+      await clienteRedis.set(CLAVE_CACHE_GUIA(paqueteActualizado.numeroGuia), JSON.stringify(paqueteActualizado), { EX: 30 });
+    }
+
     return paqueteActualizado;
   }
 
   public static async eliminarPaquete(id: string) {
-    return PaqueteModelo.findByIdAndUpdate(id, { estado: false, fechaActualizacion: new Date() }, { new: true }).lean();
+    const paqueteEliminado = await PaqueteModelo.findByIdAndUpdate(id, { estado: false, fechaActualizacion: new Date() }, { new: true }).lean();
+    if (paqueteEliminado) {
+      const clienteRedis = obtenerClienteRedis();
+      await clienteRedis.del(CLAVE_CACHE_GUIA(paqueteEliminado.numeroGuia));
+    }
+    return paqueteEliminado;
   }
 }

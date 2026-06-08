@@ -5,7 +5,7 @@
   "description": "API backend para appTrackingPaquetesAPA usando Node.js, Express, TypeScript, MongoDB y Redis.",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/servidor.ts",
-    "build": "tsc -p .",
+    "build": "tsc -p tsconfig.build.json",
     "start": "node dist/servidor.js"
   },
   "dependencies": {
