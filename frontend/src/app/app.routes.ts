@@ -3,6 +3,7 @@ import { LoginComponent } from './features/autenticacion/login.component';
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { PaquetesComponent } from './features/paquetes/paquetes.component';
+import { PaqueteNuevoComponent } from './features/paquetes/paquete-nuevo.component';
 import { PaqueteDetalleComponent } from './features/paquetes/paquete-detalle.component';
 import { TrackingComponent } from './features/tracking/tracking.component';
 import { IncidenciasComponent } from './features/incidencias/incidencias.component';
@@ -22,8 +23,10 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'paquetes', component: PaquetesComponent },
+      { path: 'paquetes/nuevo', component: PaqueteNuevoComponent },
       { path: 'paquetes/:id', component: PaqueteDetalleComponent },
       { path: 'tracking', component: TrackingComponent },
+      { path: 'tracking/:numeroGuia', component: TrackingComponent },
       { path: 'incidencias', component: IncidenciasComponent },
       { path: 'evidencias', component: EvidenciasComponent },
       { path: 'usuarios', component: UsuariosComponent },

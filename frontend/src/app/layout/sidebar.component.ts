@@ -13,6 +13,7 @@ export class SidebarComponent {
   protected menuItems = [
     { etiqueta: 'Dashboard', icono: 'pi pi-chart-line', ruta: '/dashboard' },
     { etiqueta: 'Paquetes', icono: 'pi pi-box', ruta: '/paquetes' },
+    { etiqueta: 'Nuevo paquete', icono: 'pi pi-plus-circle', ruta: '/paquetes/nuevo' },
     { etiqueta: 'Tracking', icono: 'pi pi-map-marker', ruta: '/tracking' },
     { etiqueta: 'Incidencias', icono: 'pi pi-exclamation-triangle', ruta: '/incidencias' },
     { etiqueta: 'Evidencias', icono: 'pi pi-file-image', ruta: '/evidencias' },

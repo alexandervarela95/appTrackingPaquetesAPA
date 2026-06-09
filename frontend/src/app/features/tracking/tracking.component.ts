@@ -1,8 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Estado } from '../../core/modelos/estado.model';
+import { Lugar } from '../../core/modelos/lugar.model';
 import { Tracking } from '../../core/modelos/tracking.model';
+import { Usuario } from '../../core/modelos/usuario.model';
+import { EstadoServicio } from '../../core/servicios/estado.servicio';
+import { LugarServicio } from '../../core/servicios/lugar.servicio';
 import { TrackingServicio } from '../../core/servicios/tracking.servicio';
+import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 
 @Component({
   selector: 'app-tracking',
@@ -21,14 +28,19 @@ import { TrackingServicio } from '../../core/servicios/tracking.servicio';
         </form>
       </header>
 
+      @if (mensaje) {
+        <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
+      }
+
       <article class="table-panel">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Fecha</th>
+              <th>Fecha evento</th>
               <th>Guia</th>
               <th>Estado</th>
-              <th>Lugar</th>
+              <th>Lugar actual</th>
+              <th>Usuario responsable</th>
               <th>Descripcion</th>
             </tr>
           </thead>
@@ -37,13 +49,14 @@ import { TrackingServicio } from '../../core/servicios/tracking.servicio';
               <tr>
                 <td>{{ evento.fechaEvento | date: 'short' }}</td>
                 <td><span class="badge">{{ evento.numeroGuia }}</span></td>
-                <td>{{ evento.estadoId }}</td>
-                <td>{{ evento.lugarActualId || '-' }}</td>
+                <td>{{ nombreEstado(evento.estadoId) }}</td>
+                <td>{{ nombreLugar(evento.lugarActualId) }}</td>
+                <td>{{ nombreUsuario(evento.usuarioResponsableId) }}</td>
                 <td>{{ evento.descripcion }}</td>
               </tr>
             } @empty {
               <tr>
-                <td colspan="5">Busca una guia para ver su historial.</td>
+                <td colspan="6">Busca una guia para ver su historial.</td>
               </tr>
             }
           </tbody>
@@ -52,21 +65,72 @@ import { TrackingServicio } from '../../core/servicios/tracking.servicio';
     </section>
   `,
 })
-export class TrackingComponent {
+export class TrackingComponent implements OnInit {
   protected numeroGuia = '';
   protected historial: Tracking[] = [];
+  protected estados: Estado[] = [];
+  protected lugares: Lugar[] = [];
+  protected usuarios: Usuario[] = [];
+  protected mensaje = '';
+  protected hayError = false;
 
-  public constructor(private readonly trackingServicio: TrackingServicio) {}
+  public constructor(
+    private readonly route: ActivatedRoute,
+    private readonly trackingServicio: TrackingServicio,
+    private readonly estadoServicio: EstadoServicio,
+    private readonly lugarServicio: LugarServicio,
+    private readonly usuarioServicio: UsuarioServicio,
+  ) {}
+
+  public ngOnInit(): void {
+    this.estadoServicio.listar().subscribe((estados) => (this.estados = estados));
+    this.lugarServicio.listar().subscribe((lugares) => (this.lugares = lugares));
+    this.usuarioServicio.listar().subscribe((usuarios) => (this.usuarios = usuarios));
+
+    const numeroGuiaRuta = this.route.snapshot.paramMap.get('numeroGuia');
+    if (numeroGuiaRuta) {
+      this.numeroGuia = numeroGuiaRuta;
+      this.buscarPorGuia();
+    }
+  }
 
   protected buscarPorGuia(): void {
-    if (!this.numeroGuia.trim()) {
-      this.historial = [];
+    const numeroGuia = this.numeroGuia.trim();
+    this.historial = [];
+    this.mensaje = '';
+    if (!numeroGuia) {
+      this.mostrarError('Ingresa una guia para consultar tracking.');
       return;
     }
-    this.trackingServicio.listarPorGuia(this.numeroGuia.trim()).subscribe((historial) => (this.historial = historial));
+    this.trackingServicio.listarPorGuia(numeroGuia).subscribe({
+      next: (historial) => {
+        this.historial = historial;
+        if (historial.length === 0) {
+          this.mostrarError('No hay tracking para esta guia.');
+        }
+      },
+      error: () => this.mostrarError('No fue posible consultar el tracking.'),
+    });
+  }
+
+  protected nombreLugar(lugarId?: string): string {
+    return this.lugares.find((lugar) => this.obtenerId(lugar) === String(lugarId || ''))?.nombre || '-';
+  }
+
+  protected nombreUsuario(usuarioId?: string): string {
+    return this.usuarios.find((usuario) => this.obtenerId(usuario) === String(usuarioId || ''))?.nombre || '-';
+  }
+
+  protected nombreEstado(estadoId?: string): string {
+    return this.estados.find((estado) => this.obtenerId(estado) === String(estadoId || ''))?.nombre || '-';
   }
 
   protected obtenerId(registro: { _id?: string; id?: string }): string {
     return registro._id || registro.id || '';
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.mensaje = mensaje;
+    this.hayError = true;
   }
 }

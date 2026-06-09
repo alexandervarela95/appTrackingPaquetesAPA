@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Incidencia } from '../../core/modelos/incidencia.model';
+import { Paquete } from '../../core/modelos/paquete.model';
+import { Usuario } from '../../core/modelos/usuario.model';
 import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
+import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
+import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 
 @Component({
   selector: 'app-incidencias',
@@ -15,21 +19,30 @@ import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
           <span>Gestion de problemas logisticos</span>
           <h1>Incidencias</h1>
         </div>
-        <button class="icon-button" type="button" title="Actualizar" (click)="cargarIncidencias()">
+        <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()">
           <i class="pi pi-refresh"></i>
         </button>
       </header>
+
+      @if (mensaje) {
+        <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
+      }
 
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarIncidencia()">
           <h2>Nueva incidencia</h2>
           <div class="field-group">
-            <label for="paqueteId">Paquete ID</label>
-            <input id="paqueteId" name="paqueteId" [(ngModel)]="formulario.paqueteId" required />
+            <label for="paqueteId">Paquete</label>
+            <select id="paqueteId" name="paqueteId" [(ngModel)]="formulario.paqueteId" (ngModelChange)="seleccionarPaquete($event)" required>
+              <option value="">Seleccionar</option>
+              @for (paquete of paquetes; track obtenerId(paquete)) {
+                <option [value]="obtenerId(paquete)">{{ paquete.numeroGuia }} - {{ paquete.descripcion || paquete.tipoPaquete }}</option>
+              }
+            </select>
           </div>
           <div class="field-group">
             <label for="numeroGuia">Numero guia</label>
-            <input id="numeroGuia" name="numeroGuia" [(ngModel)]="formulario.numeroGuia" required />
+            <input id="numeroGuia" name="numeroGuia" [(ngModel)]="formulario.numeroGuia" readonly required />
           </div>
           <div class="field-group">
             <label for="tipoIncidencia">Tipo</label>
@@ -44,14 +57,19 @@ import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
             </select>
           </div>
           <div class="field-group">
-            <label for="reportadoPorId">Reportado por ID</label>
-            <input id="reportadoPorId" name="reportadoPorId" [(ngModel)]="formulario.reportadoPorId" required />
+            <label for="reportadoPorId">Reportado por</label>
+            <select id="reportadoPorId" name="reportadoPorId" [(ngModel)]="formulario.reportadoPorId" required>
+              <option value="">Seleccionar</option>
+              @for (usuario of usuarios; track obtenerId(usuario)) {
+                <option [value]="obtenerId(usuario)">{{ usuario.nombre }}</option>
+              }
+            </select>
           </div>
           <div class="field-group">
             <label for="descripcion">Descripcion</label>
             <textarea id="descripcion" name="descripcion" [(ngModel)]="formulario.descripcion"></textarea>
           </div>
-          <button class="button-primary" type="submit"><i class="pi pi-save"></i>Guardar</button>
+          <button class="button-primary" type="submit"><i class="pi pi-save"></i>Guardar incidencia</button>
         </form>
 
         <article class="table-panel">
@@ -61,6 +79,7 @@ import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
                 <th>Guia</th>
                 <th>Tipo</th>
                 <th>Estado</th>
+                <th>Reportado por</th>
                 <th>Reporte</th>
                 <th></th>
               </tr>
@@ -71,6 +90,7 @@ import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
                   <td>{{ incidencia.numeroGuia }}</td>
                   <td>{{ incidencia.tipoIncidencia }}</td>
                   <td><span class="badge warning">{{ incidencia.estadoIncidencia }}</span></td>
+                  <td>{{ nombreUsuario(incidencia.reportadoPorId) }}</td>
                   <td>{{ incidencia.fechaReporte | date: 'short' }}</td>
                   <td>
                     <button class="icon-button" type="button" title="Eliminar" (click)="eliminarIncidencia(incidencia)">
@@ -80,7 +100,7 @@ import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="5">Sin incidencias registradas.</td>
+                  <td colspan="6">Sin incidencias registradas.</td>
                 </tr>
               }
             </tbody>
@@ -92,27 +112,56 @@ import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
 })
 export class IncidenciasComponent implements OnInit {
   protected incidencias: Incidencia[] = [];
+  protected paquetes: Paquete[] = [];
+  protected usuarios: Usuario[] = [];
   protected formulario: Partial<Incidencia> = this.crearFormularioVacio();
+  protected mensaje = '';
+  protected hayError = false;
 
-  public constructor(private readonly incidenciaServicio: IncidenciaServicio) {}
+  public constructor(
+    private readonly incidenciaServicio: IncidenciaServicio,
+    private readonly paqueteServicio: PaqueteServicio,
+    private readonly usuarioServicio: UsuarioServicio,
+  ) {}
 
   public ngOnInit(): void {
-    this.cargarIncidencias();
+    this.cargarDatos();
   }
 
-  protected cargarIncidencias(): void {
+  protected cargarDatos(): void {
     this.incidenciaServicio.listar().subscribe((incidencias) => (this.incidencias = incidencias));
+    this.paqueteServicio.listar().subscribe((paquetes) => (this.paquetes = paquetes));
+    this.usuarioServicio.listar().subscribe((usuarios) => (this.usuarios = usuarios.filter((usuario) => usuario.estado !== false)));
+  }
+
+  protected seleccionarPaquete(paqueteId: string): void {
+    const paquete = this.paquetes.find((registro) => this.obtenerId(registro) === paqueteId);
+    this.formulario.numeroGuia = paquete?.numeroGuia || '';
   }
 
   protected guardarIncidencia(): void {
-    this.incidenciaServicio.crear(this.formulario).subscribe(() => {
-      this.formulario = this.crearFormularioVacio();
-      this.cargarIncidencias();
+    if (!this.formulario.paqueteId || !this.formulario.numeroGuia || !this.formulario.tipoIncidencia || !this.formulario.reportadoPorId) {
+      this.mostrarError('Completa los campos obligatorios.');
+      return;
+    }
+
+    this.incidenciaServicio.crear(this.formulario).subscribe({
+      next: () => {
+        this.mensaje = 'Incidencia registrada correctamente.';
+        this.hayError = false;
+        this.formulario = this.crearFormularioVacio();
+        this.cargarDatos();
+      },
+      error: () => this.mostrarError('No fue posible registrar la incidencia.'),
     });
   }
 
   protected eliminarIncidencia(incidencia: Incidencia): void {
-    this.incidenciaServicio.eliminar(this.obtenerId(incidencia)).subscribe(() => this.cargarIncidencias());
+    this.incidenciaServicio.eliminar(this.obtenerId(incidencia)).subscribe(() => this.cargarDatos());
+  }
+
+  protected nombreUsuario(usuarioId?: string): string {
+    return this.usuarios.find((usuario) => this.obtenerId(usuario) === String(usuarioId || ''))?.nombre || '-';
   }
 
   protected obtenerId(registro: { _id?: string; id?: string }): string {
@@ -121,5 +170,10 @@ export class IncidenciasComponent implements OnInit {
 
   private crearFormularioVacio(): Partial<Incidencia> {
     return { paqueteId: '', numeroGuia: '', tipoIncidencia: '', estadoIncidencia: 'abierta', reportadoPorId: '', descripcion: '' };
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.mensaje = mensaje;
+    this.hayError = true;
   }
 }

@@ -49,6 +49,8 @@ npm run seed
 ```
 
 El seed es idempotente: no duplica el usuario y guarda la contrasena con bcrypt.
+Tambien crea datos demo minimos para presentacion: lugares, usuarios remitente,
+destinatario, motorista y estados base.
 
 Credenciales de prueba:
 

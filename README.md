@@ -28,6 +28,32 @@ npm install
 npm start
 ```
 
+## Flujo demo Avance II
+
+Preparar datos demo:
+
+```bash
+cd backend
+npm run seed
+```
+
+Credenciales:
+
+- Usuario: `Sistemas`
+- Password: `Sistemas*2026`
+
+Pantallas principales:
+
+- `/login`
+- `/dashboard`
+- `/paquetes`
+- `/paquetes/nuevo`
+- `/paquetes/:id`
+- `/tracking/:numeroGuia`
+- `/incidencias`
+
+Ver detalle en `documentacion/presentacion-avance-ii.md`.
+
 ### Docker para MongoDB y Redis
 ```bash
 docker compose up -d
