@@ -19,7 +19,7 @@ cd backend
 npm install
 cp .env.example .env
 npm run seed:demo
-PUERTO=3090 CORS_ORIGINS=http://localhost:4300 npm run dev
+PUERTO=4300 CORS_ORIGINS=http://localhost:3180 npm run dev
 ```
 
 ## Frontend
@@ -30,7 +30,7 @@ npm install
 npm start
 ```
 
-Abrir `http://localhost:4300/login`.
+Abrir `http://localhost:3180/login`.
 
 ## Verificacion
 

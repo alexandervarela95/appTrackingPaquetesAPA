@@ -15,7 +15,7 @@ Backend:
 cd /home/admin/Documentos/Proyectos/appTrackingPaquetesAPA/backend
 npm install
 npm run seed
-PUERTO=3090 CORS_ORIGINS=http://localhost:4300 npm run dev
+PUERTO=4300 CORS_ORIGINS=http://localhost:3180 npm run dev
 ```
 
 Frontend:
@@ -29,7 +29,7 @@ npm start
 URL demo:
 
 ```bash
-http://localhost:4300/login
+http://localhost:3180/login
 ```
 
 ## Flujo demo paso a paso

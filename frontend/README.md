@@ -10,7 +10,7 @@ npm start
 npm run build
 ```
 
-URL local: `http://localhost:4300/login`
+URL local: `http://localhost:3180/login`
 
 ## Pantallas
 
@@ -28,7 +28,7 @@ URL local: `http://localhost:4300/login`
 
 ## Conexion API
 
-El proxy de desarrollo redirige `/api` al backend. Usar backend en `PUERTO=3090` para coincidir con la configuracion final.
+El proxy de desarrollo redirige `/api` al backend. Usar backend en `PUERTO=4300` para coincidir con la configuracion final.
 
 ## UX
 

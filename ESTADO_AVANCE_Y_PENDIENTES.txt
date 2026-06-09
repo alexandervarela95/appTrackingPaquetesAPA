@@ -106,7 +106,7 @@ BACKEND
 cd /home/admin/Documentos/Proyectos/appTrackingPaquetesAPA/backend
 npm install
 npm run seed
-PUERTO=3090 CORS_ORIGINS=http://localhost:4300 npm run dev
+PUERTO=4300 CORS_ORIGINS=http://localhost:3180 npm run dev
 
 FRONTEND
 cd /home/admin/Documentos/Proyectos/appTrackingPaquetesAPA/frontend
@@ -114,7 +114,7 @@ npm install
 npm start
 
 URL LOGIN
-http://localhost:4300/login
+http://localhost:3180/login
 
 CREDENCIALES DEMO
 Usuario: Sistemas

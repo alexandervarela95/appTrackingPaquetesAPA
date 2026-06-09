@@ -17,7 +17,7 @@ Fecha local: 2026-06-08.
 - Backend seed demo: exitoso.
 - Backend tests: 3 suites, 4 tests exitosos.
 - Frontend build: exitoso con warning no bloqueante de budget inicial.
-- Frontend `/login`: HTTP 200 en `http://localhost:4300/login`.
+- Frontend `/login`: HTTP 200 en `http://localhost:3180/login`.
 
 ## Flujo demo validado por API
 
