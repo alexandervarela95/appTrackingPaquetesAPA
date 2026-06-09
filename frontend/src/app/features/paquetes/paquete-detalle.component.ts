@@ -36,6 +36,10 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
       }
 
+      @if (cargando) {
+        <p class="status-message">Cargando detalle del paquete...</p>
+      }
+
       @if (paquete) {
         <section class="content-grid">
           <article class="glass-panel form-grid">
@@ -60,9 +64,9 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
               </select>
             </div>
 
-            <button class="button-primary" type="button" (click)="actualizarEstado()">
+            <button class="button-primary" type="button" [disabled]="guardando" (click)="actualizarEstado()">
               <i class="pi pi-sync"></i>
-              Actualizar estado
+              {{ guardando ? 'Actualizando...' : 'Actualizar estado' }}
             </button>
           </article>
 
@@ -109,6 +113,8 @@ export class PaqueteDetalleComponent implements OnInit {
   protected estadoActualId = '';
   protected mensaje = '';
   protected hayError = false;
+  protected cargando = false;
+  protected guardando = false;
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -131,14 +137,17 @@ export class PaqueteDetalleComponent implements OnInit {
     if (!this.paquete) {
       return;
     }
+    this.guardando = true;
     this.paqueteServicio.actualizar(this.obtenerId(this.paquete), { estadoActualId: this.estadoActualId }).subscribe({
       next: (paquete) => {
+        this.guardando = false;
         this.paquete = paquete;
         this.mensaje = 'Estado actualizado correctamente.';
         this.hayError = false;
         this.cargarHistorial(paquete);
       },
       error: () => {
+        this.guardando = false;
         this.mensaje = 'No fue posible actualizar el estado.';
         this.hayError = true;
       },
@@ -162,13 +171,16 @@ export class PaqueteDetalleComponent implements OnInit {
   }
 
   private cargarPaquete(id: string): void {
+    this.cargando = true;
     this.paqueteServicio.obtenerPorId(id).subscribe({
       next: (paquete) => {
+        this.cargando = false;
         this.paquete = paquete;
         this.estadoActualId = paquete.estadoActualId;
         this.cargarHistorial(paquete);
       },
       error: () => {
+        this.cargando = false;
         this.mensaje = 'Paquete no encontrado.';
         this.hayError = true;
       },

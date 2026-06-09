@@ -1,73 +1,53 @@
-# Backend de appTrackingPaquetesAPA
+# Backend appTrackingPaquetesAPA
 
-API backend para el sistema de trazabilidad de envíos internos de Almacén Pájaro Azul.
+API REST para trazabilidad de paquetes internos.
 
-## Tecnologías
+## Stack
 
-- Node.js
-- Express
-- TypeScript
-- MongoDB
-- Mongoose
-- Redis
-- dotenv
-- cors
-- helmet
-- morgan
+- Express + TypeScript
+- MongoDB + Mongoose
+- Redis con cliente fallback
+- JWT + roles
+- Zod para validacion
+- Multer para evidencias
+- Jest + Supertest
+
+## Variables
+
+Copiar `.env.example` a `.env`:
+
+```bash
+NODE_ENV=development
+PUERTO=3090
+MONGO_URI=mongodb://127.0.0.1:27017/appTrackingPaquetesAPA
+REDIS_URL=redis://127.0.0.1:6379
+CORS_ORIGINS=http://localhost:4300
+JWT_SECRET=cambiar_esta_clave_en_produccion
+JWT_EXPIRES_IN=1d
+```
 
 ## Comandos
 
-Instalar dependencias:
-
 ```bash
-cd backend
 npm install
-```
-
-Ejecutar en modo desarrollo:
-
-```bash
-npm run dev
-```
-
-Compilar para producción:
-
-```bash
 npm run build
-```
-
-Iniciar versión compilada:
-
-```bash
+npm run dev
 npm run start
+npm run seed:demo
+npm run test
 ```
 
-Crear o actualizar usuario default para pruebas:
+## Seguridad
 
-```bash
-npm run seed
-```
+- `/api/salud` y `/api/auth/login` son publicos.
+- Rutas operativas requieren JWT.
+- Administrador gestiona catalogos y usuarios.
+- Motorista puede actualizar tracking/paquetes segun rutas permitidas.
+- Usuario puede crear paquetes, incidencias y evidencias.
+- Login tiene rate limit por IP.
+- Payload JSON limitado a 2 MB.
+- Upload de evidencias limitado a 5 MB y extensiones `jpg`, `jpeg`, `png`, `pdf`.
 
-El seed es idempotente: no duplica el usuario y guarda la contrasena con bcrypt.
-Tambien crea datos demo minimos para presentacion: lugares, usuarios remitente,
-destinatario, motorista y estados base.
+## Uploads
 
-Credenciales de prueba:
-
-- Usuario: `Sistemas`
-- Correo tecnico: `sistemas@pajaroazul.local`
-- Password: `Sistemas*2026`
-- Rol: `administrador`
-
-## Variables de entorno
-
-Copiar `.env.example` a `.env` y configurar los valores locales.
-
-- `PUERTO`: Puerto donde escucha el backend.
-- `MONGO_URI`: Conexion a MongoDB.
-- `REDIS_URL`: Conexion a Redis.
-- `CORS_ORIGINS`: Origenes permitidos para el frontend.
-
-## Puerto
-
-El backend se expone en `http://localhost:<PUERTO>`.
+Los archivos se guardan en `backend/uploads/evidencias/`. Git solo versiona `.gitkeep`; los archivos reales quedan ignorados.

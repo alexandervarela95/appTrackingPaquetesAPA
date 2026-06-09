@@ -24,6 +24,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     (req as any).user = payload;
     next();
   } catch (error) {
-    res.status(401).json({ exito: false, mensaje: 'Token invalido o expirado', errores: [] });
+    res.status(401).json({ exito: false, mensaje: 'Token no valido o expirado', errores: [] });
   }
 };

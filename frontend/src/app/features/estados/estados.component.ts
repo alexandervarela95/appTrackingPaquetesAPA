@@ -18,6 +18,14 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarEstados()"><i class="pi pi-refresh"></i></button>
       </header>
 
+      @if (mensaje) {
+        <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
+      }
+
+      @if (cargando) {
+        <p class="status-message">Cargando estados...</p>
+      }
+
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarEstado()">
           <h2>Nuevo estado</h2>
@@ -33,7 +41,9 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
             <label for="descripcion">Descripcion</label>
             <textarea id="descripcion" name="descripcion" [(ngModel)]="formulario.descripcion"></textarea>
           </div>
-          <button class="button-primary" type="submit"><i class="pi pi-save"></i>Guardar</button>
+          <button class="button-primary" type="submit" [disabled]="guardando">
+            <i class="pi pi-save"></i>{{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
         </form>
 
         <article class="table-panel">
@@ -75,6 +85,10 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
 export class EstadosComponent implements OnInit {
   protected estados: Estado[] = [];
   protected formulario: Partial<Estado> = this.crearFormularioVacio();
+  protected mensaje = '';
+  protected hayError = false;
+  protected cargando = false;
+  protected guardando = false;
 
   public constructor(private readonly estadoServicio: EstadoServicio) {}
 
@@ -83,17 +97,40 @@ export class EstadosComponent implements OnInit {
   }
 
   protected cargarEstados(): void {
-    this.estadoServicio.listar().subscribe((estados) => (this.estados = estados.sort((a, b) => a.orden - b.orden)));
+    this.cargando = true;
+    this.estadoServicio.listar().subscribe({
+      next: (estados) => {
+        this.estados = estados.sort((a, b) => a.orden - b.orden);
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarError('No fue posible cargar estados.');
+      },
+    });
   }
 
   protected guardarEstado(): void {
-    this.estadoServicio.crear(this.formulario).subscribe(() => {
-      this.formulario = this.crearFormularioVacio();
-      this.cargarEstados();
+    this.guardando = true;
+    this.estadoServicio.crear(this.formulario).subscribe({
+      next: () => {
+        this.guardando = false;
+        this.mensaje = 'Estado guardado correctamente.';
+        this.hayError = false;
+        this.formulario = this.crearFormularioVacio();
+        this.cargarEstados();
+      },
+      error: () => {
+        this.guardando = false;
+        this.mostrarError('No fue posible guardar el estado.');
+      },
     });
   }
 
   protected eliminarEstado(estado: Estado): void {
+    if (!confirm('Desea desactivar este estado?')) {
+      return;
+    }
     this.estadoServicio.eliminar(this.obtenerId(estado)).subscribe(() => this.cargarEstados());
   }
 
@@ -103,5 +140,10 @@ export class EstadosComponent implements OnInit {
 
   private crearFormularioVacio(): Partial<Estado> {
     return { nombre: '', descripcion: '', orden: 1, estado: true };
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.mensaje = mensaje;
+    this.hayError = true;
   }
 }

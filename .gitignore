@@ -5,6 +5,11 @@ node_modules/
 dist/
 frontend/dist/
 backend/dist/
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/evidencias/
+backend/uploads/evidencias/*
+!backend/uploads/evidencias/.gitkeep
 
 # Environment files
 .env

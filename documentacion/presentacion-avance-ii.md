@@ -88,3 +88,26 @@ http://localhost:4300/login
 - Aplicar autorizacion por rol a todos los endpoints sensibles.
 - Implementar carga real de archivos para evidencias.
 - Revisar presupuesto de bundle frontend por PrimeNG/Aura.
+# Presentacion Avance II
+
+El proyecto appTrackingPaquetesAPA queda en estado avanzado para entrega academica: backend completo, frontend funcional, login institucional, dashboard, CRUD operativo, tracking, incidencias, evidencias con upload real y seed demo.
+
+## Demo sugerida
+
+1. Login con `Sistemas / Sistemas*2026`.
+2. Dashboard general.
+3. Paquete demo `APA-DEMO-2026`.
+4. Tracking del paquete.
+5. Registro de paquete nuevo.
+6. Registro de incidencia.
+7. Upload de evidencia.
+8. Catalogos: usuarios, lugares y estados.
+
+## Valor tecnico
+
+- Seguridad con JWT y roles.
+- Validacion de entradas.
+- Redis cache con fallback.
+- MongoDB documentado con modelos claros.
+- Pruebas minimas automatizadas.
+ 

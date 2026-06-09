@@ -38,6 +38,10 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
       }
 
+      @if (cargando) {
+        <p class="status-message">Cargando paquetes...</p>
+      }
+
       @if (paqueteEncontrado) {
         <article class="glass-panel resultado-guia">
           <div>
@@ -118,6 +122,7 @@ export class PaquetesComponent implements OnInit {
   protected paqueteEncontrado?: Paquete;
   protected mensaje = '';
   protected hayError = false;
+  protected cargando = false;
 
   public constructor(
     private readonly paqueteServicio: PaqueteServicio,
@@ -132,9 +137,16 @@ export class PaquetesComponent implements OnInit {
 
   protected cargarDatos(): void {
     this.mensaje = '';
+    this.cargando = true;
     this.paqueteServicio.listar().subscribe({
-      next: (paquetes) => (this.paquetes = paquetes),
-      error: () => this.mostrarError('No fue posible cargar paquetes.'),
+      next: (paquetes) => {
+        this.paquetes = paquetes;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarError('No fue posible cargar paquetes.');
+      },
     });
     this.lugarServicio.listar().subscribe((lugares) => (this.lugares = lugares));
     this.usuarioServicio.listar().subscribe((usuarios) => (this.usuarios = usuarios));

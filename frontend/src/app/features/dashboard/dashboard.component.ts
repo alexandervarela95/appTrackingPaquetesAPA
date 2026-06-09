@@ -30,6 +30,10 @@ import { DashboardServicio } from '../../core/servicios/dashboard.servicio';
         }
       </section>
 
+      @if (cargando) {
+        <p class="status-message">Cargando dashboard...</p>
+      }
+
       <section class="content-grid">
         <article class="glass-panel">
           <h2>Paquetes por estado</h2>
@@ -103,6 +107,7 @@ import { DashboardServicio } from '../../core/servicios/dashboard.servicio';
 export class DashboardComponent implements OnInit {
   protected resumen?: DashboardResumen;
   protected mensajeError = '';
+  protected cargando = false;
 
   public constructor(private readonly dashboardServicio: DashboardServicio) {}
 
@@ -127,9 +132,16 @@ export class DashboardComponent implements OnInit {
 
   protected cargarResumen(): void {
     this.mensajeError = '';
+    this.cargando = true;
     this.dashboardServicio.obtenerResumen().subscribe({
-      next: (resumen) => (this.resumen = resumen),
-      error: () => (this.mensajeError = 'No fue posible cargar el dashboard. Valida token y backend.'),
+      next: (resumen) => {
+        this.resumen = resumen;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.mensajeError = 'No fue posible cargar el dashboard. Valida token y backend.';
+      },
     });
   }
 }
