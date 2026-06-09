@@ -1,0 +1,136 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Estado } from '../../core/modelos/estado.model';
+import { Lugar } from '../../core/modelos/lugar.model';
+import { Tracking } from '../../core/modelos/tracking.model';
+import { Usuario } from '../../core/modelos/usuario.model';
+import { EstadoServicio } from '../../core/servicios/estado.servicio';
+import { LugarServicio } from '../../core/servicios/lugar.servicio';
+import { TrackingServicio } from '../../core/servicios/tracking.servicio';
+import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
+
+@Component({
+  selector: 'app-tracking',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <section class="screen-shell">
+      <header class="section-header">
+        <div>
+          <span>Historial de trazabilidad</span>
+          <h1>Tracking</h1>
+        </div>
+        <form class="toolbar" (ngSubmit)="buscarPorGuia()">
+          <input class="search-input" name="numeroGuia" [(ngModel)]="numeroGuia" placeholder="Numero de guia" />
+          <button class="button-primary" type="submit"><i class="pi pi-search"></i>Buscar</button>
+        </form>
+      </header>
+
+      @if (mensaje) {
+        <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
+      }
+
+      <article class="table-panel">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha evento</th>
+              <th>Guia</th>
+              <th>Estado</th>
+              <th>Lugar actual</th>
+              <th>Usuario responsable</th>
+              <th>Descripcion</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (evento of historial; track obtenerId(evento)) {
+              <tr>
+                <td>{{ evento.fechaEvento | date: 'short' }}</td>
+                <td><span class="badge">{{ evento.numeroGuia }}</span></td>
+                <td>{{ nombreEstado(evento.estadoId) }}</td>
+                <td>{{ nombreLugar(evento.lugarActualId) }}</td>
+                <td>{{ nombreUsuario(evento.usuarioResponsableId) }}</td>
+                <td>{{ evento.descripcion }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6">Busca una guia para ver su historial.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </article>
+    </section>
+  `,
+})
+export class TrackingComponent implements OnInit {
+  protected numeroGuia = '';
+  protected historial: Tracking[] = [];
+  protected estados: Estado[] = [];
+  protected lugares: Lugar[] = [];
+  protected usuarios: Usuario[] = [];
+  protected mensaje = '';
+  protected hayError = false;
+
+  public constructor(
+    private readonly route: ActivatedRoute,
+    private readonly trackingServicio: TrackingServicio,
+    private readonly estadoServicio: EstadoServicio,
+    private readonly lugarServicio: LugarServicio,
+    private readonly usuarioServicio: UsuarioServicio,
+  ) {}
+
+  public ngOnInit(): void {
+    this.estadoServicio.listar().subscribe((estados) => (this.estados = estados));
+    this.lugarServicio.listar().subscribe((lugares) => (this.lugares = lugares));
+    this.usuarioServicio.listar().subscribe((usuarios) => (this.usuarios = usuarios));
+
+    const numeroGuiaRuta = this.route.snapshot.paramMap.get('numeroGuia');
+    if (numeroGuiaRuta) {
+      this.numeroGuia = numeroGuiaRuta;
+      this.buscarPorGuia();
+    }
+  }
+
+  protected buscarPorGuia(): void {
+    const numeroGuia = this.numeroGuia.trim();
+    this.historial = [];
+    this.mensaje = '';
+    if (!numeroGuia) {
+      this.mostrarError('Ingresa una guia para consultar tracking.');
+      return;
+    }
+    this.trackingServicio.listarPorGuia(numeroGuia).subscribe({
+      next: (historial) => {
+        this.historial = historial;
+        if (historial.length === 0) {
+          this.mostrarError('No hay tracking para esta guia.');
+        }
+      },
+      error: () => this.mostrarError('No fue posible consultar el tracking.'),
+    });
+  }
+
+  protected nombreLugar(lugarId?: string): string {
+    return this.lugares.find((lugar) => this.obtenerId(lugar) === String(lugarId || ''))?.nombre || '-';
+  }
+
+  protected nombreUsuario(usuarioId?: string): string {
+    return this.usuarios.find((usuario) => this.obtenerId(usuario) === String(usuarioId || ''))?.nombre || '-';
+  }
+
+  protected nombreEstado(estadoId?: string): string {
+    return this.estados.find((estado) => this.obtenerId(estado) === String(estadoId || ''))?.nombre || '-';
+  }
+
+  protected obtenerId(registro: { _id?: string; id?: string }): string {
+    return registro._id || registro.id || '';
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.mensaje = mensaje;
+    this.hayError = true;
+  }
+}

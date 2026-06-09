@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+.sidebar-shell {
+  position: fixed;
+  top: 18px;
+  bottom: 18px;
+  left: 18px;
+  width: 246px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+  backdrop-filter: blur(24px);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+}
+
+.brand-mark {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.9rem;
+}
+
+.sidebar-brand span {
+  display: block;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.78rem;
+}
+
+.sidebar-brand strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 1rem;
+}
+
+.sidebar-menu {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active-item {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.sidebar-menu i {
+  color: #ffffff;
+}
+
+.sidebar-footer {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.user-bubble {
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.sidebar-footer small {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .sidebar-shell {
+    position: static;
+    width: 100%;
+    min-height: auto;
+  }
+}
