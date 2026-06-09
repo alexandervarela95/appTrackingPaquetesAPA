@@ -17,13 +17,16 @@ interface LoginRespuesta {
 export class AuthService {
   private readonly tokenClave = 'apa-token';
   private readonly usuarioClave = 'apa-usuario';
+  private readonly correoUsuarioSistemas = 'sistemas@pajaroazul.local';
 
   constructor(
     private http: HttpClient,
     private router: Router,
   ) {}
 
-  public login(correo: string, contrasena: string) {
+  public login(usuarioOCorreo: string, contrasena: string) {
+    const correo = this.normalizarCredencialLogin(usuarioOCorreo);
+
     return this.http.post<LoginRespuesta>('/api/auth/login', { correo, contrasena }).pipe(
       tap((respuesta) => {
         if (respuesta.exito) {
@@ -51,5 +54,14 @@ export class AuthService {
 
   public estaAutenticado(): boolean {
     return !!this.obtenerToken();
+  }
+
+  /**
+   * Permite presentar el usuario corto "Sistemas" sin cambiar el contrato del backend,
+   * que autentica por correo para mantener una identidad unica y auditable.
+   */
+  private normalizarCredencialLogin(usuarioOCorreo: string): string {
+    const credencial = usuarioOCorreo.trim();
+    return credencial.toLowerCase() === 'sistemas' ? this.correoUsuarioSistemas : credencial;
   }
 }

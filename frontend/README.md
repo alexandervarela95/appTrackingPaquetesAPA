@@ -32,6 +32,16 @@ Interfaz Angular para la trazabilidad de envios internos de Almacen Pajaro Azul.
 - Lugares
 - Estados
 
+## Login
+
+La ruta `/login` replica visualmente el login de `appTallerAPA`: misma tarjeta glass,
+fondo, logo institucional, iconos, inputs, checkbox, boton, enlace y footer.
+
+Credenciales de prueba despues de ejecutar el seed backend:
+
+- Usuario: `Sistemas`
+- Password: `Sistemas*2026`
+
 ## Ejecucion local
 
 Instalar dependencias:
@@ -47,6 +57,12 @@ npm start
 ```
 
 El frontend se sirve en `http://localhost:4300`.
+
+Ruta de login:
+
+```bash
+http://localhost:4300/login
+```
 
 ## Conexion con backend
 

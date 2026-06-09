@@ -1,0 +1,69 @@
+<main class="login-page">
+  <section class="login-card" aria-label="Inicio de sesion">
+    <div class="login-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <img [src]="rutaLogoLogin" alt="" />
+      </span>
+      <div class="brand-copy">
+        <span>Sistema de Tracking de Envios</span>
+        <h1>Almacen Pajaro Azul</h1>
+      </div>
+    </div>
+
+    <form class="login-form" (ngSubmit)="iniciarSesion()" novalidate>
+      <div class="field-group">
+        <label for="usuario">Usuario</label>
+        <p-iconfield iconPosition="left">
+          <p-inputicon class="pi pi-user"></p-inputicon>
+          <input
+            id="usuario"
+            name="usuario"
+            pInputText
+            type="text"
+            [(ngModel)]="usuario"
+            autocomplete="username"
+            placeholder="usuario"
+          />
+        </p-iconfield>
+      </div>
+
+      <div class="field-group">
+        <label for="contrasena">Contrasena</label>
+        <p-iconfield iconPosition="left">
+          <p-inputicon class="pi pi-lock"></p-inputicon>
+          <input
+            id="contrasena"
+            name="contrasena"
+            pInputText
+            type="password"
+            [(ngModel)]="contrasena"
+            autocomplete="current-password"
+            placeholder="Ingresa tu contrasena"
+          />
+        </p-iconfield>
+      </div>
+
+      <label class="forgot-button">
+        <input name="recordarUsuario" type="checkbox" [(ngModel)]="recordarUsuario" />
+        Recordar usuario
+      </label>
+
+      @if (mensajeError) {
+        <p class="login-error">{{ mensajeError }}</p>
+      }
+
+      <button pButton type="submit" class="login-button" [loading]="cargando" [disabled]="cargando">
+        <span pButtonLabel>Iniciar sesion</span>
+      </button>
+    </form>
+
+    <button type="button" class="forgot-button">Olvide mi contrasena</button>
+  </section>
+
+  <footer class="login-footer" aria-label="Desarrollador del sistema">
+    <div class="login-footer-line"></div>
+    <div class="login-footer-content">
+      <span>Elaborado por Sistemas de "Almacen Pajaro Azul"</span>
+    </div>
+  </footer>
+</main>

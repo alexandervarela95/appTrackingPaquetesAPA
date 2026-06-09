@@ -2,6 +2,9 @@
 
 :root {
   --font-ui: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-code: "Cascadia Code", Consolas, monospace;
+  --font-reading: var(--font-ui);
+  --font-mono: var(--font-code);
   --color-texto: #ffffff;
   --color-texto-suave: rgba(255, 255, 255, 0.72);
   --color-panel: rgba(255, 255, 255, 0.12);
