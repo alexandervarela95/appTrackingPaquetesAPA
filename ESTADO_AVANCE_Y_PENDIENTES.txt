@@ -1,0 +1,255 @@
+ESTADO ACTUAL - appTrackingPaquetesAPA
+Fecha: 2026-06-08
+Repositorio local: /home/admin/Documentos/Proyectos/appTrackingPaquetesAPA
+Repositorio remoto: git@github.com:95alexandervarela/appTrackingPaquetesAPA.git
+Rama subida: feature/backend-api-app-tracking-envio
+Ultimo commit subido: 96b4ddb feat(project): agrega datos demo y flujo funcional de tracking
+
+============================================================
+1. QUE YA ESTA HECHO
+============================================================
+
+BACKEND
+- API Node.js + Express + TypeScript creada.
+- Conexion MongoDB con Mongoose creada.
+- Conexion Redis creada con fallback si Redis no esta disponible.
+- Modelos Mongoose creados:
+  - usuario
+  - lugar
+  - estado
+  - paquete
+  - tracking
+  - incidencia
+  - evidencia
+- Endpoints REST creados:
+  - /api/salud
+  - /api/auth/login
+  - /api/usuarios
+  - /api/lugares
+  - /api/estados
+  - /api/paquetes
+  - /api/paquetes/guia/:numeroGuia
+  - /api/tracking/paquete/:paqueteId
+  - /api/tracking/guia/:numeroGuia
+  - /api/incidencias
+  - /api/evidencias
+  - /api/dashboard/resumen
+- JWT funcionando en login.
+- Passwords hasheadas con bcrypt.
+- Dashboard protegido con authMiddleware.
+- Creacion de paquete genera tracking inicial.
+- Cambio de estado de paquete genera nuevo tracking.
+- Busqueda por numeroGuia funciona.
+- Redis cache usado para dashboard y busqueda por guia.
+- Seed idempotente creado con:
+  - usuario Sistemas
+  - estados base
+  - lugares demo
+  - usuarios demo
+
+FRONTEND
+- Angular creado y compilando.
+- Login visual igualado a appTallerAPA.
+- Logo APA copiado desde appTallerAPA.
+- PrimeNG/Aura configurado para que iconos/inputs/boton del login se vean como appTallerAPA.
+- Login conectado al backend real.
+- El login acepta:
+  Usuario: Sistemas
+  Password: Sistemas*2026
+- El frontend convierte Sistemas a sistemas@pajaroazul.local.
+- Token JWT se guarda en localStorage.
+- Interceptor envia Authorization Bearer.
+- Interceptor vuelve a login si recibe 401.
+- Rutas funcionales:
+  - /login
+  - /dashboard
+  - /paquetes
+  - /paquetes/nuevo
+  - /paquetes/:id
+  - /tracking
+  - /tracking/:numeroGuia
+  - /incidencias
+  - /evidencias
+  - /usuarios
+  - /lugares
+  - /estados
+- Menu lateral funcional.
+- Dashboard consume backend real.
+- Paquetes lista datos reales.
+- Crear paquete funciona con combos reales.
+- Buscar paquete por guia funciona.
+- Detalle de paquete funciona.
+- Tracking por guia funciona.
+- Incidencias lista y crea incidencias reales.
+
+DOCUMENTACION
+- README general actualizado.
+- backend/README.md actualizado.
+- frontend/README.md actualizado.
+- documentacion/frontend-avance.md creado.
+- documentacion/backend-avance.md actualizado.
+- documentacion/presentacion-avance-ii.md creado.
+
+GIT
+- Trabajo commiteado localmente.
+- Push realizado correctamente a GitHub.
+- Rama remota creada:
+  origin/feature/backend-api-app-tracking-envio
+- Link PR:
+  https://github.com/95alexandervarela/appTrackingPaquetesAPA/pull/new/feature/backend-api-app-tracking-envio
+
+============================================================
+2. COMANDOS PARA DEMO
+============================================================
+
+BACKEND
+cd /home/admin/Documentos/Proyectos/appTrackingPaquetesAPA/backend
+npm install
+npm run seed
+PUERTO=3090 CORS_ORIGINS=http://localhost:4300 npm run dev
+
+FRONTEND
+cd /home/admin/Documentos/Proyectos/appTrackingPaquetesAPA/frontend
+npm install
+npm start
+
+URL LOGIN
+http://localhost:4300/login
+
+CREDENCIALES DEMO
+Usuario: Sistemas
+Password: Sistemas*2026
+
+============================================================
+3. VALIDACIONES REALIZADAS
+============================================================
+
+BACKEND BUILD
+Comando:
+cd backend
+npm run build
+
+Resultado:
+Compila correctamente.
+
+FRONTEND BUILD
+Comando:
+cd frontend
+npm run build
+
+Resultado:
+Compila correctamente.
+
+Advertencia:
+El frontend muestra warning de bundle budget por PrimeNG/Aura.
+No rompe build.
+
+SEED
+Comando:
+cd backend
+npm run seed
+
+Resultado:
+Datos demo disponibles.
+
+PRUEBA HTTP REAL
+- Login devuelve JWT.
+- Dashboard responde.
+- Crear paquete responde.
+- Buscar por guia responde.
+- Detalle responde.
+- Tracking responde.
+- Crear incidencia responde.
+
+============================================================
+4. FLUJO DEMO LISTO PARA PRESENTAR
+============================================================
+
+1. Abrir /login.
+2. Entrar con Sistemas / Sistemas*2026.
+3. Ver dashboard.
+4. Ir a Paquetes.
+5. Crear paquete en /paquetes/nuevo.
+6. Confirmar paquete en listado.
+7. Buscar por numeroGuia.
+8. Abrir detalle del paquete.
+9. Abrir tracking por guia.
+10. Crear incidencia.
+
+============================================================
+5. LO QUE HACE FALTA
+============================================================
+
+CRITICO ANTES DE PRODUCCION
+- Unificar ramas o hacer Pull Request hacia main.
+- Revisar y aprobar PR en GitHub.
+- Proteger todas las rutas sensibles con JWT.
+- Agregar autorizacion por rol:
+  - administrador
+  - motorista
+  - usuario
+- Cambiar JWT_SECRET para ambiente real.
+- Configurar CORS solo con dominio real.
+- Configurar MongoDB con usuario/password.
+- Configurar backups de MongoDB.
+- Configurar Redis real si se usara cache en produccion.
+- No usar usuario Sistemas como admin permanente en produccion.
+
+BACKEND PENDIENTE
+- Agregar DTOs o validadores estrictos.
+- Validar ObjectId antes de consultar MongoDB.
+- Mejorar manejo de errores para no exponer detalles internos.
+- Proteger CRUD de usuarios/lugares/estados/paquetes/incidencias/evidencias.
+- Agregar rate limit al login.
+- Agregar tests:
+  - login
+  - seed
+  - crear paquete
+  - tracking inicial
+  - cambio de estado
+  - dashboard
+  - incidencias
+
+FRONTEND PENDIENTE
+- Agregar validaciones visuales mas completas en formularios.
+- Agregar estados loading en todas las pantallas.
+- Mejorar mensajes de error por endpoint.
+- Agregar confirmaciones antes de eliminar.
+- Ajustar warning de bundle budget o aceptar formalmente PrimeNG/Aura.
+- Revisar responsive de pantallas internas en celular.
+
+EVIDENCIAS PENDIENTE
+- Implementar upload real de archivos.
+- Validar tipo de archivo.
+- Validar tamano maximo.
+- Definir almacenamiento:
+  - disco
+  - S3
+  - MinIO
+  - servicio externo
+- Proteger acceso a archivos.
+
+DATOS Y DEMO PENDIENTE
+- Opcional: crear seed con paquete demo ya existente.
+- Opcional: crear incidencia demo ya existente.
+- Opcional: limpiar datos demo duplicados antiguos si se hicieron pruebas manuales.
+
+DOCUMENTACION PENDIENTE
+- Crear guia de despliegue cuando se trabaje produccion.
+- Documentar variables .env reales por ambiente.
+- Documentar roles y permisos.
+- Documentar flujo de backup/restauracion.
+
+============================================================
+6. ESTADO FINAL
+============================================================
+
+Estado academico/demo:
+LISTO PARA PRESENTACION.
+
+Estado produccion:
+NO LISTO.
+
+Motivo:
+Faltan seguridad por roles, hardening, despliegue, backups, pruebas y configuracion productiva.
+
