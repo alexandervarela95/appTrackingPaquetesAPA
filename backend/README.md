@@ -42,6 +42,21 @@ Iniciar versión compilada:
 npm run start
 ```
 
+Crear o actualizar usuario default para pruebas:
+
+```bash
+npm run seed
+```
+
+El seed es idempotente: no duplica el usuario y guarda la contrasena con bcrypt.
+
+Credenciales de prueba:
+
+- Usuario: `Sistemas`
+- Correo tecnico: `sistemas@pajaroazul.local`
+- Password: `Sistemas*2026`
+- Rol: `administrador`
+
 ## Variables de entorno
 
 Copiar `.env.example` a `.env` y configurar los valores locales.

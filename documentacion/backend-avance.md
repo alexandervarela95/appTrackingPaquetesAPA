@@ -16,6 +16,7 @@ Se utilizaron Node.js, Express, TypeScript, MongoDB (Mongoose), Redis, dotenv, c
 - `src/rutas`: rutas de API y endpoint `/api/salud`.
 - `src/utilidades`: respuestas API, generacion de numero de guia y validacion de referencias.
 - `src/semillas/estadosSemilla.ts`: carga de estados iniciales.
+- `src/semillas/usuarioDefault.ts`: seed idempotente para usuario administrador de pruebas.
 
 ## Reglas de negocio implementadas
 
@@ -25,6 +26,23 @@ Se utilizaron Node.js, Express, TypeScript, MongoDB (Mongoose), Redis, dotenv, c
 - Uso de `estado: false` para desactivar registros criticos en lugar de eliminarlos.
 - Validacion de `lugarOrigenId`, `lugarDestinoId` y usuarios relacionados.
 - Cache Redis en dashboard y busqueda por `numeroGuia`.
+- Usuario default `Sistemas` con rol `administrador`, correo tecnico `sistemas@pajaroazul.local` y password hasheada con bcrypt.
+
+## Seed de usuario default
+
+Ejecutar desde `backend/`:
+
+```bash
+npm run seed
+```
+
+Credenciales para presentacion:
+
+- Usuario: `Sistemas`
+- Password: `Sistemas*2026`
+
+El frontend permite escribir `Sistemas` y traduce esa credencial al correo tecnico
+que espera el endpoint real `POST /api/auth/login`.
 
 ## Estado actual
 
