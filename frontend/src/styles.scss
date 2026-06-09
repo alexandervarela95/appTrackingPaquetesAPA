@@ -127,19 +127,19 @@ textarea {
   gap: 12px;
 }
 
-.field-group {
+.screen-shell .field-group {
   display: grid;
   gap: 7px;
 }
 
-.field-group label {
+.screen-shell .field-group label {
   color: rgba(255, 255, 255, 0.86);
   font-size: 0.86rem;
 }
 
-.field-group input,
-.field-group select,
-.field-group textarea,
+.screen-shell .field-group input,
+.screen-shell .field-group select,
+.screen-shell .field-group textarea,
 .search-input {
   width: 100%;
   min-height: 42px;
@@ -151,20 +151,20 @@ textarea {
   padding: 0 14px;
 }
 
-.field-group textarea {
+.screen-shell .field-group textarea {
   min-height: 86px;
   border-radius: 14px;
   padding: 12px 14px;
   resize: vertical;
 }
 
-.field-group input::placeholder,
-.field-group textarea::placeholder,
+.screen-shell .field-group input::placeholder,
+.screen-shell .field-group textarea::placeholder,
 .search-input::placeholder {
   color: rgba(255, 255, 255, 0.62);
 }
 
-.field-group select option {
+.screen-shell .field-group select option {
   color: #0f172a;
 }
 
