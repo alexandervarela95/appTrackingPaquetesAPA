@@ -18,6 +18,14 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarLugares()"><i class="pi pi-refresh"></i></button>
       </header>
 
+      @if (mensaje) {
+        <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
+      }
+
+      @if (cargando) {
+        <p class="status-message">Cargando lugares...</p>
+      }
+
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarLugar()">
           <h2>Nuevo lugar</h2>
@@ -37,7 +45,9 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
             <label for="descripcion">Descripcion</label>
             <textarea id="descripcion" name="descripcion" [(ngModel)]="formulario.descripcion"></textarea>
           </div>
-          <button class="button-primary" type="submit"><i class="pi pi-save"></i>Guardar</button>
+          <button class="button-primary" type="submit" [disabled]="guardando">
+            <i class="pi pi-save"></i>{{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
         </form>
 
         <article class="table-panel">
@@ -79,6 +89,10 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
 export class LugaresComponent implements OnInit {
   protected lugares: Lugar[] = [];
   protected formulario: Partial<Lugar> = this.crearFormularioVacio();
+  protected mensaje = '';
+  protected hayError = false;
+  protected cargando = false;
+  protected guardando = false;
 
   public constructor(private readonly lugarServicio: LugarServicio) {}
 
@@ -87,17 +101,40 @@ export class LugaresComponent implements OnInit {
   }
 
   protected cargarLugares(): void {
-    this.lugarServicio.listar().subscribe((lugares) => (this.lugares = lugares));
+    this.cargando = true;
+    this.lugarServicio.listar().subscribe({
+      next: (lugares) => {
+        this.lugares = lugares;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarError('No fue posible cargar lugares.');
+      },
+    });
   }
 
   protected guardarLugar(): void {
-    this.lugarServicio.crear(this.formulario).subscribe(() => {
-      this.formulario = this.crearFormularioVacio();
-      this.cargarLugares();
+    this.guardando = true;
+    this.lugarServicio.crear(this.formulario).subscribe({
+      next: () => {
+        this.guardando = false;
+        this.mensaje = 'Lugar guardado correctamente.';
+        this.hayError = false;
+        this.formulario = this.crearFormularioVacio();
+        this.cargarLugares();
+      },
+      error: () => {
+        this.guardando = false;
+        this.mostrarError('No fue posible guardar el lugar.');
+      },
     });
   }
 
   protected eliminarLugar(lugar: Lugar): void {
+    if (!confirm('Desea desactivar este lugar?')) {
+      return;
+    }
     this.lugarServicio.eliminar(this.obtenerId(lugar)).subscribe(() => this.cargarLugares());
   }
 
@@ -107,5 +144,10 @@ export class LugaresComponent implements OnInit {
 
   private crearFormularioVacio(): Partial<Lugar> {
     return { nombre: '', descripcion: '', ciudad: '', direccion: '', estado: true };
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.mensaje = mensaje;
+    this.hayError = true;
   }
 }

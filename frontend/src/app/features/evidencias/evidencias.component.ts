@@ -26,6 +26,10 @@ import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
         <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
       }
 
+      @if (cargando) {
+        <p class="status-message">Cargando evidencias...</p>
+      }
+
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarEvidencia()">
           <h2>Nueva evidencia</h2>
@@ -111,6 +115,7 @@ export class EvidenciasComponent implements OnInit {
   protected mensaje = '';
   protected hayError = false;
   protected guardando = false;
+  protected cargando = false;
 
   public constructor(
     private readonly evidenciaServicio: EvidenciaServicio,
@@ -122,7 +127,17 @@ export class EvidenciasComponent implements OnInit {
   }
 
   protected cargarDatos(): void {
-    this.evidenciaServicio.listar().subscribe((evidencias) => (this.evidencias = evidencias));
+    this.cargando = true;
+    this.evidenciaServicio.listar().subscribe({
+      next: (evidencias) => {
+        this.evidencias = evidencias;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarError('No fue posible cargar evidencias.');
+      },
+    });
     this.paqueteServicio.listar().subscribe((paquetes) => (this.paquetes = paquetes));
   }
 

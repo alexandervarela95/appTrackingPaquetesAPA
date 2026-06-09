@@ -28,6 +28,10 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
       }
 
+      @if (cargando) {
+        <p class="status-message">Cargando incidencias...</p>
+      }
+
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarIncidencia()">
           <h2>Nueva incidencia</h2>
@@ -69,7 +73,9 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
             <label for="descripcion">Descripcion</label>
             <textarea id="descripcion" name="descripcion" [(ngModel)]="formulario.descripcion"></textarea>
           </div>
-          <button class="button-primary" type="submit"><i class="pi pi-save"></i>Guardar incidencia</button>
+          <button class="button-primary" type="submit" [disabled]="guardando">
+            <i class="pi pi-save"></i>{{ guardando ? 'Guardando...' : 'Guardar incidencia' }}
+          </button>
         </form>
 
         <article class="table-panel">
@@ -117,6 +123,8 @@ export class IncidenciasComponent implements OnInit {
   protected formulario: Partial<Incidencia> = this.crearFormularioVacio();
   protected mensaje = '';
   protected hayError = false;
+  protected cargando = false;
+  protected guardando = false;
 
   public constructor(
     private readonly incidenciaServicio: IncidenciaServicio,
@@ -129,7 +137,17 @@ export class IncidenciasComponent implements OnInit {
   }
 
   protected cargarDatos(): void {
-    this.incidenciaServicio.listar().subscribe((incidencias) => (this.incidencias = incidencias));
+    this.cargando = true;
+    this.incidenciaServicio.listar().subscribe({
+      next: (incidencias) => {
+        this.incidencias = incidencias;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarError('No fue posible cargar incidencias.');
+      },
+    });
     this.paqueteServicio.listar().subscribe((paquetes) => (this.paquetes = paquetes));
     this.usuarioServicio.listar().subscribe((usuarios) => (this.usuarios = usuarios.filter((usuario) => usuario.estado !== false)));
   }
@@ -145,18 +163,26 @@ export class IncidenciasComponent implements OnInit {
       return;
     }
 
+    this.guardando = true;
     this.incidenciaServicio.crear(this.formulario).subscribe({
       next: () => {
+        this.guardando = false;
         this.mensaje = 'Incidencia registrada correctamente.';
         this.hayError = false;
         this.formulario = this.crearFormularioVacio();
         this.cargarDatos();
       },
-      error: () => this.mostrarError('No fue posible registrar la incidencia.'),
+      error: () => {
+        this.guardando = false;
+        this.mostrarError('No fue posible registrar la incidencia.');
+      },
     });
   }
 
   protected eliminarIncidencia(incidencia: Incidencia): void {
+    if (!confirm('Desea eliminar esta incidencia?')) {
+      return;
+    }
     this.incidenciaServicio.eliminar(this.obtenerId(incidencia)).subscribe(() => this.cargarDatos());
   }
 

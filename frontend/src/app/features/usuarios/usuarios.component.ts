@@ -20,6 +20,14 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()"><i class="pi pi-refresh"></i></button>
       </header>
 
+      @if (mensaje) {
+        <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
+      }
+
+      @if (cargando) {
+        <p class="status-message">Cargando usuarios...</p>
+      }
+
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarUsuario()">
           <h2>Nuevo usuario</h2>
@@ -58,7 +66,9 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
             <label for="contrasena">Contrasena inicial</label>
             <input id="contrasena" name="contrasena" type="password" [(ngModel)]="formulario.contrasena" placeholder="123456 por defecto" />
           </div>
-          <button class="button-primary" type="submit"><i class="pi pi-save"></i>Guardar</button>
+          <button class="button-primary" type="submit" [disabled]="guardando">
+            <i class="pi pi-save"></i>{{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
         </form>
 
         <article class="table-panel">
@@ -101,6 +111,10 @@ export class UsuariosComponent implements OnInit {
   protected usuarios: Usuario[] = [];
   protected lugares: Lugar[] = [];
   protected formulario: Partial<Usuario> = this.crearFormularioVacio();
+  protected mensaje = '';
+  protected hayError = false;
+  protected cargando = false;
+  protected guardando = false;
 
   public constructor(
     private readonly usuarioServicio: UsuarioServicio,
@@ -112,18 +126,41 @@ export class UsuariosComponent implements OnInit {
   }
 
   protected cargarDatos(): void {
-    this.usuarioServicio.listar().subscribe((usuarios) => (this.usuarios = usuarios));
+    this.cargando = true;
+    this.usuarioServicio.listar().subscribe({
+      next: (usuarios) => {
+        this.usuarios = usuarios;
+        this.cargando = false;
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarError('No fue posible cargar usuarios.');
+      },
+    });
     this.lugarServicio.listar().subscribe((lugares) => (this.lugares = lugares));
   }
 
   protected guardarUsuario(): void {
-    this.usuarioServicio.crear(this.formulario).subscribe(() => {
-      this.formulario = this.crearFormularioVacio();
-      this.cargarDatos();
+    this.guardando = true;
+    this.usuarioServicio.crear(this.formulario).subscribe({
+      next: () => {
+        this.guardando = false;
+        this.mensaje = 'Usuario guardado correctamente.';
+        this.hayError = false;
+        this.formulario = this.crearFormularioVacio();
+        this.cargarDatos();
+      },
+      error: () => {
+        this.guardando = false;
+        this.mostrarError('No fue posible guardar el usuario.');
+      },
     });
   }
 
   protected eliminarUsuario(usuario: Usuario): void {
+    if (!confirm('Desea desactivar este usuario?')) {
+      return;
+    }
     this.usuarioServicio.eliminar(this.obtenerId(usuario)).subscribe(() => this.cargarDatos());
   }
 
@@ -133,5 +170,10 @@ export class UsuariosComponent implements OnInit {
 
   private crearFormularioVacio(): Partial<Usuario> {
     return { nombre: '', correo: '', codigoEmpleado: '', contrasena: '', rol: 'usuario', lugarAsignadoId: '', estado: true };
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.mensaje = mensaje;
+    this.hayError = true;
   }
 }

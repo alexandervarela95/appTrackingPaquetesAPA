@@ -32,6 +32,10 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         <p class="status-message" [class.error]="hayError">{{ mensaje }}</p>
       }
 
+      @if (cargando) {
+        <p class="status-message">Consultando tracking...</p>
+      }
+
       <article class="table-panel">
         <table class="data-table">
           <thead>
@@ -73,6 +77,7 @@ export class TrackingComponent implements OnInit {
   protected usuarios: Usuario[] = [];
   protected mensaje = '';
   protected hayError = false;
+  protected cargando = false;
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -102,14 +107,19 @@ export class TrackingComponent implements OnInit {
       this.mostrarError('Ingresa una guia para consultar tracking.');
       return;
     }
+    this.cargando = true;
     this.trackingServicio.listarPorGuia(numeroGuia).subscribe({
       next: (historial) => {
+        this.cargando = false;
         this.historial = historial;
         if (historial.length === 0) {
           this.mostrarError('No hay tracking para esta guia.');
         }
       },
-      error: () => this.mostrarError('No fue posible consultar el tracking.'),
+      error: () => {
+        this.cargando = false;
+        this.mostrarError('No fue posible consultar el tracking.');
+      },
     });
   }
 
