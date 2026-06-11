@@ -59,6 +59,13 @@ npm run build
 npm start
 ```
 
+## Documentación de gestión y código
+
+- `documentacion/documentacion-codigo.md`: mapa técnico del backend, frontend, rutas, servicios y flujo funcional.
+- `documentacion/estado-validacion-scrum.md`: estado validado, criterios de listo, riesgos y pendientes priorizados.
+- `documentacion/despliegue-local.md`: guía para levantar el entorno local.
+- `documentacion/endpoints-api.md`: referencia de endpoints locales.
+
 ## Flujo demo
 
 1. Login con `Sistemas / Sistemas*2026`.
@@ -73,4 +80,4 @@ npm start
 
 ## Estado actual
 
-Proyecto listo para entrega academica avanzada y demo funcional. Tiene base solida para futura produccion, pero aun requiere infraestructura productiva formal, monitoreo, backups, politicas de permisos por propiedad de recurso y pipeline CI/CD.
+Proyecto listo para pruebas locales y demo funcional cuando Docker Desktop, MongoDB y Redis están activos. Tiene una base sólida para futura producción, pero aún requiere infraestructura productiva formal, monitoreo, backups, políticas de permisos por propiedad de recurso, pruebas end-to-end y pipeline CI/CD.
