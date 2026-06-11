@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { DashboardResumen } from '../../core/modelos/dashboard.model';
 import { DashboardServicio } from '../../core/servicios/dashboard.servicio';
+import { EstadoRealtime, RealtimeService } from '../../core/servicios/realtime.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +16,7 @@ import { DashboardServicio } from '../../core/servicios/dashboard.servicio';
         </div>
         <div class="header-actions">
           <span class="badge">Redis cache</span>
+          <span class="badge">{{ estadoRealtime }}</span>
           <button class="icon-button" type="button" title="Actualizar" (click)="cargarResumen()">
             <i class="pi pi-refresh"></i>
           </button>
@@ -104,15 +107,28 @@ import { DashboardServicio } from '../../core/servicios/dashboard.servicio';
     `,
   ],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   protected resumen?: DashboardResumen;
   protected mensajeError = '';
   protected cargando = false;
+  protected estadoRealtime: EstadoRealtime = 'desconectado';
+  private readonly destruir$ = new Subject<void>();
 
-  public constructor(private readonly dashboardServicio: DashboardServicio) {}
+  public constructor(
+    private readonly dashboardServicio: DashboardServicio,
+    private readonly realtimeService: RealtimeService,
+  ) {}
 
   public ngOnInit(): void {
     this.cargarResumen();
+    this.realtimeService.estado$.pipe(takeUntil(this.destruir$)).subscribe((estado) => (this.estadoRealtime = estado));
+    this.realtimeService.escuchar('dashboard:updated').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarResumen());
+    this.realtimeService.escuchar('incident:created').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarResumen());
+  }
+
+  public ngOnDestroy(): void {
+    this.destruir$.next();
+    this.destruir$.complete();
   }
 
   protected get metricas() {

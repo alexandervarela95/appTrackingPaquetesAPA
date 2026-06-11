@@ -11,30 +11,42 @@
 - CRUD operativo de usuarios, lugares, estados, paquetes, tracking, incidencias y evidencias.
 - Upload real de evidencias.
 - Frontend Angular funcional.
+- Socket.IO integrado para actualizaciones en tiempo real.
+- Auditoria basica de acciones criticas.
+- Control fino por propiedad de paquete en rutas criticas.
+- Reportes basicos con consultas reales a MongoDB.
+- Scripts de backup/restauracion documentados.
+- CI/CD basico con GitHub Actions.
+- Suite E2E base configurada con Playwright.
 - Login visual alineado a appTallerAPA.
 - Seed demo idempotente.
-- Pruebas minimas backend.
+- Pruebas backend.
 - Documentacion final.
 
-## No listo aún para producción estricta
+## No listo aun para produccion estricta
 
-- Falta CI/CD.
 - Falta despliegue con dominio, TLS y proxy reverso.
 - Falta monitoreo centralizado.
-- Falta auditoría de acciones.
-- Falta control fino por propiedad de recurso.
-- Falta estrategia formal de backups/restauración.
-- Falta almacenamiento externo para archivos en producción.
-- Falta suite end-to-end para validar flujos completos de usuario.
-- Falta revisar presupuesto de bundle del frontend o ajustar el limite configurado.
+- Falta almacenamiento externo para archivos en produccion.
+- Falta ampliar suite end-to-end para todos los flujos operativos.
+- Falta adapter Redis de Socket.IO para despliegue horizontal.
 
-## Validación más reciente
+## Validacion mas reciente
 
 Fecha: 11 de junio de 2026.
 
 - Backend build: correcto.
-- Backend tests: correcto, 3 suites y 4 pruebas aprobadas.
-- Frontend build: correcto, con advertencia de presupuesto de bundle.
-- Docker Desktop: no disponible durante la validacion; debe estar activo para pruebas locales con MongoDB y Redis.
+- Backend tests: correcto, 4 suites y 7 pruebas aprobadas.
+- Frontend build: correcto, sin advertencia de presupuesto de bundle.
+- CI/CD: workflow agregado en `.github/workflows/ci.yml`.
+- E2E: configuracion base agregada con Playwright.
+- Docker Desktop: debe estar activo para pruebas locales con MongoDB y Redis.
 
-Detalle ampliado: `documentacion/estado-validacion-scrum.md`.
+Detalle ampliado:
+
+- `documentacion/estado-validacion-scrum.md`
+- `documentacion/tiempo-real.md`
+- `documentacion/auditoria.md`
+- `documentacion/reportes.md`
+- `documentacion/roles-permisos.md`
+- `documentacion/backups-restauracion.md`

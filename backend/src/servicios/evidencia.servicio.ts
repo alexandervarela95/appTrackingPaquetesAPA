@@ -1,9 +1,21 @@
 import { EvidenciaModelo } from '../modelos/evidencia.model';
 import { PaqueteModelo } from '../modelos/paquete.model';
+import { TokenPayload } from '../middlewares/auth.middleware';
+import { AccesoPaqueteServicio } from './accesoPaquete.servicio';
+import { storageEvidencias } from './storage.servicio';
 
 export class EvidenciaServicio {
   public static async listarEvidencias() {
     return EvidenciaModelo.find().lean();
+  }
+
+  public static async listarEvidenciasPorUsuario(usuario: TokenPayload) {
+    if (usuario.rol === 'administrador') {
+      return this.listarEvidencias();
+    }
+
+    const paquetes = await PaqueteModelo.find(AccesoPaqueteServicio.construirFiltroPorUsuario(usuario)).select('_id').lean();
+    return EvidenciaModelo.find({ paqueteId: { $in: paquetes.map((paquete) => paquete._id) } }).lean();
   }
 
   public static async obtenerEvidenciaPorId(id: string) {
@@ -36,7 +48,7 @@ export class EvidenciaServicio {
       numeroGuia: datos.numeroGuia,
       tipoEvidencia: datos.tipoEvidencia,
       descripcion: datos.descripcion || '',
-      rutaArchivo: `uploads/evidencias/${archivo.filename}`,
+      rutaArchivo: storageEvidencias.resolverRutaRelativa(archivo.filename),
       reportadoPorId
     });
   }

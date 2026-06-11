@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { Estado } from '../../core/modelos/estado.model';
 import { Lugar } from '../../core/modelos/lugar.model';
 import { Paquete } from '../../core/modelos/paquete.model';
@@ -9,6 +10,7 @@ import { Usuario } from '../../core/modelos/usuario.model';
 import { EstadoServicio } from '../../core/servicios/estado.servicio';
 import { LugarServicio } from '../../core/servicios/lugar.servicio';
 import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
+import { RealtimeService } from '../../core/servicios/realtime.service';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 
 @Component({
@@ -113,7 +115,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
     `,
   ],
 })
-export class PaquetesComponent implements OnInit {
+export class PaquetesComponent implements OnInit, OnDestroy {
   protected paquetes: Paquete[] = [];
   protected lugares: Lugar[] = [];
   protected usuarios: Usuario[] = [];
@@ -123,16 +125,26 @@ export class PaquetesComponent implements OnInit {
   protected mensaje = '';
   protected hayError = false;
   protected cargando = false;
+  private readonly destruir$ = new Subject<void>();
 
   public constructor(
     private readonly paqueteServicio: PaqueteServicio,
     private readonly lugarServicio: LugarServicio,
     private readonly usuarioServicio: UsuarioServicio,
     private readonly estadoServicio: EstadoServicio,
+    private readonly realtimeService: RealtimeService,
   ) {}
 
   public ngOnInit(): void {
     this.cargarDatos();
+    this.realtimeService.escuchar('package:created').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarDatos());
+    this.realtimeService.escuchar('package:updated').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarDatos());
+    this.realtimeService.escuchar('package:status-changed').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarDatos());
+  }
+
+  public ngOnDestroy(): void {
+    this.destruir$.next();
+    this.destruir$.complete();
   }
 
   protected cargarDatos(): void {

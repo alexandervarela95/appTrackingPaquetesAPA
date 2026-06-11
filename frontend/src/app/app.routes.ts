@@ -11,6 +11,8 @@ import { EvidenciasComponent } from './features/evidencias/evidencias.component'
 import { UsuariosComponent } from './features/usuarios/usuarios.component';
 import { LugaresComponent } from './features/lugares/lugares.component';
 import { EstadosComponent } from './features/estados/estados.component';
+import { AuditoriaComponent } from './features/auditoria/auditoria.component';
+import { ReportesComponent } from './features/reportes/reportes.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -32,6 +34,8 @@ export const routes: Routes = [
       { path: 'usuarios', component: UsuariosComponent },
       { path: 'lugares', component: LugaresComponent },
       { path: 'estados', component: EstadosComponent },
+      { path: 'reportes', component: ReportesComponent },
+      { path: 'auditoria', component: AuditoriaComponent },
     ],
   },
   { path: '**', redirectTo: 'login' },

@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { IncidenciaServicio } from '../servicios/incidencia.servicio';
+import { AuditLogServicio } from '../servicios/auditLog.servicio';
+import { RealtimePublisher } from '../realtime/publisher';
+import { EventosRealtime } from '../realtime/events';
 
 export class IncidenciaControlador {
   public static async listar(req: Request, res: Response, next: NextFunction) {
@@ -26,6 +29,19 @@ export class IncidenciaControlador {
   public static async crear(req: Request, res: Response, next: NextFunction) {
     try {
       const incidencia = await IncidenciaServicio.crearIncidencia(req.body);
+      await AuditLogServicio.registrar({
+        req,
+        accion: 'incidencia.creada',
+        entidad: 'Incidencia',
+        entidadId: String(incidencia._id),
+        descripcion: `Incidencia creada para guia ${incidencia.numeroGuia}`,
+      });
+      RealtimePublisher.emitir(EventosRealtime.IncidenciaCreada, {
+        datos: incidencia,
+        paqueteId: String(incidencia.paqueteId),
+        numeroGuia: incidencia.numeroGuia,
+      });
+      RealtimePublisher.emitir(EventosRealtime.DashboardActualizado, {});
       res.status(201).json({ exito: true, mensaje: 'Incidencia creada correctamente', datos: incidencia });
     } catch (error) {
       next(error);
@@ -38,6 +54,19 @@ export class IncidenciaControlador {
       if (!incidencia) {
         return res.status(404).json({ exito: false, mensaje: 'Incidencia no encontrada', errores: [] });
       }
+      await AuditLogServicio.registrar({
+        req,
+        accion: 'incidencia.actualizada',
+        entidad: 'Incidencia',
+        entidadId: String(incidencia._id),
+        descripcion: `Incidencia actualizada para guia ${incidencia.numeroGuia}`,
+      });
+      RealtimePublisher.emitir(EventosRealtime.IncidenciaActualizada, {
+        datos: incidencia,
+        paqueteId: String(incidencia.paqueteId),
+        numeroGuia: incidencia.numeroGuia,
+      });
+      RealtimePublisher.emitir(EventosRealtime.DashboardActualizado, {});
       res.json({ exito: true, mensaje: 'Incidencia actualizada correctamente', datos: incidencia });
     } catch (error) {
       next(error);

@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { Estado } from '../../core/modelos/estado.model';
 import { Lugar } from '../../core/modelos/lugar.model';
 import { Tracking } from '../../core/modelos/tracking.model';
@@ -10,6 +11,7 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
 import { LugarServicio } from '../../core/servicios/lugar.servicio';
 import { TrackingServicio } from '../../core/servicios/tracking.servicio';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
+import { RealtimeService } from '../../core/servicios/realtime.service';
 
 @Component({
   selector: 'app-tracking',
@@ -69,7 +71,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
     </section>
   `,
 })
-export class TrackingComponent implements OnInit {
+export class TrackingComponent implements OnInit, OnDestroy {
   protected numeroGuia = '';
   protected historial: Tracking[] = [];
   protected estados: Estado[] = [];
@@ -78,6 +80,7 @@ export class TrackingComponent implements OnInit {
   protected mensaje = '';
   protected hayError = false;
   protected cargando = false;
+  private readonly destruir$ = new Subject<void>();
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -85,6 +88,7 @@ export class TrackingComponent implements OnInit {
     private readonly estadoServicio: EstadoServicio,
     private readonly lugarServicio: LugarServicio,
     private readonly usuarioServicio: UsuarioServicio,
+    private readonly realtimeService: RealtimeService,
   ) {}
 
   public ngOnInit(): void {
@@ -95,8 +99,19 @@ export class TrackingComponent implements OnInit {
     const numeroGuiaRuta = this.route.snapshot.paramMap.get('numeroGuia');
     if (numeroGuiaRuta) {
       this.numeroGuia = numeroGuiaRuta;
+      this.realtimeService.unirseAGuia(numeroGuiaRuta);
       this.buscarPorGuia();
     }
+    this.realtimeService.escuchar('tracking:created').pipe(takeUntil(this.destruir$)).subscribe((evento) => {
+      if (!this.numeroGuia || evento.numeroGuia === this.numeroGuia.trim()) {
+        this.buscarPorGuia();
+      }
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.destruir$.next();
+    this.destruir$.complete();
   }
 
   protected buscarPorGuia(): void {
@@ -107,6 +122,7 @@ export class TrackingComponent implements OnInit {
       this.mostrarError('Ingresa una guia para consultar tracking.');
       return;
     }
+    this.realtimeService.unirseAGuia(numeroGuia);
     this.cargando = true;
     this.trackingServicio.listarPorGuia(numeroGuia).subscribe({
       next: (historial) => {

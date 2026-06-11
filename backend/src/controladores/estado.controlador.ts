@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { EstadoServicio } from '../servicios/estado.servicio';
+import { AuditLogServicio } from '../servicios/auditLog.servicio';
+import { RealtimePublisher } from '../realtime/publisher';
+import { EventosRealtime } from '../realtime/events';
 
 export class EstadoControlador {
   public static async listar(req: Request, res: Response, next: NextFunction) {
@@ -26,6 +29,8 @@ export class EstadoControlador {
   public static async crear(req: Request, res: Response, next: NextFunction) {
     try {
       const estado = await EstadoServicio.crearEstado(req.body);
+      await AuditLogServicio.registrar({ req, accion: 'estado.creado', entidad: 'Estado', entidadId: String(estado._id), descripcion: `Estado ${estado.nombre} creado` });
+      RealtimePublisher.emitir(EventosRealtime.CatalogoActualizado, { datos: { catalogo: 'estados' } });
       res.status(201).json({ exito: true, mensaje: 'Estado creado correctamente', datos: estado });
     } catch (error) {
       next(error);
@@ -38,6 +43,8 @@ export class EstadoControlador {
       if (!estado) {
         return res.status(404).json({ exito: false, mensaje: 'Estado no encontrado', errores: [] });
       }
+      await AuditLogServicio.registrar({ req, accion: 'estado.actualizado', entidad: 'Estado', entidadId: String(estado._id), descripcion: `Estado ${estado.nombre} actualizado` });
+      RealtimePublisher.emitir(EventosRealtime.CatalogoActualizado, { datos: { catalogo: 'estados' } });
       res.json({ exito: true, mensaje: 'Estado actualizado correctamente', datos: estado });
     } catch (error) {
       next(error);
@@ -50,6 +57,8 @@ export class EstadoControlador {
       if (!estado) {
         return res.status(404).json({ exito: false, mensaje: 'Estado no encontrado', errores: [] });
       }
+      await AuditLogServicio.registrar({ req, accion: 'estado.desactivado', entidad: 'Estado', entidadId: String(estado._id), descripcion: `Estado ${estado.nombre} desactivado` });
+      RealtimePublisher.emitir(EventosRealtime.CatalogoActualizado, { datos: { catalogo: 'estados' } });
       res.json({ exito: true, mensaje: 'Estado desactivado correctamente', datos: estado });
     } catch (error) {
       next(error);

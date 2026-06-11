@@ -3,12 +3,18 @@ import { TrackingServicio } from './tracking.servicio';
 import { generarNumeroGuia } from '../utilidades/generarNumeroGuia';
 import { EstadoModelo } from '../modelos/estado.model';
 import { obtenerClienteRedis } from '../config/conexionRedis';
+import { TokenPayload } from '../middlewares/auth.middleware';
+import { AccesoPaqueteServicio } from './accesoPaquete.servicio';
 
 const CLAVE_CACHE_GUIA = (numeroGuia: string) => `paquete:guia:${numeroGuia}`;
 
 export class PaqueteServicio {
   public static async listarPaquetes() {
     return PaqueteModelo.find({ estado: true }).lean();
+  }
+
+  public static async listarPaquetesPorUsuario(usuario: TokenPayload) {
+    return PaqueteModelo.find({ estado: true, ...AccesoPaqueteServicio.construirFiltroPorUsuario(usuario) }).lean();
   }
 
   public static async obtenerPaquetePorId(id: string) {
@@ -71,6 +77,7 @@ export class PaqueteServicio {
 
     const clienteRedis = obtenerClienteRedis();
     await clienteRedis.set(CLAVE_CACHE_GUIA(paqueteGuardado.numeroGuia), JSON.stringify(paqueteGuardado), { EX: 30 });
+    await clienteRedis.del('dashboard:resumen');
 
     return paqueteGuardado;
   }
@@ -112,6 +119,7 @@ export class PaqueteServicio {
     if (paqueteActualizado) {
       const clienteRedis = obtenerClienteRedis();
       await clienteRedis.set(CLAVE_CACHE_GUIA(paqueteActualizado.numeroGuia), JSON.stringify(paqueteActualizado), { EX: 30 });
+      await clienteRedis.del('dashboard:resumen');
     }
 
     return paqueteActualizado;
@@ -122,6 +130,7 @@ export class PaqueteServicio {
     if (paqueteEliminado) {
       const clienteRedis = obtenerClienteRedis();
       await clienteRedis.del(CLAVE_CACHE_GUIA(paqueteEliminado.numeroGuia));
+      await clienteRedis.del('dashboard:resumen');
     }
     return paqueteEliminado;
   }

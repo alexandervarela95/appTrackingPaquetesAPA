@@ -20,6 +20,8 @@ export class SidebarComponent {
     { etiqueta: 'Usuarios', icono: 'pi pi-users', ruta: '/usuarios' },
     { etiqueta: 'Lugares', icono: 'pi pi-building', ruta: '/lugares' },
     { etiqueta: 'Estados', icono: 'pi pi-tags', ruta: '/estados' },
+    { etiqueta: 'Reportes', icono: 'pi pi-chart-bar', ruta: '/reportes' },
+    { etiqueta: 'Auditoria', icono: 'pi pi-shield', ruta: '/auditoria' },
   ];
 
   constructor(

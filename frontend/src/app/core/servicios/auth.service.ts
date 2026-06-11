@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { AuthUser } from '../modelos/auth-user.model';
+import { RealtimeService } from './realtime.service';
 
 interface LoginRespuesta {
   exito: boolean;
@@ -22,6 +23,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private realtimeService: RealtimeService,
   ) {}
 
   public login(usuarioOCorreo: string, contrasena: string) {
@@ -32,6 +34,7 @@ export class AuthService {
         if (respuesta.exito) {
           localStorage.setItem(this.tokenClave, respuesta.datos.token);
           localStorage.setItem(this.usuarioClave, JSON.stringify(respuesta.datos.usuario));
+          this.realtimeService.conectar();
         }
       }),
     );
@@ -40,6 +43,7 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem(this.tokenClave);
     localStorage.removeItem(this.usuarioClave);
+    this.realtimeService.desconectar();
     this.router.navigateByUrl('/login');
   }
 

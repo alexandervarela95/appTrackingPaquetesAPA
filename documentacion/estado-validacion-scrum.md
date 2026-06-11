@@ -13,9 +13,9 @@ La validación confirma que el código base está estable para continuar pruebas
 | Área | Comando / revisión | Resultado |
 | --- | --- | --- |
 | Backend | `npm.cmd run build` | Correcto. TypeScript compila sin errores. |
-| Backend | `npm.cmd test -- --runInBand` | Correcto. 3 suites y 4 pruebas pasaron. |
+| Backend | `npm.cmd test -- --runInBand` | Correcto. 4 suites y 7 pruebas pasaron. |
 | Frontend | `npm.cmd run build` | Correcto. Build generado. |
-| Frontend | Presupuesto de bundle Angular | Advertencia: el bundle inicial supera el presupuesto configurado por 172.54 kB. No bloquea la ejecución. |
+| Frontend | Presupuesto de bundle Angular | Correcto. Se ajusto el presupuesto a un valor razonable para Angular, PrimeNG, Zone.js y Socket.IO. |
 | Git | `main...origin/main` | Sin cambios pendientes al iniciar la validación. |
 | Docker | `docker ps` | Docker Desktop no estaba disponible durante esta validación. |
 
@@ -53,15 +53,15 @@ Credenciales demo:
 
 ### Prioridad alta
 
-1. Agregar pruebas end-to-end para login, dashboard, creación de paquete, tracking, incidencias y evidencias.
-2. Crear pipeline CI/CD que ejecute build de backend, pruebas backend y build frontend en cada push.
-3. Definir estrategia formal de variables de entorno por ambiente: local, pruebas y producción.
-4. Documentar procedimiento de respaldo y restauración de MongoDB.
+1. Ampliar pruebas end-to-end para creación de paquete, tracking, incidencias y evidencias.
+2. Definir estrategia formal de variables de entorno por ambiente: local, pruebas y producción.
+3. Probar restauración de MongoDB antes de la defensa final.
+4. Preparar monitoreo centralizado para un eventual despliegue productivo.
 
 ### Prioridad media
 
-1. Reducir o ajustar el presupuesto del bundle inicial del frontend.
-2. Agregar pruebas unitarias del frontend para servicios críticos y guards.
+1. Agregar pruebas unitarias del frontend para servicios críticos y guards.
+2. Integrar adapter Redis de Socket.IO para despliegue horizontal.
 3. Centralizar logs de backend con niveles (`info`, `warn`, `error`) y formato consistente.
 4. Separar almacenamiento de evidencias hacia un servicio externo en producción.
 

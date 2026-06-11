@@ -10,6 +10,11 @@ services:
       - mongo_data:/data/db
     environment:
       MONGO_INITDB_DATABASE: appTrackingPaquetesAPA
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7.2
@@ -17,6 +22,11 @@ services:
     ports:
       - '6379:6379'
     command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mongo_data:

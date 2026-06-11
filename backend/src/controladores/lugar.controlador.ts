@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { LugarServicio } from '../servicios/lugar.servicio';
+import { AuditLogServicio } from '../servicios/auditLog.servicio';
+import { RealtimePublisher } from '../realtime/publisher';
+import { EventosRealtime } from '../realtime/events';
 
 export class LugarControlador {
   public static async listar(req: Request, res: Response, next: NextFunction) {
@@ -26,6 +29,8 @@ export class LugarControlador {
   public static async crear(req: Request, res: Response, next: NextFunction) {
     try {
       const lugar = await LugarServicio.crearLugar(req.body);
+      await AuditLogServicio.registrar({ req, accion: 'lugar.creado', entidad: 'Lugar', entidadId: String(lugar._id), descripcion: `Lugar ${lugar.nombre} creado` });
+      RealtimePublisher.emitir(EventosRealtime.CatalogoActualizado, { datos: { catalogo: 'lugares' } });
       res.status(201).json({ exito: true, mensaje: 'Lugar creado correctamente', datos: lugar });
     } catch (error) {
       next(error);
@@ -38,6 +43,8 @@ export class LugarControlador {
       if (!lugar) {
         return res.status(404).json({ exito: false, mensaje: 'Lugar no encontrado', errores: [] });
       }
+      await AuditLogServicio.registrar({ req, accion: 'lugar.actualizado', entidad: 'Lugar', entidadId: String(lugar._id), descripcion: `Lugar ${lugar.nombre} actualizado` });
+      RealtimePublisher.emitir(EventosRealtime.CatalogoActualizado, { datos: { catalogo: 'lugares' } });
       res.json({ exito: true, mensaje: 'Lugar actualizado correctamente', datos: lugar });
     } catch (error) {
       next(error);
@@ -50,6 +57,8 @@ export class LugarControlador {
       if (!lugar) {
         return res.status(404).json({ exito: false, mensaje: 'Lugar no encontrado', errores: [] });
       }
+      await AuditLogServicio.registrar({ req, accion: 'lugar.desactivado', entidad: 'Lugar', entidadId: String(lugar._id), descripcion: `Lugar ${lugar.nombre} desactivado` });
+      RealtimePublisher.emitir(EventosRealtime.CatalogoActualizado, { datos: { catalogo: 'lugares' } });
       res.json({ exito: true, mensaje: 'Lugar desactivado correctamente', datos: lugar });
     } catch (error) {
       next(error);

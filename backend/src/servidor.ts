@@ -1,7 +1,9 @@
+import { createServer } from 'http';
 import { crearApp } from './app';
 import { conectarMongo } from './config/conexionMongo';
 import { conectarRedis } from './config/conexionRedis';
 import { configuracionEntorno } from './config/configuracionEntorno';
+import { configurarRealtime } from './realtime/server';
 import { cargarEstadosIniciales } from './semillas/estadosSemilla';
 
 const iniciarServidor = async (): Promise<void> => {
@@ -10,7 +12,10 @@ const iniciarServidor = async (): Promise<void> => {
   await cargarEstadosIniciales();
 
   const app = crearApp();
-  app.listen(configuracionEntorno.puerto, () => {
+  const servidorHttp = createServer(app);
+  configurarRealtime(servidorHttp);
+
+  servidorHttp.listen(configuracionEntorno.puerto, () => {
     console.log(`Servidor backend ejecutandose en http://localhost:${configuracionEntorno.puerto}`);
   });
 };

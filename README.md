@@ -1,19 +1,21 @@
 # appTrackingPaquetesAPA
 
-Sistema fullstack para tracking interno de paquetes de Almacen Pajaro Azul. Incluye autenticacion JWT, roles, CRUD operativo, dashboard, tracking por guia, incidencias, evidencias con upload real, Redis con fallback y datos demo idempotentes.
+Sistema fullstack para tracking interno de paquetes de Almacen Pajaro Azul. Incluye autenticacion JWT, roles, control por propiedad de recurso, CRUD operativo, dashboard, tracking por guia, incidencias, evidencias con upload real, auditoria, reportes, Socket.IO para tiempo real, Redis con fallback y datos demo idempotentes.
 
 ## Tecnologias
 
-- Backend: Node.js, Express, TypeScript, MongoDB, Mongoose, Redis, JWT, Zod, Multer, Jest.
-- Frontend: Angular standalone, TypeScript, RxJS, SCSS, PrimeIcons.
+- Backend: Node.js, Express, TypeScript, MongoDB, Mongoose, Redis, JWT, Zod, Multer, Socket.IO y Jest.
+- Frontend: Angular standalone, TypeScript, RxJS, SCSS, PrimeIcons, Socket.IO Client y Playwright.
 - Infra local: Docker Compose para MongoDB y Redis.
+- CI/CD: GitHub Actions.
 
 ## Estructura
 
-- `backend/`: API REST y seeds.
-- `frontend/`: interfaz Angular.
-- `documentacion/`: guias de entrega, seguridad, endpoints y demo.
-- `docker-compose.yml`: servicios locales de datos.
+- `backend/`: API REST, Socket.IO, modelos, servicios, middlewares, seeds y pruebas.
+- `frontend/`: interfaz Angular, guards, interceptores, servicios, pantallas y E2E.
+- `documentacion/`: guias tecnicas, usuario, validacion, roles, reportes y defensa.
+- `scripts/backup/`: scripts de backup y restauracion MongoDB.
+- `.github/workflows/ci.yml`: validacion automatica en GitHub.
 
 ## Inicio rapido
 
@@ -57,14 +59,30 @@ Frontend:
 ```bash
 npm run build
 npm start
+npm run e2e
 ```
 
-## Documentación de gestión y código
+CI/CD:
 
-- `documentacion/documentacion-codigo.md`: mapa técnico del backend, frontend, rutas, servicios y flujo funcional.
+```bash
+git push origin main
+```
+
+El workflow `.github/workflows/ci.yml` ejecuta instalacion, build backend, pruebas backend y build frontend.
+
+## Documentacion de gestion y codigo
+
+- `documentacion/documentacion-codigo.md`: mapa tecnico del backend, frontend, rutas, servicios y flujo funcional.
 - `documentacion/estado-validacion-scrum.md`: estado validado, criterios de listo, riesgos y pendientes priorizados.
-- `documentacion/despliegue-local.md`: guía para levantar el entorno local.
+- `documentacion/despliegue-local.md`: guia para levantar el entorno local.
 - `documentacion/endpoints-api.md`: referencia de endpoints locales.
+- `documentacion/tiempo-real.md`: eventos Socket.IO, rooms y validacion manual.
+- `documentacion/roles-permisos.md`: reglas por rol y propiedad de recurso.
+- `documentacion/auditoria.md`: trazabilidad de acciones criticas.
+- `documentacion/reportes.md`: salidas de informacion y endpoints.
+- `documentacion/backups-restauracion.md`: respaldo y restauracion de MongoDB.
+- `documentacion/ci-cd.md`: pipeline de GitHub Actions.
+- `documentacion/e2e.md`: pruebas end-to-end base.
 
 ## Flujo demo
 
@@ -77,7 +95,11 @@ npm start
 7. Crear incidencia.
 8. Subir evidencia PDF/JPG/PNG.
 9. Revisar usuarios, lugares y estados.
+10. Revisar reportes.
+11. Revisar auditoria.
 
 ## Estado actual
 
-Proyecto listo para pruebas locales y demo funcional cuando Docker Desktop, MongoDB y Redis están activos. Tiene una base sólida para futura producción, pero aún requiere infraestructura productiva formal, monitoreo, backups, políticas de permisos por propiedad de recurso, pruebas end-to-end y pipeline CI/CD.
+Proyecto listo para pruebas locales y demo funcional cuando Docker Desktop, MongoDB y Redis estan activos. Tiene base defendible para entrega academica: backend y frontend integrados, datos reales desde MongoDB, tiempo real con Socket.IO, auditoria, reportes, control por propiedad de recurso, CI/CD basico y documentacion final.
+
+Para produccion estricta todavia requiere dominio, TLS, proxy reverso, monitoreo centralizado, almacenamiento externo de evidencias, adapter Redis de Socket.IO para despliegue horizontal y mayor cobertura E2E.
