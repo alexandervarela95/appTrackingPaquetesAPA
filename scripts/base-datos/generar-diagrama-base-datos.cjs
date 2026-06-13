@@ -47,16 +47,15 @@ function linea(x1, y1, x2, y2, texto, dashed = false) {
   `;
 }
 
-function ruta(puntos, texto, labelX, labelY, dashed = false) {
+function ruta(puntos, numero, tagX, tagY, dashed = false) {
   const d = puntos.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0]} ${p[1]}`).join(' ');
   const [x1, y1] = puntos[0];
-  const [x2, y2] = puntos[puntos.length - 1];
   return `
     <g class="relation ${dashed ? 'dashed' : ''}">
-      <path d="${d}" />
+      <path class="relation-path" d="${d}" marker-end="${dashed ? 'url(#arrow-dashed)' : 'url(#arrow)'}" />
       <circle cx="${x1}" cy="${y1}" r="3.2" />
-      <path d="M ${x2} ${y2} l -9 -5 m 9 5 l -9 5" />
-      <text x="${labelX}" y="${labelY}" text-anchor="middle">${texto}</text>
+      <circle class="relation-tag" cx="${tagX}" cy="${tagY}" r="10" />
+      <text class="relation-number" x="${tagX}" y="${tagY + 4}" text-anchor="middle">${numero}</text>
     </g>
   `;
 }
@@ -110,25 +109,24 @@ function construirHtml(logoDataUri) {
     .catalog .entity-head { fill: #edf7ed; }
     .child .entity-head { fill: #fff4dc; }
     .audit .entity-head { fill: #f1eaff; }
-    .relation line,
-    .relation path,
-    .relation circle {
+    .relation .relation-path,
+    .relation > circle:not(.relation-tag) {
       fill: none;
       stroke: #000;
       stroke-width: 1.35;
     }
-    .relation text {
-      font-size: 10px;
+    .relation-tag {
+      fill: #fff;
+      stroke: #000;
+      stroke-width: 1.2;
+    }
+    .relation-number {
+      font-size: 10.5px;
       font-weight: 700;
       fill: #111;
-      paint-order: stroke;
-      stroke: #fff;
-      stroke-width: 4px;
-      stroke-linejoin: round;
     }
-    .dashed line,
-    .dashed path,
-    .dashed circle {
+    .dashed .relation-path,
+    .dashed > circle:not(.relation-tag) {
       stroke-dasharray: 7 5;
     }
     .note-title,
@@ -153,6 +151,14 @@ function construirHtml(logoDataUri) {
 <body>
   <div class="sheet">
     <svg viewBox="0 0 1700 1100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+        </marker>
+        <marker id="arrow-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+        </marker>
+      </defs>
       <rect class="border" x="10" y="8" width="1680" height="1084" />
       <rect class="thin" x="36" y="32" width="1628" height="968" />
 
@@ -267,25 +273,27 @@ function construirHtml(logoDataUri) {
       ], 'audit')}
 
       <!-- Relaciones principales -->
-      ${ruta([[450, 290], [535, 290], [535, 420], [620, 420]], 'usuarios del paquete', 535, 280)}
-      ${ruta([[450, 650], [535, 650], [535, 510], [620, 510]], 'origen / destino', 535, 666)}
-      ${ruta([[850, 312], [850, 360]], 'estado actual', 918, 338)}
-      ${ruta([[1080, 430], [1150, 430], [1150, 260], [1230, 260]], '1 paquete / N avances', 1150, 250)}
-      ${ruta([[1080, 510], [1150, 510], [1150, 555], [1230, 555]], '1 paquete / N incidencias', 1168, 525)}
-      ${ruta([[1080, 600], [1150, 600], [1150, 820], [1230, 820]], '1 paquete / N evidencias', 1168, 792)}
-      ${ruta([[1000, 225], [1110, 225], [1110, 245], [1230, 245]], 'estado del avance', 1110, 218)}
-      ${ruta([[850, 660], [850, 735]], 'acciones del sistema', 936, 696, true)}
-      ${ruta([[450, 250], [500, 250], [500, 710], [610, 710], [610, 830]], 'usuario auditado', 548, 702, true)}
+      ${ruta([[450, 290], [535, 290], [535, 420], [620, 420]], 1, 535, 356)}
+      ${ruta([[450, 650], [535, 650], [535, 510], [620, 510]], 2, 535, 580)}
+      ${ruta([[850, 312], [850, 360]], 3, 878, 336)}
+      ${ruta([[1080, 430], [1150, 430], [1150, 260], [1230, 260]], 4, 1150, 346)}
+      ${ruta([[1080, 510], [1150, 510], [1150, 555], [1230, 555]], 5, 1150, 535)}
+      ${ruta([[1080, 600], [1150, 600], [1150, 820], [1230, 820]], 6, 1150, 710)}
+      ${ruta([[1000, 225], [1110, 225], [1110, 245], [1230, 245]], 7, 1110, 224)}
+      ${ruta([[850, 660], [850, 735]], 8, 878, 698, true)}
+      ${ruta([[450, 250], [500, 250], [500, 710], [610, 710], [610, 830]], 9, 500, 710, true)}
 
       <!-- Referencias -->
-      <g transform="translate(1230,930)">
-        <rect class="thin" x="0" y="0" width="350" height="62" />
-        <text class="ref-title" x="175" y="19" text-anchor="middle">REFERENCIAS</text>
-        <text class="ref-text" x="14" y="38">PK: principal   UK: unico   FK: referencia</text>
-        <line x1="14" y1="52" x2="88" y2="52" stroke="#000" stroke-width="1.35" />
-        <text class="ref-text" x="102" y="56">directa</text>
-        <line x1="190" y1="52" x2="260" y2="52" stroke="#000" stroke-width="1.35" stroke-dasharray="7 5" />
-        <text class="ref-text" x="274" y="56">auditoria</text>
+      <g transform="translate(70,905)">
+        <rect class="thin" x="0" y="0" width="500" height="88" />
+        <text class="ref-title" x="250" y="19" text-anchor="middle">REFERENCIAS</text>
+        <text class="ref-text" x="14" y="37">PK: principal   UK: unico   FK: referencia</text>
+        <text class="ref-text" x="14" y="54">1 Usuarios   2 Origen/destino   3 Estado actual   4 Avances</text>
+        <text class="ref-text" x="14" y="70">5 Incidencias   6 Evidencias   7 Estado avance</text>
+        <line x1="14" y1="81" x2="74" y2="81" stroke="#000" stroke-width="1.35" />
+        <text class="ref-text" x="84" y="85">directa</text>
+        <line x1="250" y1="81" x2="320" y2="81" stroke="#000" stroke-width="1.35" stroke-dasharray="7 5" />
+        <text class="ref-text" x="330" y="85">8-9 auditoria</text>
       </g>
 
       <!-- Notas -->
@@ -309,15 +317,15 @@ function construirHtml(logoDataUri) {
       <text class="cartouche" x="115" y="1060" text-anchor="middle">APPTRACKINGPAQUETESAPA</text>
       <text class="cartouche-title" x="448" y="1018">PLANO:</text>
       <text class="cartouche" x="635" y="1060" text-anchor="middle">DIAGRAMA DE BASE DE DATOS</text>
-      <text class="cartouche-title" x="858" y="1018">ELABORO:</text>
-      <text class="cartouche" x="940" y="1060" text-anchor="middle">SISTEMAS APA</text>
+      <text class="cartouche-title" x="858" y="1018">ELABORADO POR:</text>
+      <text class="cartouche" x="940" y="1060" text-anchor="middle">ING. ALEXANDER VARELA</text>
       <text class="cartouche-title" x="1058" y="1018">REVISO:</text>
-      <text class="cartouche" x="1130" y="1060" text-anchor="middle">SCRUM MASTER</text>
+      <text class="cartouche" x="1130" y="1060" text-anchor="middle">DOCENTE / SCRUM MASTER</text>
       <text class="cartouche-title" x="1238" y="1018">FECHA:</text>
       <text class="cartouche" x="1310" y="1060" text-anchor="middle">${fecha}</text>
       <text class="cartouche-title" x="1418" y="1018">NORMA:</text>
       <text class="cartouche" x="1472" y="1060" text-anchor="middle">DOCUMENTACION INTERNA</text>
-      <text class="cartouche-title" x="1562" y="1018">PLANO N°:</text>
+      <text class="cartouche-title" x="1562" y="1018">PLANO No.:</text>
       <text class="cartouche" x="1618" y="1060" text-anchor="middle">BD-01</text>
     </svg>
   </div>
