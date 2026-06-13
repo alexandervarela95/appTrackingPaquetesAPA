@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Diagrama de Base de Datos - appTrackingPaquetesAPA</title>
+  <style>
+    html, body {
+      margin: 0;
+      background: #f3f4f6;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .sheet {
+      width: 1700px;
+      height: 1100px;
+      margin: 0 auto;
+      background: #fff;
+    }
+    svg {
+      display: block;
+      width: 1700px;
+      height: 1100px;
+      background: #fff;
+    }
+    text {
+      fill: #111;
+      letter-spacing: 0;
+    }
+    .border { fill: none; stroke: #000; stroke-width: 2; }
+    .thin { fill: none; stroke: #000; stroke-width: 1; }
+    .grid-label { font-size: 14px; font-weight: 700; }
+    .title { font-size: 27px; font-weight: 700; }
+    .subtitle { font-size: 16px; font-weight: 700; }
+    .entity-box { fill: #fff; stroke: #000; stroke-width: 1.6; }
+    .entity-head { fill: #eef2f7; stroke: #000; stroke-width: 1.2; }
+    .entity-title { font-size: 15px; font-weight: 700; }
+    .entity-subtitle { font-size: 11px; font-weight: 700; }
+    .fields { font-size: 11px; font-family: Arial, Helvetica, sans-serif; }
+    .center .entity-head { fill: #e4eefb; }
+    .catalog .entity-head { fill: #edf7ed; }
+    .child .entity-head { fill: #fff4dc; }
+    .audit .entity-head { fill: #f1eaff; }
+    .relation line,
+    .relation path,
+    .relation circle {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1.35;
+    }
+    .relation text {
+      font-size: 10px;
+      font-weight: 700;
+      fill: #111;
+      paint-order: stroke;
+      stroke: #fff;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+    .dashed line,
+    .dashed path,
+    .dashed circle {
+      stroke-dasharray: 7 5;
+    }
+    .note-title,
+    .ref-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .note-text,
+    .ref-text,
+    .cartouche {
+      font-size: 11px;
+    }
+    .cartouche-title {
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .logo {
+      image-rendering: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <svg viewBox="0 0 1700 1100" xmlns="http://www.w3.org/2000/svg">
+      <rect class="border" x="10" y="8" width="1680" height="1084" />
+      <rect class="thin" x="36" y="32" width="1628" height="968" />
+
+      <!-- Coordenadas superiores -->
+      <line class="thin" x1="36" y1="8" x2="36" y2="32" /><text class="grid-label" x="137.75" y="24" text-anchor="middle">1</text><line class="thin" x1="239.5" y1="8" x2="239.5" y2="32" /><text class="grid-label" x="341.25" y="24" text-anchor="middle">2</text><line class="thin" x1="443" y1="8" x2="443" y2="32" /><text class="grid-label" x="544.75" y="24" text-anchor="middle">3</text><line class="thin" x1="646.5" y1="8" x2="646.5" y2="32" /><text class="grid-label" x="748.25" y="24" text-anchor="middle">4</text><line class="thin" x1="850" y1="8" x2="850" y2="32" /><text class="grid-label" x="951.75" y="24" text-anchor="middle">5</text><line class="thin" x1="1053.5" y1="8" x2="1053.5" y2="32" /><text class="grid-label" x="1155.25" y="24" text-anchor="middle">6</text><line class="thin" x1="1257" y1="8" x2="1257" y2="32" /><text class="grid-label" x="1358.75" y="24" text-anchor="middle">7</text><line class="thin" x1="1460.5" y1="8" x2="1460.5" y2="32" /><text class="grid-label" x="1562.25" y="24" text-anchor="middle">8</text>
+      <line class="thin" x1="1664" y1="8" x2="1664" y2="32" />
+
+      <!-- Coordenadas laterales -->
+      <line class="thin" x1="10" y1="32" x2="36" y2="32" /><text class="grid-label" x="22" y="116.66666666666667" text-anchor="middle">A</text><line class="thin" x1="10" y1="193.33333333333334" x2="36" y2="193.33333333333334" /><text class="grid-label" x="22" y="278" text-anchor="middle">B</text><line class="thin" x1="10" y1="354.6666666666667" x2="36" y2="354.6666666666667" /><text class="grid-label" x="22" y="439.33333333333337" text-anchor="middle">C</text><line class="thin" x1="10" y1="516" x2="36" y2="516" /><text class="grid-label" x="22" y="600.6666666666666" text-anchor="middle">D</text><line class="thin" x1="10" y1="677.3333333333334" x2="36" y2="677.3333333333334" /><text class="grid-label" x="22" y="762" text-anchor="middle">E</text><line class="thin" x1="10" y1="838.6666666666667" x2="36" y2="838.6666666666667" /><text class="grid-label" x="22" y="923.3333333333334" text-anchor="middle">F</text>
+
+      <text class="title" x="850" y="72" text-anchor="middle">DIAGRAMA DE BASE DE DATOS - APPTRACKINGPAQUETESAPA</text>
+      <text class="subtitle" x="850" y="100" text-anchor="middle">MODELO DOCUMENTAL MONGODB / RELACIONES OPERATIVAS DEL SISTEMA</text>
+      <image class="logo" href="data:image/jpeg;base64,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" x="60" y="48" width="188" height="48" preserveAspectRatio="xMidYMid meet" />
+
+      <!-- Entidades -->
+      
+    <g id="estado" class="entity catalog" transform="translate(700,140)">
+      <rect class="entity-box" width="300" height="172" rx="0" />
+      <rect class="entity-head" width="300" height="30" rx="0" />
+      <text class="entity-title" x="150" y="20" text-anchor="middle">ESTADO</text>
+      <text class="entity-subtitle" x="150" y="45" text-anchor="middle">Catalogo de avance del paquete</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">UK nombre : String</tspan><tspan x="0" dy="16">orden : Number</tspan><tspan x="0" dy="16">descripcion : String</tspan><tspan x="0" dy="16">estado : Boolean</tspan><tspan x="0" dy="16">fechaCreacion / fechaActualizacion : Date</tspan></text>
+    </g>
+  
+
+      
+    <g id="usuario" class="entity catalog" transform="translate(90,210)">
+      <rect class="entity-box" width="360" height="230" rx="0" />
+      <rect class="entity-head" width="360" height="30" rx="0" />
+      <text class="entity-title" x="180" y="20" text-anchor="middle">USUARIO</text>
+      <text class="entity-subtitle" x="180" y="45" text-anchor="middle">Personas que operan o consultan</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">UK correo : String</tspan><tspan x="0" dy="16">UK codigoEmpleado : String</tspan><tspan x="0" dy="16">nombre : String</tspan><tspan x="0" dy="16">contrasena : String</tspan><tspan x="0" dy="16">rol : usuario | motorista | administrador</tspan><tspan x="0" dy="16">FK lugarAsignadoId : Lugar</tspan><tspan x="0" dy="16">estado : Boolean</tspan><tspan x="0" dy="16">fechaCreacion / fechaActualizacion : Date</tspan></text>
+    </g>
+  
+
+      
+    <g id="lugar" class="entity catalog" transform="translate(90,570)">
+      <rect class="entity-box" width="360" height="182" rx="0" />
+      <rect class="entity-head" width="360" height="30" rx="0" />
+      <text class="entity-title" x="180" y="20" text-anchor="middle">LUGAR</text>
+      <text class="entity-subtitle" x="180" y="45" text-anchor="middle">Bodegas, sucursales y destinos</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">nombre : String</tspan><tspan x="0" dy="16">ciudad : String</tspan><tspan x="0" dy="16">direccion : String</tspan><tspan x="0" dy="16">descripcion : String</tspan><tspan x="0" dy="16">estado : Boolean</tspan><tspan x="0" dy="16">fechaCreacion / fechaActualizacion : Date</tspan></text>
+    </g>
+  
+
+      
+    <g id="paquete" class="entity center" transform="translate(620,360)">
+      <rect class="entity-box" width="460" height="300" rx="0" />
+      <rect class="entity-head" width="460" height="30" rx="0" />
+      <text class="entity-title" x="230" y="20" text-anchor="middle">PAQUETE</text>
+      <text class="entity-subtitle" x="230" y="45" text-anchor="middle">Registro central del envio</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">UK numeroGuia : String</tspan><tspan x="0" dy="16">descripcion : String</tspan><tspan x="0" dy="16">tipoPaquete : String</tspan><tspan x="0" dy="16">prioridad : baja | media | alta</tspan><tspan x="0" dy="16">FK estadoActualId : Estado</tspan><tspan x="0" dy="16">FK lugarOrigenId / lugarDestinoId : Lugar</tspan><tspan x="0" dy="16">FK usuarioRemitenteId : Usuario</tspan><tspan x="0" dy="16">FK usuarioDestinatarioId : Usuario</tspan><tspan x="0" dy="16">FK motoristaAsignadoId : Usuario</tspan><tspan x="0" dy="16">observaciones : String</tspan><tspan x="0" dy="16">estado : Boolean</tspan><tspan x="0" dy="16">fechaCreacion / fechaActualizacion : Date</tspan></text>
+    </g>
+  
+
+      
+    <g id="tracking" class="entity child" transform="translate(1230,170)">
+      <rect class="entity-box" width="350" height="205" rx="0" />
+      <rect class="entity-head" width="350" height="30" rx="0" />
+      <text class="entity-title" x="175" y="20" text-anchor="middle">TRACKING</text>
+      <text class="entity-subtitle" x="175" y="45" text-anchor="middle">Historial de avances</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">FK paqueteId : Paquete</tspan><tspan x="0" dy="16">numeroGuia : String</tspan><tspan x="0" dy="16">FK estadoId : Estado</tspan><tspan x="0" dy="16">FK lugarActualId : Lugar</tspan><tspan x="0" dy="16">FK usuarioResponsableId : Usuario</tspan><tspan x="0" dy="16">descripcion : String</tspan><tspan x="0" dy="16">fechaEvento / fechaCreacion : Date</tspan></text>
+    </g>
+  
+
+      
+    <g id="incidencia" class="entity child" transform="translate(1230,455)">
+      <rect class="entity-box" width="350" height="205" rx="0" />
+      <rect class="entity-head" width="350" height="30" rx="0" />
+      <text class="entity-title" x="175" y="20" text-anchor="middle">INCIDENCIA</text>
+      <text class="entity-subtitle" x="175" y="45" text-anchor="middle">Casos que requieren seguimiento</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">FK paqueteId : Paquete</tspan><tspan x="0" dy="16">numeroGuia : String</tspan><tspan x="0" dy="16">tipoIncidencia : String</tspan><tspan x="0" dy="16">estadoIncidencia : abierta | en proceso | cerrada</tspan><tspan x="0" dy="16">FK reportadoPorId : Usuario</tspan><tspan x="0" dy="16">descripcion : String</tspan><tspan x="0" dy="16">fechaReporte / fechaCierre : Date</tspan></text>
+    </g>
+  
+
+      
+    <g id="evidencia" class="entity child" transform="translate(1230,735)">
+      <rect class="entity-box" width="350" height="190" rx="0" />
+      <rect class="entity-head" width="350" height="30" rx="0" />
+      <text class="entity-title" x="175" y="20" text-anchor="middle">EVIDENCIA</text>
+      <text class="entity-subtitle" x="175" y="45" text-anchor="middle">Archivos y respaldos del proceso</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">FK paqueteId : Paquete</tspan><tspan x="0" dy="16">numeroGuia : String</tspan><tspan x="0" dy="16">tipoEvidencia : String</tspan><tspan x="0" dy="16">rutaArchivo : String</tspan><tspan x="0" dy="16">FK reportadoPorId : Usuario</tspan><tspan x="0" dy="16">descripcion : String</tspan><tspan x="0" dy="16">fechaReporte : Date</tspan></text>
+    </g>
+  
+
+      
+    <g id="auditoria" class="entity audit" transform="translate(610,735)">
+      <rect class="entity-box" width="480" height="190" rx="0" />
+      <rect class="entity-head" width="480" height="30" rx="0" />
+      <text class="entity-title" x="240" y="20" text-anchor="middle">AUDITORIA</text>
+      <text class="entity-subtitle" x="240" y="45" text-anchor="middle">Registro de acciones relevantes</text>
+      <text class="fields" transform="translate(14,58)"><tspan x="0" dy="16">PK _id : ObjectId</tspan><tspan x="0" dy="16">FK usuarioId : Usuario</tspan><tspan x="0" dy="16">rol : String</tspan><tspan x="0" dy="16">accion : String</tspan><tspan x="0" dy="16">entidad / entidadId : String</tspan><tspan x="0" dy="16">descripcion : String</tspan><tspan x="0" dy="16">ip / userAgent : String</tspan><tspan x="0" dy="16">metadata : Mixed</tspan><tspan x="0" dy="16">fecha : Date</tspan></text>
+    </g>
+  
+
+      <!-- Relaciones principales -->
+      
+    <g class="relation ">
+      <path d="M 450 290 L 535 290 L 535 420 L 620 420" />
+      <circle cx="450" cy="290" r="3.2" />
+      <path d="M 620 420 l -9 -5 m 9 5 l -9 5" />
+      <text x="535" y="280" text-anchor="middle">usuarios del paquete</text>
+    </g>
+  
+      
+    <g class="relation ">
+      <path d="M 450 650 L 535 650 L 535 510 L 620 510" />
+      <circle cx="450" cy="650" r="3.2" />
+      <path d="M 620 510 l -9 -5 m 9 5 l -9 5" />
+      <text x="535" y="666" text-anchor="middle">origen / destino</text>
+    </g>
+  
+      
+    <g class="relation ">
+      <path d="M 850 312 L 850 360" />
+      <circle cx="850" cy="312" r="3.2" />
+      <path d="M 850 360 l -9 -5 m 9 5 l -9 5" />
+      <text x="918" y="338" text-anchor="middle">estado actual</text>
+    </g>
+  
+      
+    <g class="relation ">
+      <path d="M 1080 430 L 1150 430 L 1150 260 L 1230 260" />
+      <circle cx="1080" cy="430" r="3.2" />
+      <path d="M 1230 260 l -9 -5 m 9 5 l -9 5" />
+      <text x="1150" y="250" text-anchor="middle">1 paquete / N avances</text>
+    </g>
+  
+      
+    <g class="relation ">
+      <path d="M 1080 510 L 1150 510 L 1150 555 L 1230 555" />
+      <circle cx="1080" cy="510" r="3.2" />
+      <path d="M 1230 555 l -9 -5 m 9 5 l -9 5" />
+      <text x="1168" y="525" text-anchor="middle">1 paquete / N incidencias</text>
+    </g>
+  
+      
+    <g class="relation ">
+      <path d="M 1080 600 L 1150 600 L 1150 820 L 1230 820" />
+      <circle cx="1080" cy="600" r="3.2" />
+      <path d="M 1230 820 l -9 -5 m 9 5 l -9 5" />
+      <text x="1168" y="792" text-anchor="middle">1 paquete / N evidencias</text>
+    </g>
+  
+      
+    <g class="relation ">
+      <path d="M 1000 225 L 1110 225 L 1110 245 L 1230 245" />
+      <circle cx="1000" cy="225" r="3.2" />
+      <path d="M 1230 245 l -9 -5 m 9 5 l -9 5" />
+      <text x="1110" y="218" text-anchor="middle">estado del avance</text>
+    </g>
+  
+      
+    <g class="relation dashed">
+      <path d="M 850 660 L 850 735" />
+      <circle cx="850" cy="660" r="3.2" />
+      <path d="M 850 735 l -9 -5 m 9 5 l -9 5" />
+      <text x="936" y="696" text-anchor="middle">acciones del sistema</text>
+    </g>
+  
+      
+    <g class="relation dashed">
+      <path d="M 450 250 L 500 250 L 500 710 L 610 710 L 610 830" />
+      <circle cx="450" cy="250" r="3.2" />
+      <path d="M 610 830 l -9 -5 m 9 5 l -9 5" />
+      <text x="548" y="702" text-anchor="middle">usuario auditado</text>
+    </g>
+  
+
+      <!-- Referencias -->
+      <g transform="translate(1230,930)">
+        <rect class="thin" x="0" y="0" width="350" height="62" />
+        <text class="ref-title" x="175" y="19" text-anchor="middle">REFERENCIAS</text>
+        <text class="ref-text" x="14" y="38">PK: principal   UK: unico   FK: referencia</text>
+        <line x1="14" y1="52" x2="88" y2="52" stroke="#000" stroke-width="1.35" />
+        <text class="ref-text" x="102" y="56">directa</text>
+        <line x1="190" y1="52" x2="260" y2="52" stroke="#000" stroke-width="1.35" stroke-dasharray="7 5" />
+        <text class="ref-text" x="274" y="56">auditoria</text>
+      </g>
+
+      <!-- Notas -->
+      <g transform="translate(70,790)">
+        <text class="note-title" x="0" y="0">NOTAS:</text>
+        <text class="note-text" x="0" y="28">1. Paquete es la coleccion central: concentra numero de guia, origen, destino, usuarios y estado actual.</text>
+        <text class="note-text" x="0" y="52">2. Tracking, Incidencia y Evidencia se relacionan con Paquete para conservar historial y respaldo operativo.</text>
+        <text class="note-text" x="0" y="76">3. Usuario, Lugar y Estado funcionan como catalogos de apoyo para control, busqueda y reportes.</text>
+        <text class="note-text" x="0" y="100">4. Auditoria registra acciones relevantes para trazabilidad administrativa.</text>
+      </g>
+
+      <!-- Cajetin inferior -->
+      <rect class="thin" x="10" y="1000" width="1680" height="90" />
+      <line class="thin" x1="430" y1="1000" x2="430" y2="1090" />
+      <line class="thin" x1="840" y1="1000" x2="840" y2="1090" />
+      <line class="thin" x1="1040" y1="1000" x2="1040" y2="1090" />
+      <line class="thin" x1="1220" y1="1000" x2="1220" y2="1090" />
+      <line class="thin" x1="1400" y1="1000" x2="1400" y2="1090" />
+      <line class="thin" x1="1545" y1="1000" x2="1545" y2="1090" />
+      <text class="cartouche-title" x="24" y="1018">PROYECTO:</text>
+      <text class="cartouche" x="115" y="1060" text-anchor="middle">APPTRACKINGPAQUETESAPA</text>
+      <text class="cartouche-title" x="448" y="1018">PLANO:</text>
+      <text class="cartouche" x="635" y="1060" text-anchor="middle">DIAGRAMA DE BASE DE DATOS</text>
+      <text class="cartouche-title" x="858" y="1018">ELABORO:</text>
+      <text class="cartouche" x="940" y="1060" text-anchor="middle">SISTEMAS APA</text>
+      <text class="cartouche-title" x="1058" y="1018">REVISO:</text>
+      <text class="cartouche" x="1130" y="1060" text-anchor="middle">SCRUM MASTER</text>
+      <text class="cartouche-title" x="1238" y="1018">FECHA:</text>
+      <text class="cartouche" x="1310" y="1060" text-anchor="middle">13/06/2026</text>
+      <text class="cartouche-title" x="1418" y="1018">NORMA:</text>
+      <text class="cartouche" x="1472" y="1060" text-anchor="middle">DOCUMENTACION INTERNA</text>
+      <text class="cartouche-title" x="1562" y="1018">PLANO N°:</text>
+      <text class="cartouche" x="1618" y="1060" text-anchor="middle">BD-01</text>
+    </svg>
+  </div>
+</body>
+</html>
