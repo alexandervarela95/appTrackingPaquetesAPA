@@ -14,8 +14,8 @@ El proyecto está dividido en tres bloques:
 
 Puertos locales definidos:
 
-- Backend: `4300`.
-- Frontend: `3180`.
+- Backend: `3180`.
+- Frontend: `4300`.
 - MongoDB: `27017`.
 - Redis: `6379`.
 
@@ -81,6 +81,7 @@ Todas las rutas operativas se agrupan en `src/rutas/index.rutas.ts`:
 - `/paquetes`: listado y búsqueda de paquetes.
 - `/paquetes/nuevo`: creación de paquetes.
 - `/paquetes/:id`: detalle y cambio de estado.
+- `/paquetes/:id/imprimir`: hoja de envío interno en formato carta horizontal.
 - `/tracking`: consulta de tracking.
 - `/tracking/:numeroGuia`: tracking directo por guía.
 - `/incidencias`: gestión de incidencias.
@@ -132,10 +133,10 @@ Valores locales esperados:
 
 ```env
 NODE_ENV=development
-PUERTO=4300
+PUERTO=3180
 MONGO_URI=mongodb://127.0.0.1:27017/appTrackingPaquetesAPA
 REDIS_URL=redis://127.0.0.1:6379
-CORS_ORIGINS=http://localhost:3180
+CORS_ORIGINS=http://localhost:4300
 JWT_SECRET=cambiar_esta_clave_en_produccion
 JWT_EXPIRES_IN=1d
 ```
@@ -155,7 +156,6 @@ npm.cmd run build
 
 Luego validar manualmente:
 
-- `http://localhost:4300/api/salud`
-- `http://localhost:3180/login`
-- Login con `sistemas@pajaroazul.local` y `Sistemas*2026`.
-
+- `http://localhost:3180/api/salud`
+- `http://localhost:4300/login`
+- Login con `Sistemas` o `sistemas@pajaroazul.com` y `Sistemas*2026`.

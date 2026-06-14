@@ -13,7 +13,7 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
       <header class="section-header">
         <div>
           <span>Sucursales y departamentos</span>
-          <h1>Lugares</h1>
+          <h1>Ubicaciones</h1>
         </div>
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarLugares()"><i class="pi pi-refresh"></i></button>
       </header>
@@ -23,12 +23,12 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
       }
 
       @if (cargando) {
-        <p class="status-message">Cargando lugares...</p>
+        <p class="status-message">Cargando ubicaciones...</p>
       }
 
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarLugar()">
-          <h2>Nuevo lugar</h2>
+          <h2>Nueva ubicacion</h2>
           <div class="field-group">
             <label for="nombre">Nombre</label>
             <input id="nombre" name="nombre" [(ngModel)]="formulario.nombre" required />
@@ -76,7 +76,7 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="5">Sin lugares registrados.</td>
+                  <td colspan="5">Todavia no hay ubicaciones para mostrar.</td>
                 </tr>
               }
             </tbody>
@@ -109,7 +109,7 @@ export class LugaresComponent implements OnInit {
       },
       error: () => {
         this.cargando = false;
-        this.mostrarError('No fue posible cargar lugares.');
+        this.mostrarError('No se pudieron cargar las ubicaciones. Intenta de nuevo.');
       },
     });
   }
@@ -119,20 +119,20 @@ export class LugaresComponent implements OnInit {
     this.lugarServicio.crear(this.formulario).subscribe({
       next: () => {
         this.guardando = false;
-        this.mensaje = 'Lugar guardado correctamente.';
+        this.mensaje = 'Ubicacion guardada correctamente.';
         this.hayError = false;
         this.formulario = this.crearFormularioVacio();
         this.cargarLugares();
       },
       error: () => {
         this.guardando = false;
-        this.mostrarError('No fue posible guardar el lugar.');
+        this.mostrarError('No se pudo guardar la ubicacion. Intenta de nuevo.');
       },
     });
   }
 
   protected eliminarLugar(lugar: Lugar): void {
-    if (!confirm('Desea desactivar este lugar?')) {
+    if (!confirm('Desea desactivar esta ubicacion?')) {
       return;
     }
     this.lugarServicio.eliminar(this.obtenerId(lugar)).subscribe(() => this.cargarLugares());

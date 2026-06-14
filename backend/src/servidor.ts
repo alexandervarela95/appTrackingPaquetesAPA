@@ -6,6 +6,7 @@ import { configuracionEntorno } from './config/configuracionEntorno';
 import { configurarRealtime } from './realtime/server';
 import { cargarEstadosIniciales } from './semillas/estadosSemilla';
 
+// Orden de arranque: base de datos, cache opcional, catalogos base, Express y Socket.IO.
 const iniciarServidor = async (): Promise<void> => {
   await conectarMongo();
   await conectarRedis();

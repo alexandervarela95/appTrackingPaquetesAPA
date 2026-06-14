@@ -1,27 +1,31 @@
 :host {
   display: block;
+  min-width: 0;
 }
 
 .layout-shell {
   min-height: 100dvh;
-  padding: 18px;
+  padding: var(--layout-gutter);
   background:
     linear-gradient(rgba(15, 23, 42, 0.34), rgba(15, 23, 42, 0.58)),
     url("https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/block.images/blocks/signin/signin-glass.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  overflow-x: clip;
+  isolation: isolate;
 }
 
 .layout-content {
-  min-height: calc(100dvh - 36px);
-  margin-left: 282px;
+  min-width: 0;
+  min-height: calc(100dvh - (var(--layout-gutter) * 2));
+  margin-left: var(--sidebar-content-offset);
 }
 
 @media (max-width: 900px) {
   .layout-shell {
     display: grid;
-    gap: 16px;
+    gap: var(--layout-content-gap);
   }
 
   .layout-content {

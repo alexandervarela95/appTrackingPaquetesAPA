@@ -11,6 +11,7 @@ import { dashboardRutas } from './dashboard.rutas';
 import { auditLogRutas } from './auditLog.rutas';
 import { reporteRutas } from './reporte.rutas';
 
+// Punto unico donde se montan las rutas del API. Asi el prefijo /api queda ordenado.
 export const rutasApi = Router();
 
 rutasApi.use('/auth', authRutas);

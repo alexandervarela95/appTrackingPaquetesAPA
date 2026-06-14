@@ -14,8 +14,8 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Administracion de colaboradores</span>
-          <h1>Usuarios</h1>
+          <span>Colaboradores de la empresa</span>
+          <h1>Personal</h1>
         </div>
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()"><i class="pi pi-refresh"></i></button>
       </header>
@@ -25,12 +25,12 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
       }
 
       @if (cargando) {
-        <p class="status-message">Cargando usuarios...</p>
+        <p class="status-message">Cargando personal...</p>
       }
 
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarUsuario()">
-          <h2>Nuevo usuario</h2>
+          <h2>Nuevo colaborador</h2>
           <div class="field-group">
             <label for="nombre">Nombre</label>
             <input id="nombre" name="nombre" [(ngModel)]="formulario.nombre" required />
@@ -45,16 +45,16 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
               <input id="codigoEmpleado" name="codigoEmpleado" [(ngModel)]="formulario.codigoEmpleado" required />
             </div>
             <div class="field-group">
-              <label for="rol">Rol</label>
+              <label for="rol">Puesto</label>
               <select id="rol" name="rol" [(ngModel)]="formulario.rol">
-                <option value="usuario">Usuario</option>
+                <option value="usuario">Colaborador</option>
                 <option value="motorista">Motorista</option>
                 <option value="administrador">Administrador</option>
               </select>
             </div>
           </div>
           <div class="field-group">
-            <label for="lugarAsignadoId">Lugar asignado</label>
+            <label for="lugarAsignadoId">Ubicacion asignada</label>
             <select id="lugarAsignadoId" name="lugarAsignadoId" [(ngModel)]="formulario.lugarAsignadoId" required>
               <option value="">Seleccionar</option>
               @for (lugar of lugares; track obtenerId(lugar)) {
@@ -64,7 +64,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
           </div>
           <div class="field-group">
             <label for="contrasena">Contrasena inicial</label>
-            <input id="contrasena" name="contrasena" type="password" [(ngModel)]="formulario.contrasena" placeholder="123456 por defecto" />
+            <input id="contrasena" name="contrasena" type="password" [(ngModel)]="formulario.contrasena" placeholder="Minimo 6 caracteres" />
           </div>
           <button class="button-primary" type="submit" [disabled]="guardando">
             <i class="pi pi-save"></i>{{ guardando ? 'Guardando...' : 'Guardar' }}
@@ -77,7 +77,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
               <tr>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Rol</th>
+                <th>Puesto</th>
                 <th>Estado</th>
                 <th></th>
               </tr>
@@ -87,7 +87,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
                 <tr>
                   <td>{{ usuario.nombre }}</td>
                   <td>{{ usuario.correo }}</td>
-                  <td><span class="badge">{{ usuario.rol }}</span></td>
+                  <td><span class="badge">{{ nombreRol(usuario.rol) }}</span></td>
                   <td>{{ usuario.estado === false ? 'Inactivo' : 'Activo' }}</td>
                   <td>
                     <button class="icon-button" type="button" title="Desactivar" (click)="eliminarUsuario(usuario)">
@@ -97,7 +97,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="5">Sin usuarios registrados.</td>
+                  <td colspan="5">Todavia no hay personal para mostrar.</td>
                 </tr>
               }
             </tbody>
@@ -134,7 +134,7 @@ export class UsuariosComponent implements OnInit {
       },
       error: () => {
         this.cargando = false;
-        this.mostrarError('No fue posible cargar usuarios.');
+        this.mostrarError('No se pudo cargar el personal. Intenta de nuevo.');
       },
     });
     this.lugarServicio.listar().subscribe((lugares) => (this.lugares = lugares));
@@ -145,20 +145,20 @@ export class UsuariosComponent implements OnInit {
     this.usuarioServicio.crear(this.formulario).subscribe({
       next: () => {
         this.guardando = false;
-        this.mensaje = 'Usuario guardado correctamente.';
+        this.mensaje = 'Colaborador guardado correctamente.';
         this.hayError = false;
         this.formulario = this.crearFormularioVacio();
         this.cargarDatos();
       },
       error: () => {
         this.guardando = false;
-        this.mostrarError('No fue posible guardar el usuario.');
+        this.mostrarError('No se pudo guardar el colaborador. Intenta de nuevo.');
       },
     });
   }
 
   protected eliminarUsuario(usuario: Usuario): void {
-    if (!confirm('Desea desactivar este usuario?')) {
+    if (!confirm('Desea desactivar este colaborador?')) {
       return;
     }
     this.usuarioServicio.eliminar(this.obtenerId(usuario)).subscribe(() => this.cargarDatos());
@@ -166,6 +166,16 @@ export class UsuariosComponent implements OnInit {
 
   protected obtenerId(registro: { _id?: string; id?: string }): string {
     return registro._id || registro.id || '';
+  }
+
+  protected nombreRol(rol?: string): string {
+    if (rol === 'administrador') {
+      return 'Administrador';
+    }
+    if (rol === 'motorista') {
+      return 'Motorista';
+    }
+    return 'Colaborador';
   }
 
   private crearFormularioVacio(): Partial<Usuario> {

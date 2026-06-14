@@ -1,12 +1,12 @@
 {
   "/api": {
-    "target": "http://localhost:4300",
+    "target": "http://localhost:3180",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/socket.io": {
-    "target": "http://localhost:4300",
+    "target": "http://localhost:3180",
     "secure": false,
     "changeOrigin": true,
     "ws": true,

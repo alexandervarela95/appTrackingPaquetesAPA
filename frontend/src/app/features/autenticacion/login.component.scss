@@ -48,10 +48,6 @@
   font-size: 1.45rem;
 }
 
-/**
- * Mantiene el logo institucional en la misma proporcion y posicion visual que
- * el login de appTallerAPA, sin deformarlo dentro de la tarjeta glass.
- */
 .brand-mark img {
   display: block;
   width: auto;
@@ -65,22 +61,26 @@
 .brand-copy p,
 .forgot-button {
   color: rgba(255, 255, 255, 0.82);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: var(--leading-normal);
 }
 
 .brand-copy h1 {
   margin: 5px 0 8px;
   color: #ffffff;
   font-family: var(--font-reading);
-  font-size: clamp(1.9rem, 6vw, 2.45rem);
-  font-weight: 600;
-  line-height: 1.08;
+  font-size: var(--text-title);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: 0;
 }
 
 .brand-copy p {
   margin: 0;
   font-family: var(--font-reading);
-  font-size: 0.95rem;
-  line-height: 1.4;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
 }
 
 .login-form {
@@ -95,7 +95,9 @@
 
 .field-group label {
   color: rgba(255, 255, 255, 0.86);
-  font-size: 0.88rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 :host ::ng-deep .p-iconfield {
@@ -112,7 +114,11 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.14);
   color: #ffffff;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: 450;
+  line-height: var(--leading-normal);
+  letter-spacing: 0;
   outline: 0;
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
 }
@@ -126,9 +132,6 @@
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
 }
 
-/**
- * Mensaje discreto para errores reales de autenticacion del backend.
- */
 .login-error {
   margin: 0;
   padding: 10px 12px;
@@ -136,7 +139,9 @@
   border-radius: 12px;
   background: rgba(248, 113, 113, 0.12);
   color: #fecaca;
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: var(--leading-normal);
 }
 
 :host ::ng-deep .login-button {
@@ -146,6 +151,10 @@
   border-radius: 999px;
   background: #111827;
   color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 :host ::ng-deep .login-button:hover {
@@ -158,7 +167,7 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  font: inherit;
+  font-family: var(--font-ui);
 }
 
 .forgot-button:hover {
@@ -166,9 +175,6 @@
   text-decoration: underline;
 }
 
-/**
- * Pie visual identico al login de appTallerAPA.
- */
 .login-footer {
   position: fixed;
   right: 18px;
@@ -177,7 +183,9 @@
   display: grid;
   gap: 14px;
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: var(--leading-normal);
 }
 
 .login-footer-line {

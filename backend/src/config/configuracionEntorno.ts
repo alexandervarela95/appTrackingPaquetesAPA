@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
+// Centralizamos las variables de entorno para que el resto del backend no lea process.env directo.
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const jwtSecretConfigurado = process.env.JWT_SECRET;
@@ -13,11 +14,12 @@ if (!jwtSecretConfigurado) {
   console.warn(`[Config] ${mensaje}`);
 }
 
+// Valores locales seguros para desarrollo. En produccion deben venir del entorno.
 export const configuracionEntorno = {
-  puerto: Number(process.env.PUERTO || process.env.PORT || 4300),
+  puerto: Number(process.env.PUERTO || process.env.PORT || 3180),
   mongodbUri: process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/appTrackingPaquetes',
   redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
-  corsOrigins: process.env.CORS_ORIGINS || 'http://localhost:3180',
+  corsOrigins: process.env.CORS_ORIGINS || 'http://localhost:4300',
   jwtSecret: jwtSecretConfigurado || 'secret_jwt_placeholder',
   jwtExpiraEn: process.env.JWT_EXPIRES_IN || '1d',
   entorno: process.env.NODE_ENV || 'development'

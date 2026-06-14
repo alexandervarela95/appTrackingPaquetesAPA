@@ -8,13 +8,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../../core/servicios/auth.service';
 
-/**
- * Pantalla de inicio de sesion del sistema de tracking APA.
- *
- * @remarks
- * Replica la composicion visual del login de appTallerAPA y mantiene la
- * autenticacion real contra el backend Express/JWT de appTrackingPaquetesAPA.
- */
+// Pantalla de login. Solo arma la vista; la validacion real de credenciales vive en el backend.
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -23,16 +17,9 @@ import { AuthService } from '../../core/servicios/auth.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  /** Logo institucional copiado desde appTallerAPA para conservar identidad visual. */
   protected readonly rutaLogoLogin = 'assets/login/logoAPA.jpg';
-
-  /** Usuario o correo escrito por la persona que inicia sesion. */
   protected usuario = '';
-
-  /** Estado visual del checkbox solicitado por el diseno original. */
   protected recordarUsuario = false;
-
-  /** Contrasena escrita en el formulario. */
   protected contrasena = '';
 
   protected cargando = false;
@@ -43,9 +30,6 @@ export class LoginComponent {
     private readonly router: Router,
   ) {}
 
-  /**
-   * Ejecuta el login real y navega al dashboard solo cuando backend confirma JWT.
-   */
   protected iniciarSesion(): void {
     this.mensajeError = '';
 
@@ -56,17 +40,14 @@ export class LoginComponent {
 
     this.cargando = true;
 
+    // El servicio normaliza "Sistemas" al correo demo para facilitar la presentacion.
     this.authService
       .login(this.usuario, this.contrasena)
       .pipe(finalize(() => (this.cargando = false)))
       .subscribe({
         next: () => this.router.navigateByUrl('/dashboard'),
-        error: (error) => {
-          this.mensajeError =
-            error.error?.mensaje ||
-            error.error?.error ||
-            error.message ||
-            'No se pudo iniciar sesion. Revisa tus credenciales.';
+        error: () => {
+          this.mensajeError = 'No se pudo iniciar sesion. Revisa tus datos e intenta de nuevo.';
         },
       });
   }

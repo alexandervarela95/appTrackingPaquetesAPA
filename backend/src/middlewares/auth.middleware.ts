@@ -9,6 +9,7 @@ export interface TokenPayload {
   rol: string;
 }
 
+// Aquí validamos que el usuario venga autenticado antes de dejarlo pasar.
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const autorizacion = req.headers.authorization;
 
@@ -21,6 +22,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
 
   try {
     const payload = jwt.verify(token, configuracionEntorno.jwtSecret) as TokenPayload;
+    // Guardamos el usuario del token en request para roles, permisos y auditoria.
     (req as any).user = payload;
     next();
   } catch (error) {

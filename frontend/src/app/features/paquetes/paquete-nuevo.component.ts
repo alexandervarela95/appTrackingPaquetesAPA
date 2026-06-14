@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Lugar } from '../../core/modelos/lugar.model';
 import { Paquete } from '../../core/modelos/paquete.model';
 import { Usuario } from '../../core/modelos/usuario.model';
@@ -9,18 +9,18 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
 import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 
+// Formulario para registrar paquetes internos con origen, destino y responsables.
 @Component({
   selector: 'app-paquete-nuevo',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   template: `
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Registro de envio interno</span>
-          <h1>Nuevo paquete</h1>
+          <span>Envios internos</span>
+          <h1>Registrar paquete</h1>
         </div>
-        <a class="button-secondary" routerLink="/paquetes"><i class="pi pi-arrow-left"></i>Volver</a>
       </header>
 
       <form class="glass-panel form-grid formulario-paquete" (ngSubmit)="guardarPaquete()">
@@ -87,7 +87,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         </div>
 
         <div class="field-group">
-          <label for="motoristaAsignadoId">Motorista opcional</label>
+          <label for="motoristaAsignadoId">Motorista</label>
           <select id="motoristaAsignadoId" name="motoristaAsignadoId" [(ngModel)]="formulario.motoristaAsignadoId">
             <option value="">Sin asignar</option>
             @for (usuario of motoristas; track obtenerId(usuario)) {
@@ -144,6 +144,7 @@ export class PaqueteNuevoComponent implements OnInit {
   }
 
   protected guardarPaquete(): void {
+    // Validacion rapida de UI; el backend vuelve a validar antes de guardar.
     if (!this.formulario.descripcion || !this.formulario.tipoPaquete || !this.formulario.lugarOrigenId || !this.formulario.lugarDestinoId || !this.formulario.usuarioRemitenteId || !this.formulario.usuarioDestinatarioId) {
       this.mostrarError('Completa los campos obligatorios antes de guardar.');
       return;
@@ -157,9 +158,9 @@ export class PaqueteNuevoComponent implements OnInit {
         this.hayError = false;
         setTimeout(() => this.router.navigate(['/paquetes', this.obtenerId(paquete)]), 650);
       },
-      error: (error) => {
+      error: () => {
         this.guardando = false;
-        this.mostrarError(error.error?.mensaje || 'No fue posible registrar el paquete.');
+        this.mostrarError('No se pudo registrar el paquete. Intenta de nuevo.');
       },
     });
   }

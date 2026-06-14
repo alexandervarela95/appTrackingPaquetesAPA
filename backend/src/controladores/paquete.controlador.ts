@@ -7,6 +7,7 @@ import { AuditLogServicio } from '../servicios/auditLog.servicio';
 import { RealtimePublisher } from '../realtime/publisher';
 import { EventosRealtime } from '../realtime/events';
 
+// Controlador HTTP de paquetes. Aqui se conectan permisos, validaciones, auditoria y tiempo real.
 export class PaqueteControlador {
   public static async listar(req: Request, res: Response, next: NextFunction) {
     try {
@@ -54,12 +55,14 @@ export class PaqueteControlador {
 
   public static async crear(req: Request, res: Response, next: NextFunction) {
     try {
+      // Validamos referencias para no guardar paquetes apuntando a usuarios, lugares o estados inexistentes.
       const errores = await validarReferenciasPaquete(req.body);
       if (errores.length > 0) {
         return res.status(400).json({ exito: false, mensaje: 'Referencias invalidas para paquete', errores });
       }
 
       const paquete = await PaqueteServicio.crearPaquete(req.body);
+      // Cada accion importante queda en auditoria para defender la trazabilidad del sistema.
       await AuditLogServicio.registrar({
         req,
         accion: 'paquete.creado',
@@ -88,6 +91,7 @@ export class PaqueteControlador {
 
       const usuario = (req as unknown as { user: TokenPayload }).user;
       if (usuario.rol === 'motorista') {
+        // El motorista solo puede modificar paquetes que realmente tiene asignados.
         const puedeGestionar = await AccesoPaqueteServicio.usuarioPuedeGestionarTracking(usuario, req.params.id);
         if (!puedeGestionar) {
           return res.status(403).json({ exito: false, mensaje: 'No puede modificar paquetes no asignados', errores: [] });

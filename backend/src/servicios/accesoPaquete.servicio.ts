@@ -1,6 +1,7 @@
 import { PaqueteModelo } from '../modelos/paquete.model';
 import { TokenPayload } from '../middlewares/auth.middleware';
 
+// Reglas de acceso a paquetes. Mantenerlas juntas evita repetir filtros en cada controlador.
 export class AccesoPaqueteServicio {
   public static construirFiltroPorUsuario(usuario: TokenPayload): Record<string, unknown> {
     if (usuario.rol === 'administrador') {
@@ -8,9 +9,11 @@ export class AccesoPaqueteServicio {
     }
 
     if (usuario.rol === 'motorista') {
+      // El motorista solo ve los paquetes que le fueron asignados.
       return { motoristaAsignadoId: usuario.id };
     }
 
+    // Un usuario normal solo ve envios donde participa como remitente o destinatario.
     return {
       $or: [
         { usuarioRemitenteId: usuario.id },
@@ -46,6 +49,7 @@ export class AccesoPaqueteServicio {
       return false;
     }
 
+    // Para cambiar tracking, el motorista debe estar asignado al paquete.
     const paquete = await PaqueteModelo.findById(paqueteId).select('motoristaAsignadoId').lean();
     return String(paquete?.motoristaAsignadoId || '') === String(usuario.id);
   }

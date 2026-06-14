@@ -1,10 +1,7 @@
 import mongoose from 'mongoose';
 import { configuracionEntorno } from './configuracionEntorno';
 
-/**
- * Inicializa la conexion a MongoDB usando Mongoose.
- * @returns Promise que se resuelve cuando la conexion se establece.
- */
+// Conecta MongoDB antes de levantar Express. Si falla, el backend no tiene datos para operar.
 export const conectarMongo = async (): Promise<void> => {
   try {
     await mongoose.connect(configuracionEntorno.mongodbUri, {

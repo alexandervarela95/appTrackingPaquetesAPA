@@ -11,6 +11,7 @@ export interface EventoRealtime<T = unknown> {
 }
 
 @Injectable({ providedIn: 'root' })
+// Servicio de Socket.IO. Mantiene una sola conexion y reparte eventos como observables.
 export class RealtimeService {
   private socket?: Socket;
   private readonly estadoSubject = new BehaviorSubject<EstadoRealtime>('desconectado');
@@ -29,6 +30,7 @@ export class RealtimeService {
     }
 
     this.estadoSubject.next('conectando');
+    // Se conecta al mismo host del frontend; el proxy local manda /socket.io al backend.
     this.socket = io('/', {
       path: '/socket.io',
       auth: { token },
@@ -68,6 +70,7 @@ export class RealtimeService {
   }
 
   public escuchar<T = unknown>(evento: string): Observable<EventoRealtime<T>> {
+    // Los componentes no necesitan saber si el socket ya estaba conectado.
     this.conectar();
     return this.obtenerSubject(evento).asObservable() as Observable<EventoRealtime<T>>;
   }

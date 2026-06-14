@@ -13,6 +13,7 @@ import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
 import { TrackingServicio } from '../../core/servicios/tracking.servicio';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 
+// Detalle operativo del paquete: informacion, historial, cambio de estado e impresion.
 @Component({
   selector: 'app-paquete-detalle',
   standalone: true,
@@ -21,12 +22,13 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Detalle de paquete</span>
+          <span>Informacion del paquete</span>
           <h1>{{ paquete?.numeroGuia || 'Paquete' }}</h1>
         </div>
         <div class="toolbar">
           @if (paquete) {
-            <a class="button-secondary" [routerLink]="['/tracking', paquete.numeroGuia]"><i class="pi pi-map-marker"></i>Ver tracking</a>
+            <a class="button-secondary" [routerLink]="['/tracking', paquete.numeroGuia]"><i class="pi pi-map-marker"></i>Ver seguimiento</a>
+            <a class="button-secondary" [routerLink]="['/paquetes', obtenerId(paquete), 'imprimir']"><i class="pi pi-print"></i>Imprimir hoja</a>
           }
           <a class="button-secondary" routerLink="/paquetes"><i class="pi pi-arrow-left"></i>Volver</a>
         </div>
@@ -44,7 +46,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         <section class="content-grid">
           <article class="glass-panel form-grid">
             <h2>Informacion del envio</h2>
-            <p><strong>Descripcion:</strong> {{ paquete.descripcion || 'Sin descripcion' }}</p>
+            <p><strong>Descripcion:</strong> {{ paquete.descripcion || 'No hay descripcion disponible' }}</p>
             <p><strong>Tipo:</strong> {{ paquete.tipoPaquete }}</p>
             <p><strong>Prioridad:</strong> <span class="badge">{{ paquete.prioridad }}</span></p>
             <p><strong>Estado actual:</strong> {{ nombreEstado(paquete.estadoActualId) }}</p>
@@ -53,7 +55,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
             <p><strong>Remitente:</strong> {{ nombreUsuario(paquete.usuarioRemitenteId) }}</p>
             <p><strong>Destinatario:</strong> {{ nombreUsuario(paquete.usuarioDestinatarioId) }}</p>
             <p><strong>Motorista:</strong> {{ nombreUsuario(paquete.motoristaAsignadoId) }}</p>
-            <p><strong>Observaciones:</strong> {{ paquete.observaciones || 'Sin observaciones' }}</p>
+            <p><strong>Observaciones:</strong> {{ paquete.observaciones || 'No hay observaciones' }}</p>
 
             <div class="field-group">
               <label for="estadoActualId">Cambiar estado</label>
@@ -70,39 +72,114 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
             </button>
           </article>
 
-          <article class="table-panel">
-            <h2>Historial reciente</h2>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Estado</th>
-                  <th>Lugar</th>
-                  <th>Responsable</th>
-                  <th>Descripcion</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (evento of historial; track obtenerId(evento)) {
+          <article class="table-panel movimientos-panel">
+            <div class="panel-heading">
+              <h2>Movimientos recientes</h2>
+            </div>
+            <div class="movimientos-table-wrap">
+              <table class="data-table movimientos-table">
+                <thead>
                   <tr>
-                    <td>{{ evento.fechaEvento | date: 'short' }}</td>
-                    <td><span class="badge success">{{ nombreEstado(evento.estadoId) }}</span></td>
-                    <td>{{ nombreLugar(evento.lugarActualId) }}</td>
-                    <td>{{ nombreUsuario(evento.usuarioResponsableId) }}</td>
-                    <td>{{ evento.descripcion }}</td>
+                    <th class="col-fecha">Fecha</th>
+                    <th class="col-estado">Estado</th>
+                    <th class="col-lugar">Lugar</th>
+                    <th class="col-responsable">Responsable</th>
+                    <th class="col-descripcion">Descripcion</th>
                   </tr>
-                } @empty {
-                  <tr>
-                    <td colspan="5">Sin eventos registrados.</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  @for (evento of historial; track obtenerId(evento)) {
+                    <tr>
+                      <td class="col-fecha">{{ evento.fechaEvento | date: 'short' }}</td>
+                      <td class="col-estado"><span class="badge success">{{ nombreEstado(evento.estadoId) }}</span></td>
+                      <td class="col-lugar">{{ nombreLugar(evento.lugarActualId) }}</td>
+                      <td class="col-responsable">{{ nombreUsuario(evento.usuarioResponsableId) }}</td>
+                      <td class="col-descripcion">{{ evento.descripcion || 'Sin descripcion' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="5">Todavia no hay movimientos para este paquete.</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </article>
         </section>
       }
     </section>
   `,
+  styles: [
+    `
+      :host {
+        min-width: 0;
+      }
+
+      .content-grid {
+        min-width: 0;
+      }
+
+      .panel-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-4);
+      }
+
+      .movimientos-panel {
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      .movimientos-table-wrap {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      .movimientos-table {
+        min-width: 680px;
+        table-layout: fixed;
+      }
+
+      .movimientos-table th,
+      .movimientos-table td {
+        text-align: left;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      .movimientos-table th:last-child,
+      .movimientos-table td:last-child {
+        text-align: left;
+      }
+
+      .col-fecha {
+        width: 112px;
+      }
+
+      .col-estado {
+        width: 150px;
+      }
+
+      .col-lugar,
+      .col-responsable {
+        width: 135px;
+      }
+
+      .col-descripcion {
+        width: auto;
+      }
+
+      @media (max-width: 680px) {
+        .movimientos-table {
+          min-width: 620px;
+        }
+      }
+    `,
+  ],
 })
 export class PaqueteDetalleComponent implements OnInit {
   protected paquete?: Paquete;
@@ -138,6 +215,7 @@ export class PaqueteDetalleComponent implements OnInit {
       return;
     }
     this.guardando = true;
+    // Al actualizar estado, el backend crea el movimiento de tracking correspondiente.
     this.paqueteServicio.actualizar(this.obtenerId(this.paquete), { estadoActualId: this.estadoActualId }).subscribe({
       next: (paquete) => {
         this.guardando = false;
@@ -148,7 +226,7 @@ export class PaqueteDetalleComponent implements OnInit {
       },
       error: () => {
         this.guardando = false;
-        this.mensaje = 'No fue posible actualizar el estado.';
+        this.mensaje = 'No se pudo actualizar el estado. Intenta de nuevo.';
         this.hayError = true;
       },
     });
@@ -188,6 +266,7 @@ export class PaqueteDetalleComponent implements OnInit {
   }
 
   private cargarHistorial(paquete: Paquete): void {
+    // El historial alimenta la tabla de movimientos recientes.
     this.trackingServicio.listarPorPaquete(this.obtenerId(paquete)).subscribe((historial) => (this.historial = historial));
   }
 }

@@ -7,6 +7,7 @@ import { configuracionEntorno } from '../config/configuracionEntorno';
 import { TokenPayload } from '../middlewares/auth.middleware';
 import { registrarServidorRealtime } from './publisher';
 
+// Configura Socket.IO para avisar cambios de paquetes, tracking, incidencias y dashboard.
 export const configurarRealtime = (servidorHttp: Server): SocketServer => {
   const io = new SocketServer(servidorHttp, {
     cors: {
@@ -24,6 +25,7 @@ export const configurarRealtime = (servidorHttp: Server): SocketServer => {
       console.log('Socket.IO Redis adapter conectado');
     })
     .catch((error) => {
+      // En local Redis puede estar apagado; Socket.IO sigue funcionando con el adapter normal.
       console.warn('Socket.IO Redis adapter no disponible, usando adapter local:', error);
       pubClient.disconnect().catch(() => undefined);
       subClient.disconnect().catch(() => undefined);
@@ -38,6 +40,7 @@ export const configurarRealtime = (servidorHttp: Server): SocketServer => {
     }
 
     try {
+      // El socket usa el mismo JWT del API para no abrir otro mecanismo de login.
       const usuario = jwt.verify(token, configuracionEntorno.jwtSecret) as TokenPayload;
       socket.data.usuario = usuario;
       next();
@@ -52,6 +55,7 @@ export const configurarRealtime = (servidorHttp: Server): SocketServer => {
     socket.join(`rol:${usuario.rol}`);
 
     socket.on('package:join', (paqueteId: string) => {
+      // Rooms por paquete y guia para mandar eventos solo a pantallas interesadas.
       if (paqueteId) {
         socket.join(`paquete:${paqueteId}`);
       }

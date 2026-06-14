@@ -2,10 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { RespuestaApi } from '../modelos/respuesta-api.model';
 
-/**
- * Servicio base para recursos REST simples.
- * Centraliza el desempaquetado de la respuesta uniforme del backend.
- */
+// Servicio base para CRUD simples. Evita repetir las mismas llamadas HTTP en cada catalogo.
 export abstract class ApiCrudServicio<T> {
   protected constructor(
     protected readonly http: HttpClient,

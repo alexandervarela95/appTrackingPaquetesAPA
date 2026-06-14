@@ -6,12 +6,14 @@ import { obtenerClienteRedis } from '../config/conexionRedis';
 
 const CLAVE_RESUMEN = 'dashboard:resumen';
 
+// Esto alimenta las tarjetas del dashboard con datos reales de MongoDB.
 export class DashboardServicio {
   public static async obtenerResumen() {
     const clienteRedis = obtenerClienteRedis();
     const contenidoCache = await clienteRedis.get(CLAVE_RESUMEN);
 
     if (contenidoCache) {
+      // El resumen puede cachearse poquito porque cambia cuando se crean o actualizan paquetes.
       return JSON.parse(contenidoCache);
     }
 

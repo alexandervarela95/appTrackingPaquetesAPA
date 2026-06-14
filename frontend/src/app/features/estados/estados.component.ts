@@ -12,8 +12,8 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Flujo de vida del paquete</span>
-          <h1>Estados</h1>
+          <span>Avance del paquete</span>
+          <h1>Estados del paquete</h1>
         </div>
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarEstados()"><i class="pi pi-refresh"></i></button>
       </header>
@@ -23,12 +23,12 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
       }
 
       @if (cargando) {
-        <p class="status-message">Cargando estados...</p>
+        <p class="status-message">Cargando estados del paquete...</p>
       }
 
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarEstado()">
-          <h2>Nuevo estado</h2>
+          <h2>Nuevo estado del paquete</h2>
           <div class="field-group">
             <label for="nombre">Nombre</label>
             <input id="nombre" name="nombre" [(ngModel)]="formulario.nombre" required />
@@ -53,7 +53,7 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
                 <th>Orden</th>
                 <th>Nombre</th>
                 <th>Descripcion</th>
-                <th>Estado</th>
+                <th>Disponibilidad</th>
                 <th></th>
               </tr>
             </thead>
@@ -72,7 +72,7 @@ import { EstadoServicio } from '../../core/servicios/estado.servicio';
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="5">Sin estados registrados.</td>
+                  <td colspan="5">Todavia no hay estados para mostrar.</td>
                 </tr>
               }
             </tbody>
@@ -105,7 +105,7 @@ export class EstadosComponent implements OnInit {
       },
       error: () => {
         this.cargando = false;
-        this.mostrarError('No fue posible cargar estados.');
+        this.mostrarError('No se pudieron cargar los estados. Intenta de nuevo.');
       },
     });
   }
@@ -122,7 +122,7 @@ export class EstadosComponent implements OnInit {
       },
       error: () => {
         this.guardando = false;
-        this.mostrarError('No fue posible guardar el estado.');
+        this.mostrarError('No se pudo guardar el estado. Intenta de nuevo.');
       },
     });
   }

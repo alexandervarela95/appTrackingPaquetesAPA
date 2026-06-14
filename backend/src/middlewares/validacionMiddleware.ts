@@ -10,10 +10,7 @@ const formatearErrores = (error: ZodError) => {
   }));
 };
 
-/**
- * Valida entradas HTTP con Zod y responde errores uniformes antes de ejecutar
- * controladores o consultas a base de datos.
- */
+// Valida entradas HTTP con Zod antes de tocar controladores o MongoDB.
 export const validarSolicitud = (schema: ZodTypeAny, origen: OrigenValidacion = 'body') => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const resultado = schema.safeParse(req[origen]);

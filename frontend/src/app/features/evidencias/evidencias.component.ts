@@ -14,8 +14,8 @@ import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Comprobantes y soportes</span>
-          <h1>Evidencias</h1>
+          <span>Fotos, firmas y documentos</span>
+          <h1>Comprobantes</h1>
         </div>
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()">
           <i class="pi pi-refresh"></i>
@@ -27,12 +27,12 @@ import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
       }
 
       @if (cargando) {
-        <p class="status-message">Cargando evidencias...</p>
+        <p class="status-message">Cargando comprobantes...</p>
       }
 
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarEvidencia()">
-          <h2>Nueva evidencia</h2>
+          <h2>Nuevo comprobante</h2>
           <div class="field-group">
             <label for="paqueteId">Paquete</label>
             <select id="paqueteId" name="paqueteId" [(ngModel)]="formulario.paqueteId" (ngModelChange)="seleccionarPaquete($event)" required>
@@ -47,19 +47,25 @@ import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
             <input id="numeroGuia" name="numeroGuia" [(ngModel)]="formulario.numeroGuia" readonly required />
           </div>
           <div class="field-group">
-            <label for="tipoEvidencia">Tipo</label>
+            <label for="tipoEvidencia">Tipo de comprobante</label>
             <input id="tipoEvidencia" name="tipoEvidencia" [(ngModel)]="formulario.tipoEvidencia" required placeholder="Foto, firma, documento" />
           </div>
           <div class="field-group">
             <label for="archivo">Archivo</label>
-            <input id="archivo" name="archivo" type="file" accept=".jpg,.jpeg,.png,.pdf" (change)="seleccionarArchivo($event)" required />
+            <div class="file-control">
+              <input id="archivo" class="file-input" name="archivo" type="file" accept=".jpg,.jpeg,.png,.pdf" (change)="seleccionarArchivo($event)" required />
+              <label class="button-secondary file-button" for="archivo">
+                <i class="pi pi-paperclip"></i>Seleccionar archivo
+              </label>
+              <span>{{ archivoSeleccionado?.name || 'Ningun archivo seleccionado' }}</span>
+            </div>
           </div>
           <div class="field-group">
             <label for="descripcion">Descripcion</label>
             <textarea id="descripcion" name="descripcion" [(ngModel)]="formulario.descripcion"></textarea>
           </div>
           <button class="button-primary" type="submit" [disabled]="guardando">
-            <i class="pi pi-upload"></i>{{ guardando ? 'Subiendo...' : 'Subir evidencia' }}
+            <i class="pi pi-upload"></i>{{ guardando ? 'Subiendo...' : 'Subir comprobante' }}
           </button>
         </form>
 
@@ -97,7 +103,7 @@ import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="5">Sin evidencias registradas.</td>
+                  <td colspan="5">Todavia no hay comprobantes para mostrar.</td>
                 </tr>
               }
             </tbody>
@@ -135,7 +141,7 @@ export class EvidenciasComponent implements OnInit {
       },
       error: () => {
         this.cargando = false;
-        this.mostrarError('No fue posible cargar evidencias.');
+        this.mostrarError('No se pudieron cargar los comprobantes. Intenta de nuevo.');
       },
     });
     this.paqueteServicio.listar().subscribe((paquetes) => (this.paquetes = paquetes));
@@ -181,7 +187,7 @@ export class EvidenciasComponent implements OnInit {
       archivo: this.archivoSeleccionado,
     }).subscribe({
       next: () => {
-        this.mensaje = 'Evidencia subida correctamente.';
+        this.mensaje = 'Comprobante subido correctamente.';
         this.hayError = false;
         this.guardando = false;
         this.archivoSeleccionado = undefined;
@@ -190,13 +196,13 @@ export class EvidenciasComponent implements OnInit {
       },
       error: () => {
         this.guardando = false;
-        this.mostrarError('No fue posible subir la evidencia.');
+        this.mostrarError('No se pudo subir el comprobante. Intenta de nuevo.');
       },
     });
   }
 
   protected eliminarEvidencia(evidencia: Evidencia): void {
-    if (!confirm('Desea eliminar esta evidencia?')) {
+    if (!confirm('Desea eliminar este comprobante?')) {
       return;
     }
     this.evidenciaServicio.eliminar(this.obtenerId(evidencia)).subscribe(() => this.cargarDatos());

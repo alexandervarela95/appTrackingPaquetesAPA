@@ -18,7 +18,7 @@ interface LoginRespuesta {
 export class AuthService {
   private readonly tokenClave = 'apa-token';
   private readonly usuarioClave = 'apa-usuario';
-  private readonly correoUsuarioSistemas = 'sistemas@pajaroazul.local';
+  private readonly correoUsuarioSistemas = 'sistemas@pajaroazul.com';
 
   constructor(
     private http: HttpClient,
@@ -43,8 +43,10 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem(this.tokenClave);
     localStorage.removeItem(this.usuarioClave);
+    sessionStorage.removeItem(this.tokenClave);
+    sessionStorage.removeItem(this.usuarioClave);
     this.realtimeService.desconectar();
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
   public obtenerToken(): string | null {
@@ -53,17 +55,23 @@ export class AuthService {
 
   public obtenerUsuario(): AuthUser | null {
     const raw = localStorage.getItem(this.usuarioClave);
-    return raw ? (JSON.parse(raw) as AuthUser) : null;
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(raw) as AuthUser;
+    } catch {
+      localStorage.removeItem(this.usuarioClave);
+      sessionStorage.removeItem(this.usuarioClave);
+      return null;
+    }
   }
 
   public estaAutenticado(): boolean {
     return !!this.obtenerToken();
   }
 
-  /**
-   * Permite presentar el usuario corto "Sistemas" sin cambiar el contrato del backend,
-   * que autentica por correo para mantener una identidad unica y auditable.
-   */
   private normalizarCredencialLogin(usuarioOCorreo: string): string {
     const credencial = usuarioOCorreo.trim();
     return credencial.toLowerCase() === 'sistemas' ? this.correoUsuarioSistemas : credencial;

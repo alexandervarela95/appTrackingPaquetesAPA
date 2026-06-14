@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './sidebar.component';
 
+// Layout principal de usuarios autenticados: sidebar global y contenido por router.
 @Component({
   selector: 'app-layout',
   standalone: true,

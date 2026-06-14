@@ -7,6 +7,7 @@ import { RealtimePublisher } from '../realtime/publisher';
 import { EventosRealtime } from '../realtime/events';
 import { storageEvidencias } from '../servicios/storage.servicio';
 
+// Controlador de evidencias. Maneja consultas, subida de archivos y descarga segura.
 export class EvidenciaControlador {
   public static async listar(req: Request, res: Response, next: NextFunction) {
     try {
@@ -67,6 +68,7 @@ export class EvidenciaControlador {
       }
 
       const usuario = (req as any).user;
+      // Si el archivo paso Multer, aqui se guarda la referencia en MongoDB.
       const evidencia = await EvidenciaServicio.crearEvidenciaConArchivo(req.body, req.file, usuario.id);
       await AuditLogServicio.registrar({
         req,
@@ -98,6 +100,7 @@ export class EvidenciaControlador {
         return res.status(403).json({ exito: false, mensaje: 'No tiene acceso al archivo de evidencia', errores: [] });
       }
 
+      // Solo enviamos el archivo despues de confirmar que el usuario puede ver ese paquete.
       const rutaArchivo = storageEvidencias.resolverRutaAbsoluta(evidencia.rutaArchivo);
       res.sendFile(rutaArchivo);
     } catch (error) {

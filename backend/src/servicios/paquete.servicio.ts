@@ -8,6 +8,7 @@ import { AccesoPaqueteServicio } from './accesoPaquete.servicio';
 
 const CLAVE_CACHE_GUIA = (numeroGuia: string) => `paquete:guia:${numeroGuia}`;
 
+// Servicio encargado de manejar los paquetes y su trazabilidad inicial.
 export class PaqueteServicio {
   public static async listarPaquetes() {
     return PaqueteModelo.find({ estado: true }).lean();
@@ -27,6 +28,7 @@ export class PaqueteServicio {
     const paqueteCache = await clienteRedis.get(clave);
 
     if (paqueteCache) {
+      // La busqueda por guia se consulta mucho, por eso se cachea por pocos segundos.
       return JSON.parse(paqueteCache);
     }
 
@@ -42,6 +44,7 @@ export class PaqueteServicio {
     let numeroGuia = datos.numeroGuia?.trim();
 
     if (!numeroGuia) {
+      // La guia se genera aqui para evitar que el usuario la escriba manualmente.
       numeroGuia = generarNumeroGuia();
     }
 
@@ -66,6 +69,7 @@ export class PaqueteServicio {
 
     const paqueteGuardado = await paquete.save();
 
+    // Todo paquete nuevo arranca con un movimiento inicial para que el historial no quede vacio.
     await TrackingServicio.crearRegistroTracking({
       paqueteId: paqueteGuardado._id,
       numeroGuia: paqueteGuardado.numeroGuia,
@@ -106,6 +110,7 @@ export class PaqueteServicio {
     const paqueteActualizado = await PaqueteModelo.findByIdAndUpdate(id, cambios, { new: true }).lean();
 
     if (paqueteActualizado && datos.estadoActualId && datos.estadoActualId.toString() !== paqueteAnterior.estadoActualId.toString()) {
+      // Si cambia el estado, tambien dejamos registro en tracking para conservar la trazabilidad.
       await TrackingServicio.crearRegistroTracking({
         paqueteId: paqueteActualizado._id,
         numeroGuia: paqueteActualizado.numeroGuia,

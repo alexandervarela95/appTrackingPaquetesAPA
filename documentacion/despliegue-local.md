@@ -19,8 +19,10 @@ cd backend
 npm install
 cp .env.example .env
 npm run seed:demo
-PUERTO=4300 CORS_ORIGINS=http://localhost:3180 npm run dev
+npm run dev
 ```
+
+El backend queda en `http://localhost:3180`. Redis ayuda con cache, pero si esta apagado el backend sigue funcionando con fallback.
 
 ## Frontend
 
@@ -30,7 +32,13 @@ npm install
 npm start
 ```
 
-Abrir `http://localhost:3180/login`.
+Abrir `http://localhost:4300/login`.
+
+Credenciales demo:
+
+- Usuario visible: `Sistemas`
+- Correo API: `sistemas@pajaroazul.com`
+- Password: `Sistemas*2026`
 
 ## Verificacion
 

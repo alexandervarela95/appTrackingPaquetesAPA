@@ -3,6 +3,7 @@ import { EventoRealtime } from './events';
 
 let servidorSocket: Server | null = null;
 
+// Guardamos la instancia de Socket.IO para emitir desde servicios o controladores.
 export const registrarServidorRealtime = (io: Server): void => {
   servidorSocket = io;
 };
@@ -22,6 +23,7 @@ export class RealtimePublisher {
     }
 
     try {
+      // Emitimos global y tambien por rooms cuando el payload trae paquete, guia, rol o usuario.
       servidorSocket.emit(evento, payload);
 
       if (payload.paqueteId) {

@@ -1,27 +1,59 @@
-<aside class="sidebar-shell" aria-label="Modulos principales">
+<aside class="sidebar-shell" [class.user-panel-open]="panelUsuarioAbierto" aria-label="Módulos principales">
   <div class="sidebar-brand">
     <span class="brand-mark">
       <i class="pi pi-send" aria-hidden="true"></i>
     </span>
     <div>
-      <span>Almacen Pajaro Azul</span>
-      <strong>Tracking Envio</strong>
+      <span>Almacén Pájaro Azul</span>
+      <strong>Control de envíos</strong>
     </div>
   </div>
 
-  <nav class="sidebar-menu" aria-label="Navegacion principal">
+  <nav class="sidebar-menu" aria-label="Navegación principal">
     @for (item of menuItems; track item.ruta) {
-      <a [routerLink]="item.ruta" routerLinkActive="active-item">
+      <a [routerLink]="item.ruta" [class.active-item]="esItemActivo(item)" (click)="cerrarPanelUsuario()">
         <i [class]="item.icono" aria-hidden="true"></i>
         <span>{{ item.etiqueta }}</span>
       </a>
     }
   </nav>
 
-  <div class="sidebar-footer">
-    <button type="button" class="user-bubble" title="Cerrar sesion" (click)="regresarLogin()">
-      <i class="pi pi-sign-out"></i>
+  <section class="sidebar-user-section" aria-label="Usuario actual">
+    <div class="sidebar-separator"></div>
+
+    <div id="sidebar-user-panel" class="user-popover" [class.open]="panelUsuarioAbierto">
+      <div class="user-popover-header">
+        <span class="user-avatar small">{{ inicialesUsuario() }}</span>
+        <div>
+          <strong>{{ nombreUsuario() }}</strong>
+          @if (correoUsuario()) {
+            <small>{{ correoUsuario() }}</small>
+          }
+        </div>
+      </div>
+      <button type="button" class="logout-action" (click)="regresarLogin()">
+        <i class="pi pi-sign-out" aria-hidden="true"></i>
+        <span>Cerrar sesión</span>
+      </button>
+    </div>
+
+    <button
+      type="button"
+      class="user-bubble"
+      [class.active]="panelUsuarioAbierto"
+      [attr.aria-expanded]="panelUsuarioAbierto"
+      aria-controls="sidebar-user-panel"
+      title="Ver usuario"
+      (click)="alternarPanelUsuario()"
+    >
+      <span class="user-avatar">{{ inicialesUsuario() }}</span>
+      <span class="user-summary">
+        <strong>{{ nombreUsuario() }}</strong>
+        @if (correoUsuario()) {
+          <small>{{ correoUsuario() }}</small>
+        }
+      </span>
+      <i class="pi pi-chevron-up" aria-hidden="true"></i>
     </button>
-    <small>Almacen Pajaro Azul 2026</small>
-  </div>
+  </section>
 </aside>

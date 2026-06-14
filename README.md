@@ -33,12 +33,13 @@ npm install
 npm start
 ```
 
-Frontend: `http://localhost:3180/login`
+Backend: `http://localhost:3180`
+Frontend: `http://localhost:4300/login`
 
 Credenciales demo:
 
 - Usuario visible: `Sistemas`
-- Correo API: `sistemas@pajaroazul.local`
+- Correo API: `sistemas@pajaroazul.com`
 - Password: `Sistemas*2026`
 - Rol: `administrador`
 
@@ -96,10 +97,10 @@ El workflow `.github/workflows/ci.yml` ejecuta instalacion, build backend, prueb
 8. Subir evidencia PDF/JPG/PNG.
 9. Revisar usuarios, lugares y estados.
 10. Revisar reportes.
-11. Revisar auditoria.
+11. Revisar reportes. Auditoria queda oculta para roles normales y solo se habilita para roles tecnicos.
 
 ## Estado actual
 
-Proyecto listo para pruebas locales y demo funcional cuando Docker Desktop, MongoDB y Redis estan activos. Tiene base defendible para entrega academica: backend y frontend integrados, datos reales desde MongoDB, tiempo real con Socket.IO, auditoria, reportes, control por propiedad de recurso, CI/CD basico y documentacion final.
+Proyecto listo para pruebas locales y demo funcional cuando MongoDB esta activo. Redis ayuda con cache y tiempo real, pero si esta apagado el backend usa fallback y no se cae. Tiene base defendible para entrega academica: backend y frontend integrados, datos reales desde MongoDB, tiempo real con Socket.IO, reportes, control por propiedad de recurso, CI/CD basico y documentacion final.
 
 Para produccion estricta todavia requiere dominio, TLS, proxy reverso, monitoreo centralizado, almacenamiento externo de evidencias, adapter Redis de Socket.IO para despliegue horizontal y mayor cobertura E2E.

@@ -11,8 +11,8 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Control administrativo</span>
-          <h1>Auditoria</h1>
+          <span>Historial administrativo</span>
+          <h1>Actividad</h1>
         </div>
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()">
           <i class="pi pi-refresh"></i>
@@ -20,7 +20,7 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
       </header>
 
       @if (cargando) {
-        <p class="status-message">Cargando auditoria...</p>
+        <p class="status-message">Cargando actividad...</p>
       }
 
       <article class="table-panel">
@@ -28,9 +28,9 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>Accion</th>
-              <th>Entidad</th>
-              <th>Rol</th>
+              <th>Movimiento</th>
+              <th>Area</th>
+              <th>Puesto</th>
               <th>Descripcion</th>
             </tr>
           </thead>
@@ -45,7 +45,7 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
               </tr>
             } @empty {
               <tr>
-                <td colspan="5">No hay registros de auditoria para mostrar.</td>
+                <td colspan="5">Todavia no hay actividad para mostrar.</td>
               </tr>
             }
           </tbody>

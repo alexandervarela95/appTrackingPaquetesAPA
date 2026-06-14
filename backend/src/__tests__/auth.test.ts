@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { crearApp } from '../app';
 
+// Prueba minima de auth: antes de llegar al servicio, Zod debe frenar datos incompletos.
 describe('POST /api/auth/login', () => {
   it('rechaza credenciales incompletas con error de validacion', async () => {
     const respuesta = await request(crearApp()).post('/api/auth/login').send({ correo: 'correo-invalido' });

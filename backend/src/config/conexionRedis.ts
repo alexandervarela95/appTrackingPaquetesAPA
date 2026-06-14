@@ -3,16 +3,14 @@ import { configuracionEntorno } from './configuracionEntorno';
 
 let clienteRedis: RedisClientType | null = null;
 
+// Cliente de respaldo para que el codigo de cache no tenga que preguntar si Redis existe.
 const clienteRedisNoOp = {
   get: async (_clave: string): Promise<string | null> => null,
   set: async (_clave: string, _valor: string, _opts?: any): Promise<'OK'> => 'OK',
   del: async (_clave: string): Promise<number> => 0
 } as unknown as RedisClientType;
 
-/**
- * Crea una instancia global de Redis para caché y datos temporales.
- * Si Redis no está disponible, se mantiene un cliente no operativo.
- */
+// Ojo: Redis ayuda con cache y tiempo real, pero no debe tumbar el backend en local.
 export const conectarRedis = async (): Promise<void> => {
   try {
     clienteRedis = createClient({
@@ -43,9 +41,7 @@ export const conectarRedis = async (): Promise<void> => {
   }
 };
 
-/**
- * Obtiene el cliente Redis global o un cliente no operativo si no está conectado.
- */
+// El resto del sistema usa esta funcion y recibe Redis real o un fallback silencioso.
 export const obtenerClienteRedis = (): RedisClientType => {
   return clienteRedis || clienteRedisNoOp;
 };

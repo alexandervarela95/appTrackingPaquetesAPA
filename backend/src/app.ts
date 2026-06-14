@@ -8,9 +8,7 @@ import { manejadorErrores } from './middlewares/manejadorErrores.middleware';
 import { saludRutas } from './rutas/salud.rutas';
 import { configuracionEntorno } from './config/configuracionEntorno';
 
-/**
- * Configura la aplicacion Express con middlewares generales y rutas.
- */
+// Arma la app Express con seguridad, CORS y todas las rutas bajo /api.
 export const crearApp = (): Application => {
   const app = express();
 

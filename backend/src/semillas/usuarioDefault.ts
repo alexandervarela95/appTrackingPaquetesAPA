@@ -8,10 +8,11 @@ import { PaqueteModelo } from '../modelos/paquete.model';
 import { TrackingModelo } from '../modelos/tracking.model';
 import { UsuarioModelo } from '../modelos/usuario.model';
 
-const correoSistemas = 'sistemas@pajaroazul.local';
+const correoSistemas = 'sistemas@pajaroazul.com';
 const contrasenaSistemas = 'Sistemas*2026';
 const numeroGuiaDemo = 'APA-DEMO-2026';
 
+// Catalogo base de estados para que el sistema pueda operar desde la primera ejecucion.
 const estadosDemo = [
   { nombre: 'Creado', descripcion: 'El paquete ha sido registrado', orden: 1 },
   { nombre: 'Asignado a motorista', descripcion: 'El paquete fue asignado a un motorista', orden: 2 },
@@ -21,13 +22,8 @@ const estadosDemo = [
   { nombre: 'Extraviado', descripcion: 'El paquete se considera extraviado', orden: 6 }
 ];
 
-/**
- * Crea los datos minimos para iniciar una presentacion del sistema.
- *
- * @remarks
- * El proceso es idempotente: usa el correo tecnico como llave unica, no duplica
- * usuarios y siempre guarda la contrasena como hash bcrypt.
- */
+// Crea datos demo para presentar el sistema sin cargar todo a mano.
+// Es idempotente: se puede correr varias veces sin duplicar los registros principales.
 const ejecutarSeedUsuarioDefault = async (): Promise<void> => {
   await conectarMongo();
 
@@ -71,18 +67,24 @@ const ejecutarSeedUsuarioDefault = async (): Promise<void> => {
   const lugarSps = await asegurarLugarDemo('Sistemas SPS', 'Sucursal demo para sistemas', 'San Pedro Sula', 'Oficina Sistemas SPS', fechaActual);
   const lugarBodega = await asegurarLugarDemo('Bodega Central', 'Bodega principal de paquetes internos', 'San Pedro Sula', 'Bodega Central APA', fechaActual);
   const lugarCeiba = await asegurarLugarDemo('Tienda La Ceiba', 'Sucursal destino demo', 'La Ceiba', 'Sucursal APA La Ceiba', fechaActual);
+  const lugarContabilidad = await asegurarLugarDemo('Contabilidad', 'Departamento de contabilidad APA', 'San Pedro Sula', 'Oficina Contabilidad APA', fechaActual);
+  const lugarRrhh = await asegurarLugarDemo('Recursos Humanos', 'Departamento de recursos humanos APA', 'San Pedro Sula', 'Oficina RRHH APA', fechaActual);
+  const lugarMarketing = await asegurarLugarDemo('Marketing', 'Departamento de marketing APA', 'San Pedro Sula', 'Oficina Marketing APA', fechaActual);
+  const lugarCompras = await asegurarLugarDemo('Compras', 'Departamento de compras APA', 'San Pedro Sula', 'Oficina Compras APA', fechaActual);
+  const lugarVentas = await asegurarLugarDemo('Ventas', 'Departamento de ventas APA', 'San Pedro Sula', 'Oficina Ventas APA', fechaActual);
   await asegurarLugarDemo('Tegucigalpa', 'Sucursal demo Tegucigalpa', 'Tegucigalpa', 'Sucursal APA Tegucigalpa', fechaActual);
   await asegurarLugarDemo('El Progreso', 'Sucursal demo El Progreso', 'El Progreso', 'Sucursal APA El Progreso', fechaActual);
 
   const contrasenaHash = await bcrypt.hash(contrasenaSistemas, 10);
 
+  // Usuario principal para entrar a la demo local.
   await UsuarioModelo.findOneAndUpdate(
     { correo: correoSistemas },
     {
       $set: {
-        nombre: 'Sistemas',
+        nombre: 'Gixel Varela',
         correo: correoSistemas,
-        codigoEmpleado: 'SISTEMAS-2026',
+        codigoEmpleado: '0504',
         contrasena: contrasenaHash,
         rol: 'administrador',
         lugarAsignadoId: lugarSistemas._id,
@@ -96,9 +98,50 @@ const ejecutarSeedUsuarioDefault = async (): Promise<void> => {
     { new: true, upsert: true, setDefaultsOnInsert: true }
   );
 
-  const remitenteDemo = await asegurarUsuarioDemo('Usuario Remitente Demo', 'remitente.demo@pajaroazul.local', 'REM-DEMO', 'usuario', lugarSps._id, fechaActual);
-  const destinatarioDemo = await asegurarUsuarioDemo('Usuario Destinatario Demo', 'destinatario.demo@pajaroazul.local', 'DES-DEMO', 'usuario', lugarCeiba._id, fechaActual);
-  const motoristaDemo = await asegurarUsuarioDemo('Motorista Demo', 'motorista.demo@pajaroazul.local', 'MOT-DEMO', 'motorista', lugarBodega._id, fechaActual);
+  const usuariosDemo = [
+    { nombre: 'Daniela Castro', correo: 'daniela.castro@pajaroazul.com', codigoEmpleado: 'CON-1001', rol: 'usuario', lugarAsignadoId: lugarContabilidad._id },
+    { nombre: 'Roberto Aguilar', correo: 'roberto.aguilar@pajaroazul.com', codigoEmpleado: 'RRHH-1002', rol: 'usuario', lugarAsignadoId: lugarRrhh._id },
+    { nombre: 'Valeria Torres', correo: 'valeria.torres@pajaroazul.com', codigoEmpleado: 'MKT-1003', rol: 'usuario', lugarAsignadoId: lugarMarketing._id },
+    { nombre: 'Elena Rivera', correo: 'elena.rivera@pajaroazul.com', codigoEmpleado: 'COM-1004', rol: 'usuario', lugarAsignadoId: lugarCompras._id },
+    { nombre: 'Jose Martinez', correo: 'jose.martinez@pajaroazul.com', codigoEmpleado: 'VEN-1005', rol: 'usuario', lugarAsignadoId: lugarVentas._id }
+  ];
+
+  const motoristasDemo = [
+    { nombre: 'Miguel Hernandez', correo: 'miguel.hernandez@pajaroazul.com', codigoEmpleado: 'MOT-2001', rol: 'motorista', lugarAsignadoId: lugarBodega._id },
+    { nombre: 'Jorge Ramirez', correo: 'jorge.ramirez@pajaroazul.com', codigoEmpleado: 'MOT-2002', rol: 'motorista', lugarAsignadoId: lugarBodega._id },
+    { nombre: 'Luis Mejia', correo: 'luis.mejia@pajaroazul.com', codigoEmpleado: 'MOT-2003', rol: 'motorista', lugarAsignadoId: lugarBodega._id },
+    { nombre: 'Kevin Alvarado', correo: 'kevin.alvarado@pajaroazul.com', codigoEmpleado: 'MOT-2004', rol: 'motorista', lugarAsignadoId: lugarBodega._id },
+    { nombre: 'Oscar Pineda', correo: 'oscar.pineda@pajaroazul.com', codigoEmpleado: 'MOT-2005', rol: 'motorista', lugarAsignadoId: lugarBodega._id }
+  ];
+
+  const usuariosCreados = await Promise.all(
+    usuariosDemo.map((usuario) =>
+      asegurarUsuarioDemo(usuario.nombre, usuario.correo, usuario.codigoEmpleado, usuario.rol, usuario.lugarAsignadoId, fechaActual)
+    )
+  );
+  const motoristasCreados = await Promise.all(
+    motoristasDemo.map((usuario) =>
+      asegurarUsuarioDemo(usuario.nombre, usuario.correo, usuario.codigoEmpleado, usuario.rol, usuario.lugarAsignadoId, fechaActual)
+    )
+  );
+
+  const remitenteDemo = usuariosCreados[0];
+  const destinatarioDemo = usuariosCreados[2];
+  const motoristaDemo = motoristasCreados[0];
+
+  // Limpieza de usuarios viejos de demos anteriores para no mezclar credenciales.
+  await UsuarioModelo.deleteMany({
+    correo: {
+      $in: [
+        'sistemas@pajaroazul.local',
+        'remitente.demo@pajaroazul.local',
+        'destinatario.demo@pajaroazul.local',
+        'motorista.demo@pajaroazul.local',
+        'carlos.mendoza@pajaroazul.com',
+        'andrea.lopez@pajaroazul.com'
+      ]
+    }
+  });
 
   const estadoCreado = await EstadoModelo.findOne({ nombre: 'Creado' });
   const estadoTransito = await EstadoModelo.findOne({ nombre: 'En transito' });
@@ -106,6 +149,7 @@ const ejecutarSeedUsuarioDefault = async (): Promise<void> => {
     throw new Error('Estados demo requeridos no encontrados');
   }
 
+  // El paquete demo deja lista una guia con tracking e incidencia para la defensa.
   const paqueteDemo = await PaqueteModelo.findOneAndUpdate(
     { numeroGuia: numeroGuiaDemo },
     {

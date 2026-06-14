@@ -3,6 +3,7 @@ import request from 'supertest';
 import { crearApp } from '../app';
 import { configuracionEntorno } from '../config/configuracionEntorno';
 
+// Token local para probar rutas protegidas sin depender del login ni de MongoDB.
 const crearTokenAdmin = () =>
   jwt.sign(
     {

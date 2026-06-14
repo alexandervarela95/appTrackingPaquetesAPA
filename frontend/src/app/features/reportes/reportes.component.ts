@@ -11,8 +11,8 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Salidas de informacion</span>
-          <h1>Reportes</h1>
+          <span>Resumen para administracion</span>
+          <h1>Informes</h1>
         </div>
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()">
           <i class="pi pi-refresh"></i>
@@ -27,12 +27,12 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
         </article>
         <article class="metric-card">
           <i class="pi pi-exclamation-triangle"></i>
-          <span class="muted">Incidencias reportadas</span>
+          <span class="muted">Problemas reportados</span>
           <strong>{{ totalIncidencias }}</strong>
         </article>
         <article class="metric-card">
           <i class="pi pi-history"></i>
-          <span class="muted">Actividad reciente</span>
+          <span class="muted">Movimientos recientes</span>
           <strong>{{ totalActividad }}</strong>
         </article>
       </section>
@@ -53,7 +53,7 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
               </tr>
             } @empty {
               <tr>
-                <td colspan="2">No hay datos de paquetes por estado.</td>
+                <td colspan="2">Todavia no hay informacion para mostrar.</td>
               </tr>
             }
           </tbody>

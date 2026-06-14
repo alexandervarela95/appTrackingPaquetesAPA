@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { DashboardResumen } from '../../core/modelos/dashboard.model';
 import { DashboardServicio } from '../../core/servicios/dashboard.servicio';
-import { EstadoRealtime, RealtimeService } from '../../core/servicios/realtime.service';
+import { RealtimeService } from '../../core/servicios/realtime.service';
 
+// Pantalla inicial. Muestra indicadores calculados por el backend, no datos quemados.
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -11,12 +12,10 @@ import { EstadoRealtime, RealtimeService } from '../../core/servicios/realtime.s
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Sistema de trazabilidad APA</span>
-          <h1>Dashboard</h1>
+          <span>Almacen Pajaro Azul</span>
+          <h1>Inicio</h1>
         </div>
         <div class="header-actions">
-          <span class="badge">Redis cache</span>
-          <span class="badge">{{ estadoRealtime }}</span>
           <button class="icon-button" type="button" title="Actualizar" (click)="cargarResumen()">
             <i class="pi pi-refresh"></i>
           </button>
@@ -34,7 +33,7 @@ import { EstadoRealtime, RealtimeService } from '../../core/servicios/realtime.s
       </section>
 
       @if (cargando) {
-        <p class="status-message">Cargando dashboard...</p>
+        <p class="status-message">Cargando informacion...</p>
       }
 
       <section class="content-grid">
@@ -51,11 +50,11 @@ import { EstadoRealtime, RealtimeService } from '../../core/servicios/realtime.s
         </article>
 
         <article class="glass-panel">
-          <h2>Resumen operativo</h2>
+          <h2>Resumen general</h2>
           <div class="summary-list">
-            <span>{{ resumen?.paquetesActivos || 0 }} paquetes activos en trazabilidad</span>
-            <span>{{ resumen?.incidenciasAbiertas || 0 }} incidencias abiertas</span>
-            <span>{{ resumen?.evidenciasRegistradas || 0 }} evidencias registradas</span>
+            <span>{{ resumen?.paquetesActivos || 0 }} paquetes en proceso</span>
+            <span>{{ resumen?.incidenciasAbiertas || 0 }} problemas pendientes</span>
+            <span>{{ resumen?.evidenciasRegistradas || 0 }} fotos o comprobantes</span>
           </div>
         </article>
       </section>
@@ -111,7 +110,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   protected resumen?: DashboardResumen;
   protected mensajeError = '';
   protected cargando = false;
-  protected estadoRealtime: EstadoRealtime = 'desconectado';
   private readonly destruir$ = new Subject<void>();
 
   public constructor(
@@ -121,7 +119,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.cargarResumen();
-    this.realtimeService.estado$.pipe(takeUntil(this.destruir$)).subscribe((estado) => (this.estadoRealtime = estado));
+    // Si otro modulo cambia datos importantes, refrescamos las tarjetas del inicio.
     this.realtimeService.escuchar('dashboard:updated').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarResumen());
     this.realtimeService.escuchar('incident:created').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarResumen());
   }
@@ -133,10 +131,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   protected get metricas() {
     return [
-      { titulo: 'Estados', valor: this.resumen?.totalEstados || 0, icono: 'pi pi-tags' },
-      { titulo: 'Paquetes activos', valor: this.resumen?.paquetesActivos || 0, icono: 'pi pi-box' },
-      { titulo: 'Incidencias abiertas', valor: this.resumen?.incidenciasAbiertas || 0, icono: 'pi pi-exclamation-triangle' },
-      { titulo: 'Evidencias', valor: this.resumen?.evidenciasRegistradas || 0, icono: 'pi pi-file' },
+      { titulo: 'Estados del paquete', valor: this.resumen?.totalEstados || 0, icono: 'pi pi-tags' },
+      { titulo: 'Paquetes en proceso', valor: this.resumen?.paquetesActivos || 0, icono: 'pi pi-box' },
+      { titulo: 'Problemas pendientes', valor: this.resumen?.incidenciasAbiertas || 0, icono: 'pi pi-exclamation-triangle' },
+      { titulo: 'Fotos o comprobantes', valor: this.resumen?.evidenciasRegistradas || 0, icono: 'pi pi-file' },
     ];
   }
 
@@ -156,7 +154,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.cargando = false;
-        this.mensajeError = 'No fue posible cargar el dashboard. Valida token y backend.';
+        this.mensajeError = 'No se pudo cargar la informacion. Intenta de nuevo.';
       },
     });
   }

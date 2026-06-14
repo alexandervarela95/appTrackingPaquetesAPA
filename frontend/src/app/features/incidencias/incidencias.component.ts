@@ -16,8 +16,8 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Gestion de problemas logisticos</span>
-          <h1>Incidencias</h1>
+          <span>Problemas en envios</span>
+          <h1>Problemas</h1>
         </div>
         <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()">
           <i class="pi pi-refresh"></i>
@@ -29,12 +29,12 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
       }
 
       @if (cargando) {
-        <p class="status-message">Cargando incidencias...</p>
+        <p class="status-message">Cargando problemas...</p>
       }
 
       <section class="content-grid">
         <form class="glass-panel form-grid" (ngSubmit)="guardarIncidencia()">
-          <h2>Nueva incidencia</h2>
+          <h2>Nuevo problema</h2>
           <div class="field-group">
             <label for="paqueteId">Paquete</label>
             <select id="paqueteId" name="paqueteId" [(ngModel)]="formulario.paqueteId" (ngModelChange)="seleccionarPaquete($event)" required>
@@ -49,7 +49,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
             <input id="numeroGuia" name="numeroGuia" [(ngModel)]="formulario.numeroGuia" readonly required />
           </div>
           <div class="field-group">
-            <label for="tipoIncidencia">Tipo</label>
+            <label for="tipoIncidencia">Tipo de problema</label>
             <input id="tipoIncidencia" name="tipoIncidencia" [(ngModel)]="formulario.tipoIncidencia" required placeholder="Retraso, dano, extravio" />
           </div>
           <div class="field-group">
@@ -74,7 +74,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
             <textarea id="descripcion" name="descripcion" [(ngModel)]="formulario.descripcion"></textarea>
           </div>
           <button class="button-primary" type="submit" [disabled]="guardando">
-            <i class="pi pi-save"></i>{{ guardando ? 'Guardando...' : 'Guardar incidencia' }}
+            <i class="pi pi-save"></i>{{ guardando ? 'Guardando...' : 'Guardar problema' }}
           </button>
         </form>
 
@@ -106,7 +106,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="6">Sin incidencias registradas.</td>
+                  <td colspan="6">Todavia no hay problemas para mostrar.</td>
                 </tr>
               }
             </tbody>
@@ -145,7 +145,7 @@ export class IncidenciasComponent implements OnInit {
       },
       error: () => {
         this.cargando = false;
-        this.mostrarError('No fue posible cargar incidencias.');
+        this.mostrarError('No se pudieron cargar los problemas. Intenta de nuevo.');
       },
     });
     this.paqueteServicio.listar().subscribe((paquetes) => (this.paquetes = paquetes));
@@ -167,20 +167,20 @@ export class IncidenciasComponent implements OnInit {
     this.incidenciaServicio.crear(this.formulario).subscribe({
       next: () => {
         this.guardando = false;
-        this.mensaje = 'Incidencia registrada correctamente.';
+        this.mensaje = 'Problema guardado correctamente.';
         this.hayError = false;
         this.formulario = this.crearFormularioVacio();
         this.cargarDatos();
       },
       error: () => {
         this.guardando = false;
-        this.mostrarError('No fue posible registrar la incidencia.');
+        this.mostrarError('No se pudo guardar el problema. Intenta de nuevo.');
       },
     });
   }
 
   protected eliminarIncidencia(incidencia: Incidencia): void {
-    if (!confirm('Desea eliminar esta incidencia?')) {
+    if (!confirm('Desea eliminar este problema?')) {
       return;
     }
     this.incidenciaServicio.eliminar(this.obtenerId(incidencia)).subscribe(() => this.cargarDatos());

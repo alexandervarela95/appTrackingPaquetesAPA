@@ -21,8 +21,8 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Historial de trazabilidad</span>
-          <h1>Tracking</h1>
+          <span>Movimientos del paquete</span>
+          <h1>Seguimiento</h1>
         </div>
         <form class="toolbar" (ngSubmit)="buscarPorGuia()">
           <input class="search-input" name="numeroGuia" [(ngModel)]="numeroGuia" placeholder="Numero de guia" />
@@ -35,18 +35,18 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
       }
 
       @if (cargando) {
-        <p class="status-message">Consultando tracking...</p>
+        <p class="status-message">Buscando movimientos...</p>
       }
 
       <article class="table-panel">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Fecha evento</th>
+              <th>Fecha</th>
               <th>Guia</th>
               <th>Estado</th>
               <th>Lugar actual</th>
-              <th>Usuario responsable</th>
+              <th>Responsable</th>
               <th>Descripcion</th>
             </tr>
           </thead>
@@ -62,7 +62,7 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
               </tr>
             } @empty {
               <tr>
-                <td colspan="6">Busca una guia para ver su historial.</td>
+                <td colspan="6">Ingresa una guia para ver los movimientos del paquete.</td>
               </tr>
             }
           </tbody>
@@ -119,7 +119,7 @@ export class TrackingComponent implements OnInit, OnDestroy {
     this.historial = [];
     this.mensaje = '';
     if (!numeroGuia) {
-      this.mostrarError('Ingresa una guia para consultar tracking.');
+      this.mostrarError('Ingresa una guia para buscar el paquete.');
       return;
     }
     this.realtimeService.unirseAGuia(numeroGuia);
@@ -129,12 +129,12 @@ export class TrackingComponent implements OnInit, OnDestroy {
         this.cargando = false;
         this.historial = historial;
         if (historial.length === 0) {
-          this.mostrarError('No hay tracking para esta guia.');
+          this.mostrarError('Todavia no hay movimientos para esta guia.');
         }
       },
       error: () => {
         this.cargando = false;
-        this.mostrarError('No fue posible consultar el tracking.');
+        this.mostrarError('No se pudo consultar la informacion. Intenta de nuevo.');
       },
     });
   }

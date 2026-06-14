@@ -4,6 +4,7 @@ import multer from 'multer';
 const extensionesPermitidas = new Set(['.jpg', '.jpeg', '.png', '.pdf']);
 const carpetaEvidencias = path.resolve(__dirname, '../../uploads/evidencias');
 
+// Se guarda la evidencia en disco local para la demo del proyecto.
 const almacenamientoEvidencias = multer.diskStorage({
   destination: carpetaEvidencias,
   filename: (_req, archivo, callback) => {
@@ -17,6 +18,7 @@ export const subidaEvidencia = multer({
   storage: almacenamientoEvidencias,
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_req, archivo, callback) => {
+    // Dejamos una lista corta de formatos para evitar subir ejecutables o archivos raros.
     const extension = path.extname(archivo.originalname).toLowerCase();
     if (!extensionesPermitidas.has(extension)) {
       callback(new Error('Solo se permiten archivos jpg, jpeg, png o pdf'));

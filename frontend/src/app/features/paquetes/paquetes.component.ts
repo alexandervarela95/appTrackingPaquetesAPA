@@ -13,6 +13,7 @@ import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
 import { RealtimeService } from '../../core/servicios/realtime.service';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 
+// Listado principal de paquetes. Desde aqui se busca por guia y se abre el detalle.
 @Component({
   selector: 'app-paquetes',
   standalone: true,
@@ -21,15 +22,15 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
     <section class="screen-shell">
       <header class="section-header">
         <div>
-          <span>Consulta operativa de envios</span>
+          <span>Envios internos</span>
           <h1>Paquetes</h1>
         </div>
         <div class="toolbar">
           <form class="toolbar" (ngSubmit)="buscarPorGuia()">
-            <input class="search-input" name="numeroGuiaBusqueda" [(ngModel)]="numeroGuiaBusqueda" placeholder="Buscar por numero guia" />
+            <input class="search-input" name="numeroGuiaBusqueda" [(ngModel)]="numeroGuiaBusqueda" placeholder="Buscar por guia" />
             <button class="button-secondary" type="submit"><i class="pi pi-search"></i>Buscar</button>
           </form>
-          <a class="button-primary" routerLink="/paquetes/nuevo"><i class="pi pi-plus"></i>Nuevo</a>
+          <a class="button-primary" routerLink="/paquetes/nuevo"><i class="pi pi-plus"></i>Registrar paquete</a>
           <button class="icon-button" type="button" title="Actualizar" (click)="cargarDatos()">
             <i class="pi pi-refresh"></i>
           </button>
@@ -47,9 +48,9 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
       @if (paqueteEncontrado) {
         <article class="glass-panel resultado-guia">
           <div>
-            <span class="muted">Resultado por guia</span>
+            <span class="muted">Paquete encontrado</span>
             <h2>{{ paqueteEncontrado.numeroGuia }}</h2>
-            <p>{{ paqueteEncontrado.descripcion || 'Sin descripcion' }}</p>
+            <p>{{ paqueteEncontrado.descripcion || 'No hay descripcion disponible' }}</p>
           </div>
           <a class="button-secondary" [routerLink]="['/paquetes', obtenerId(paqueteEncontrado)]">
             <i class="pi pi-eye"></i>Ver detalle
@@ -61,14 +62,14 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         <table class="data-table">
           <thead>
             <tr>
-              <th>Numero guia</th>
+              <th>Guia</th>
               <th>Descripcion</th>
               <th>Prioridad</th>
               <th>Estado actual</th>
               <th>Origen</th>
               <th>Destino</th>
-              <th>Fecha creacion</th>
-              <th>Acciones</th>
+              <th>Fecha</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -85,14 +86,14 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
                   <a class="icon-button" [routerLink]="['/paquetes', obtenerId(paquete)]" title="Ver detalle">
                     <i class="pi pi-eye"></i>
                   </a>
-                  <a class="icon-button" [routerLink]="['/tracking', paquete.numeroGuia]" title="Tracking">
+                  <a class="icon-button" [routerLink]="['/tracking', paquete.numeroGuia]" title="Ver seguimiento">
                     <i class="pi pi-map-marker"></i>
                   </a>
                 </td>
               </tr>
             } @empty {
               <tr>
-                <td colspan="8">No hay paquetes registrados. Usa el boton Nuevo para crear el primer envio.</td>
+                <td colspan="8">Todavia no hay paquetes para mostrar. Usa Registrar paquete para crear el primer envio.</td>
               </tr>
             }
           </tbody>
@@ -137,6 +138,7 @@ export class PaquetesComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.cargarDatos();
+    // Mantiene el listado fresco cuando llegan cambios por Socket.IO.
     this.realtimeService.escuchar('package:created').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarDatos());
     this.realtimeService.escuchar('package:updated').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarDatos());
     this.realtimeService.escuchar('package:status-changed').pipe(takeUntil(this.destruir$)).subscribe(() => this.cargarDatos());
@@ -157,7 +159,7 @@ export class PaquetesComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.cargando = false;
-        this.mostrarError('No fue posible cargar paquetes.');
+        this.mostrarError('No se pudieron cargar los paquetes. Intenta de nuevo.');
       },
     });
     this.lugarServicio.listar().subscribe((lugares) => (this.lugares = lugares));
@@ -169,7 +171,7 @@ export class PaquetesComponent implements OnInit, OnDestroy {
     const numeroGuia = this.numeroGuiaBusqueda.trim();
     this.paqueteEncontrado = undefined;
     if (!numeroGuia) {
-      this.mostrarError('Ingresa un numero de guia para buscar.');
+      this.mostrarError('Ingresa una guia para buscar el paquete.');
       return;
     }
 
@@ -179,7 +181,7 @@ export class PaquetesComponent implements OnInit, OnDestroy {
         this.mensaje = 'Paquete encontrado.';
         this.hayError = false;
       },
-      error: () => this.mostrarError('No encontrado.'),
+      error: () => this.mostrarError('No encontramos un paquete con esa guia.'),
     });
   }
 
