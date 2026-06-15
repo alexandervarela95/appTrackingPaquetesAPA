@@ -1,3 +1,4 @@
+// Modelo de tracking: define la forma de los datos persistidos y sus tipos principales.
 import { Schema, model } from 'mongoose';
 
 /**
@@ -6,7 +7,7 @@ import { Schema, model } from 'mongoose';
 const trackingSchema = new Schema(
   {
     paqueteId: { type: Schema.Types.ObjectId, ref: 'Paquete', required: true },
-    numeroGuia: { type: String, required: true, trim: true },
+    numeroGuia: { type: String, required: true, trim: true, uppercase: true, match: /^APA-\d{6}$/ },
     estadoId: { type: Schema.Types.ObjectId, ref: 'Estado', required: true },
     descripcion: { type: String, trim: true, default: '' },
     lugarActualId: { type: Schema.Types.ObjectId, ref: 'Lugar' },

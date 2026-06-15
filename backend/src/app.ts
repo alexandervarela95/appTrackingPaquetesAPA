@@ -1,3 +1,4 @@
+// Configura la aplicacion Express, middlewares globales y montaje principal de rutas API.
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';

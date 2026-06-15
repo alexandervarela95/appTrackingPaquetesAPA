@@ -1,3 +1,4 @@
+// Prueba automatizada que valida el flujo de accesoPaquete y evita regresiones en backend.
 import { AccesoPaqueteServicio } from '../servicios/accesoPaquete.servicio';
 import { TokenPayload } from '../middlewares/auth.middleware';
 

@@ -1,3 +1,4 @@
+// Modelo de paquete: define la forma de los datos persistidos y sus tipos principales.
 import { Schema, model } from 'mongoose';
 
 /**
@@ -5,7 +6,7 @@ import { Schema, model } from 'mongoose';
  */
 const paqueteSchema = new Schema(
   {
-    numeroGuia: { type: String, required: true, unique: true, trim: true },
+    numeroGuia: { type: String, required: true, unique: true, trim: true, uppercase: true, match: /^APA-\d{6}$/ },
     descripcion: { type: String, trim: true, default: '' },
     tipoPaquete: { type: String, required: true, trim: true },
     prioridad: { type: String, required: true, enum: ['baja', 'media', 'alta'], default: 'media' },

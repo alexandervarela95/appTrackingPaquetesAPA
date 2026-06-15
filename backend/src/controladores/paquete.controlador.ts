@@ -1,3 +1,4 @@
+// Controlador de paquete: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response, NextFunction } from 'express';
 import { PaqueteServicio } from '../servicios/paquete.servicio';
 import { validarReferenciasPaquete } from '../utilidades/validacionReferencias';
@@ -77,6 +78,47 @@ export class PaqueteControlador {
       });
       RealtimePublisher.emitir(EventosRealtime.DashboardActualizado, {});
       res.status(201).json({ exito: true, mensaje: 'Paquete creado correctamente', datos: paquete });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async crearBulk(req: Request, res: Response, next: NextFunction) {
+    try {
+      const errores = await validarReferenciasPaquete({
+        lugarOrigenId: req.body.lugarOrigenId,
+        lugarDestinoId: req.body.lugarDestinoId,
+        usuarioRemitenteId: req.body.usuarioRemitenteId,
+        usuarioDestinatarioId: req.body.usuarioDestinatarioId,
+        motoristaAsignadoId: req.body.motoristaAsignadoId,
+      });
+      if (errores.length > 0) {
+        return res.status(400).json({ exito: false, mensaje: 'Referencias invalidas para consolidacion', errores });
+      }
+
+      const resultado = await PaqueteServicio.crearPaquetesBulk(req.body);
+      await AuditLogServicio.registrar({
+        req,
+        accion: 'paquete.bulk.creado',
+        entidad: 'Paquete',
+        descripcion: `Consolidacion de ${resultado.paquetes.length} paquetes creada`,
+        metadata: { guias: resultado.paquetes.map((paquete: any) => paquete.numeroGuia), advertencia: resultado.advertencia },
+      });
+
+      for (const paquete of resultado.paquetes) {
+        RealtimePublisher.emitir(EventosRealtime.PaqueteCreado, {
+          datos: paquete,
+          paqueteId: String(paquete._id),
+          numeroGuia: paquete.numeroGuia,
+        });
+      }
+      RealtimePublisher.emitir(EventosRealtime.DashboardActualizado, {});
+
+      res.status(201).json({
+        exito: true,
+        mensaje: 'Paquetes consolidados creados correctamente',
+        datos: resultado,
+      });
     } catch (error) {
       next(error);
     }

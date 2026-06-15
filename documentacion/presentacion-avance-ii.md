@@ -5,7 +5,7 @@
 - Usuario: `Sistemas`
 - Password: `Sistemas*2026`
 
-El frontend acepta `Sistemas` y lo envia al backend como `sistemas@pajaroazul.local`.
+El frontend acepta `Sistemas` y lo envia al backend como `sistemas@pajaroazul.com`.
 
 ## Comandos
 
@@ -15,7 +15,7 @@ Backend:
 cd /home/admin/Documentos/Proyectos/appTrackingPaquetesAPA/backend
 npm install
 npm run seed
-PUERTO=4300 CORS_ORIGINS=http://localhost:3180 npm run dev
+PUERTO=3180 CORS_ORIGINS=http://localhost:4300 npm run dev
 ```
 
 Frontend:
@@ -29,7 +29,7 @@ npm start
 URL demo:
 
 ```bash
-http://localhost:3180/login
+http://localhost:4300/login
 ```
 
 ## Flujo demo paso a paso
@@ -96,7 +96,7 @@ El proyecto appTrackingPaquetesAPA queda en estado avanzado para entrega academi
 
 1. Login con `Sistemas / Sistemas*2026`.
 2. Dashboard general.
-3. Paquete demo `APA-DEMO-2026`.
+3. Paquete demo `APA-000001`.
 4. Tracking del paquete.
 5. Registro de paquete nuevo.
 6. Registro de incidencia.

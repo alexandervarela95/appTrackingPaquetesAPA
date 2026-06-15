@@ -1,3 +1,4 @@
+// Validador de lugarValidador: revisa entradas con esquemas antes de ejecutar la regla de negocio.
 import { z } from 'zod';
 import { textoOpcional, textoRequerido } from './camposComunes';
 

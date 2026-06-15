@@ -1,3 +1,4 @@
+// Rutas de usuario: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { UsuarioControlador } from '../controladores/usuario.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

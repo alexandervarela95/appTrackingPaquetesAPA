@@ -1,3 +1,4 @@
+// Pantalla de incidencias: maneja datos, acciones de usuario y estado visual de la vista.
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +9,7 @@ import { IncidenciaServicio } from '../../core/servicios/incidencia.servicio';
 import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 
+// Pantalla de problemas. Permite reportar incidencias amarradas a un paquete y su guia.
 @Component({
   selector: 'app-incidencias',
   standalone: true,
@@ -153,11 +155,13 @@ export class IncidenciasComponent implements OnInit {
   }
 
   protected seleccionarPaquete(paqueteId: string): void {
+    // Al elegir paquete copiamos la guia para evitar que el usuario la escriba mal.
     const paquete = this.paquetes.find((registro) => this.obtenerId(registro) === paqueteId);
     this.formulario.numeroGuia = paquete?.numeroGuia || '';
   }
 
   protected guardarIncidencia(): void {
+    // Validacion visual minima; el backend valida el payload completo con Zod.
     if (!this.formulario.paqueteId || !this.formulario.numeroGuia || !this.formulario.tipoIncidencia || !this.formulario.reportadoPorId) {
       this.mostrarError('Completa los campos obligatorios.');
       return;

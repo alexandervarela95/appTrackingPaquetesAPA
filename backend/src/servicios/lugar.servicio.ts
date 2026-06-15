@@ -1,3 +1,4 @@
+// Servicio de lugar: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { LugarModelo } from '../modelos/lugar.model';
 
 export class LugarServicio {

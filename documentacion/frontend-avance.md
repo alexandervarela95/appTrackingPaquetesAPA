@@ -30,7 +30,7 @@ No se modifico `appTallerAPA`.
 
 El login usa el servicio real de autenticacion Angular contra `POST /api/auth/login`.
 Para la cuenta de presentacion, el frontend acepta `Sistemas` y lo normaliza a
-`sistemas@pajaroazul.local`, que es el correo tecnico del usuario creado por el
+`sistemas@pajaroazul.com`, que es el correo tecnico del usuario creado por el
 seed backend.
 
 ## Estado

@@ -1,3 +1,4 @@
+// Rutas de lugar: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { LugarControlador } from '../controladores/lugar.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

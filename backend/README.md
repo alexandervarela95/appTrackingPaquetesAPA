@@ -30,9 +30,9 @@ JWT_EXPIRES_IN=1d
 
 ```bash
 npm install
-npm run build
+npm start
 npm run dev
-npm run start
+npm run start:prod
 npm run seed:demo
 npm run test
 ```

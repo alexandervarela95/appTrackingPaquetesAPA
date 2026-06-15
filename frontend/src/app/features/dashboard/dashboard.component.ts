@@ -1,3 +1,4 @@
+// Pantalla de dashboard: maneja datos, acciones de usuario y estado visual de la vista.
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { DashboardResumen } from '../../core/modelos/dashboard.model';

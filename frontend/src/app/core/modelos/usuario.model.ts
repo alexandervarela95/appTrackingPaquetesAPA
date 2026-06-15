@@ -1,3 +1,4 @@
+// Modelo de usuario: define la forma de los datos persistidos y sus tipos principales.
 export interface Usuario {
   _id?: string;
   id?: string;

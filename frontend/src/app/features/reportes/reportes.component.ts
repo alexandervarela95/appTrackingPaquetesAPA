@@ -1,8 +1,10 @@
+// Pantalla de reportes: maneja datos, acciones de usuario y estado visual de la vista.
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReporteServicio } from '../../core/servicios/reporte.servicio';
 import { RealtimeService } from '../../core/servicios/realtime.service';
 
+// Pantalla de informes. Resume datos operativos para administracion.
 @Component({
   selector: 'app-reportes',
   standalone: true,
@@ -74,6 +76,7 @@ export class ReportesComponent implements OnInit {
 
   public ngOnInit(): void {
     this.cargarDatos();
+    // Si cambia el dashboard, tambien refrescamos los numeros de informes.
     this.realtimeService.escuchar('dashboard:updated').subscribe(() => this.cargarDatos());
   }
 

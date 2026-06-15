@@ -1,3 +1,4 @@
+// Controlador de dashboard: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response, NextFunction } from 'express';
 import { DashboardServicio } from '../servicios/dashboard.servicio';
 

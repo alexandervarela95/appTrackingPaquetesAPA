@@ -1,3 +1,4 @@
+// Middleware de auth: aplica una regla transversal antes de que la peticion llegue al controlador.
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { configuracionEntorno } from '../config/configuracionEntorno';

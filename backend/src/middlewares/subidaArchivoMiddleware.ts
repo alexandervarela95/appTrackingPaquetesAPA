@@ -1,3 +1,4 @@
+// Middleware de subidaArchivoMiddleware: aplica una regla transversal antes de que la peticion llegue al controlador.
 import path from 'path';
 import multer from 'multer';
 

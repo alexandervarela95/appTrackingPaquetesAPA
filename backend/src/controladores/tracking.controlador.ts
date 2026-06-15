@@ -1,3 +1,4 @@
+// Controlador de tracking: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response, NextFunction } from 'express';
 import { TrackingServicio } from '../servicios/tracking.servicio';
 import { TokenPayload } from '../middlewares/auth.middleware';

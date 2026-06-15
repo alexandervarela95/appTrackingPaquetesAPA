@@ -1,3 +1,4 @@
+// Rutas de auditLog: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { AuditLogControlador } from '../controladores/auditLog.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

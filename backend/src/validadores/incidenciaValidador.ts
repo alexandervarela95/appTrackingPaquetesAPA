@@ -1,6 +1,7 @@
+// Validador de incidenciaValidador: revisa entradas con esquemas antes de ejecutar la regla de negocio.
 import { z } from 'zod';
 import { textoRequerido } from './camposComunes';
-import { objectIdSchema } from './mongoIdValidador';
+import { numeroGuiaSchema, objectIdSchema } from './mongoIdValidador';
 
 const estadoIncidenciaSchema = z.enum(['abierta', 'en proceso', 'cerrada'], {
   message: 'El estado de incidencia no es permitido'
@@ -8,7 +9,7 @@ const estadoIncidenciaSchema = z.enum(['abierta', 'en proceso', 'cerrada'], {
 
 export const crearIncidenciaSchema = z.object({
   paqueteId: objectIdSchema,
-  numeroGuia: textoRequerido('El numero de guia es obligatorio'),
+  numeroGuia: numeroGuiaSchema,
   tipoIncidencia: textoRequerido('El tipo de incidencia es obligatorio'),
   descripcion: textoRequerido('La descripcion es obligatoria'),
   estadoIncidencia: estadoIncidenciaSchema.default('abierta'),

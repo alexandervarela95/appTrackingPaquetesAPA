@@ -14,19 +14,19 @@ Se utilizaron Node.js, Express, TypeScript, MongoDB (Mongoose), Redis, dotenv, c
 - `src/controladores`: controladores REST con respuestas JSON uniformes.
 - `src/servicios`: logica de negocios y validaciones.
 - `src/rutas`: rutas de API y endpoint `/api/salud`.
-- `src/utilidades`: respuestas API, generacion de numero de guia y validacion de referencias.
+- `src/utilidades`: respuestas API, generacion secuencial de numero de guia y validacion de referencias.
 - `src/semillas/estadosSemilla.ts`: carga de estados iniciales.
 - `src/semillas/usuarioDefault.ts`: seed idempotente para usuario administrador de pruebas.
 
 ## Reglas de negocio implementadas
 
-- Generacion automatica de `numeroGuia` unico cuando no se provee.
+- Generacion automatica de `numeroGuia` en backend con formato secuencial `APA-000001`.
 - Creacion de tracking inicial al crear un paquete.
 - Creacion de nuevo registro de tracking al cambiar `estadoActualId` de un paquete.
 - Uso de `estado: false` para desactivar registros criticos en lugar de eliminarlos.
 - Validacion de `lugarOrigenId`, `lugarDestinoId` y usuarios relacionados.
 - Cache Redis en dashboard y busqueda por `numeroGuia`.
-- Usuario default `Sistemas` con rol `administrador`, correo tecnico `sistemas@pajaroazul.local` y password hasheada con bcrypt.
+- Usuario default `Sistemas` con rol `administrador`, correo tecnico `sistemas@pajaroazul.com` y password hasheada con bcrypt.
 
 ## Seed de usuario default
 

@@ -1,3 +1,4 @@
+// Servicio de realtime: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';

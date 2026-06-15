@@ -1,3 +1,4 @@
+// Datos semilla de usuarioDefault: prepara informacion inicial necesaria para usar el sistema.
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { conectarMongo } from '../config/conexionMongo';
@@ -7,10 +8,11 @@ import { LugarModelo } from '../modelos/lugar.model';
 import { PaqueteModelo } from '../modelos/paquete.model';
 import { TrackingModelo } from '../modelos/tracking.model';
 import { UsuarioModelo } from '../modelos/usuario.model';
+import { ContadorModelo } from '../modelos/contador.model';
 
 const correoSistemas = 'sistemas@pajaroazul.com';
 const contrasenaSistemas = 'Sistemas*2026';
-const numeroGuiaDemo = 'APA-DEMO-2026';
+const numeroGuiaDemo = 'APA-000001';
 
 // Catalogo base de estados para que el sistema pueda operar desde la primera ejecucion.
 const estadosDemo = [
@@ -177,6 +179,11 @@ const ejecutarSeedUsuarioDefault = async (): Promise<void> => {
 
   await asegurarTrackingDemo(paqueteDemo._id, numeroGuiaDemo, estadoCreado._id, 'Tracking inicial demo', lugarSps._id, remitenteDemo._id, fechaActual);
   await asegurarTrackingDemo(paqueteDemo._id, numeroGuiaDemo, estadoTransito._id, 'Paquete demo en transito', lugarBodega._id, motoristaDemo._id, fechaActual);
+  await ContadorModelo.findOneAndUpdate(
+    { _id: 'paquetes' },
+    { $max: { seq: 1 } },
+    { new: true, upsert: true, setDefaultsOnInsert: true }
+  );
 
   await IncidenciaModelo.findOneAndUpdate(
     { paqueteId: paqueteDemo._id, tipoIncidencia: 'Incidencia demo' },

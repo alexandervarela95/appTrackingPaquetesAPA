@@ -57,7 +57,7 @@ Ver `endpoints.md` para la lista completa de rutas disponibles.
 
 ## Reglas de negocio
 
-1. Al crear un paquete, se genera un `numeroGuia` único si no se proporciona.
+1. Al crear un paquete, el backend genera un `numeroGuia` secuencial con formato `APA-000001`.
 2. Al crear un paquete, se crea un registro inicial en `tracking` con estado `Creado`.
 3. Al actualizar el estado del paquete, se crea un registro adicional en `tracking`.
 4. Las eliminaciones críticas se realizan por estado inactivo en lugar de borrado físico.

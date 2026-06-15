@@ -1,3 +1,4 @@
+// Prueba base del componente raiz para validar que Angular lo crea correctamente.
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 

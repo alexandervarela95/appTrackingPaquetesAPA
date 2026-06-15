@@ -1,3 +1,4 @@
+// Servicio de storage: concentra la regla de negocio y las operaciones de datos reutilizables.
 import path from 'path';
 
 export interface StorageProvider {

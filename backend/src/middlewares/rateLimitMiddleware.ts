@@ -1,3 +1,4 @@
+// Middleware de rateLimitMiddleware: aplica una regla transversal antes de que la peticion llegue al controlador.
 import rateLimit from 'express-rate-limit';
 
 export const loginRateLimit = rateLimit({

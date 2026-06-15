@@ -1,3 +1,4 @@
+// Servicio de accesoPaquete: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { PaqueteModelo } from '../modelos/paquete.model';
 import { TokenPayload } from '../middlewares/auth.middleware';
 

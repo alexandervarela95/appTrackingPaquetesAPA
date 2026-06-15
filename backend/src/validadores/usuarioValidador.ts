@@ -1,3 +1,4 @@
+// Validador de usuarioValidador: revisa entradas con esquemas antes de ejecutar la regla de negocio.
 import { z } from 'zod';
 import { textoRequerido } from './camposComunes';
 import { objectIdSchema } from './mongoIdValidador';

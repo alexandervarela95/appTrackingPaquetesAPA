@@ -1,3 +1,4 @@
+// Controlador de lugar: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response, NextFunction } from 'express';
 import { LugarServicio } from '../servicios/lugar.servicio';
 import { AuditLogServicio } from '../servicios/auditLog.servicio';

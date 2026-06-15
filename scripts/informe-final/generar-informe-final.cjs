@@ -1,3 +1,4 @@
+// Genera el informe final HTML a partir de la informacion documentada del proyecto.
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');

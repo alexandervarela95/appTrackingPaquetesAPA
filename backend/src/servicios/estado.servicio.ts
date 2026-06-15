@@ -1,3 +1,4 @@
+// Servicio de estado: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { EstadoModelo } from '../modelos/estado.model';
 
 export class EstadoServicio {

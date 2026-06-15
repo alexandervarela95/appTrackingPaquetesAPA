@@ -1,3 +1,4 @@
+// Controlador de auth: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response, NextFunction } from 'express';
 import { AuthServicio } from '../servicios/auth.servicio';
 import { AuditLogServicio } from '../servicios/auditLog.servicio';

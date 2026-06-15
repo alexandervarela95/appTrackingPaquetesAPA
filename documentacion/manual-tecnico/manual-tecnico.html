@@ -402,12 +402,12 @@
     <h2>7. Variables de Entorno</h2>
     <p>El backend utiliza <code>backend/.env</code>. El archivo base es <code>backend/.env.example</code>.</p>
     <pre>NODE_ENV=development
-PUERTO=4300
+PUERTO=3180
 PORT=4300
 MONGO_URI=mongodb://127.0.0.1:27017/appTrackingPaquetesAPA
 MONGODB_URI=mongodb://127.0.0.1:27017/appTrackingPaquetesAPA
 REDIS_URL=redis://127.0.0.1:6379
-CORS_ORIGINS=http://localhost:3180
+CORS_ORIGINS=http://localhost:4300
 FRONTEND_URL=http://localhost:3180
 UPLOAD_DIR=uploads/evidencias
 JWT_SECRET=cambiar_esta_clave_en_produccion
@@ -435,8 +435,8 @@ npm start</pre>
     <table>
       <thead><tr><th>Servicio</th><th>URL</th><th>Uso</th></tr></thead>
       <tbody>
-        <tr><td>Frontend</td><td><code>http://localhost:3180/login</code></td><td>Acceso a la aplicación.</td></tr>
-        <tr><td>Backend salud</td><td><code>http://localhost:4300/api/salud</code></td><td>Validar que la API responde.</td></tr>
+        <tr><td>Frontend</td><td><code>http://localhost:4300/login</code></td><td>Acceso a la aplicación.</td></tr>
+        <tr><td>Backend salud</td><td><code>http://localhost:3180/api/salud</code></td><td>Validar que la API responde.</td></tr>
         <tr><td>MongoDB</td><td><code>localhost:27017</code></td><td>Base de datos local.</td></tr>
         <tr><td>Redis</td><td><code>localhost:6379</code></td><td>Caché y soporte de eventos.</td></tr>
       </tbody>
@@ -712,7 +712,7 @@ npm run e2e</pre>
       <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
       <tbody>
         <tr><td>Usuario visible</td><td><code>Sistemas</code></td></tr>
-        <tr><td>Correo API</td><td><code>sistemas@pajaroazul.local</code></td></tr>
+        <tr><td>Correo API</td><td><code>sistemas@pajaroazul.com</code></td></tr>
         <tr><td>Contraseña</td><td><code>Sistemas*2026</code></td></tr>
         <tr><td>Rol</td><td><code>administrador</code></td></tr>
       </tbody>

@@ -1,3 +1,4 @@
+// Interceptor de auth: ajusta peticiones HTTP salientes, como autenticacion y cabeceras.
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';

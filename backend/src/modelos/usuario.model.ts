@@ -1,9 +1,7 @@
+// Modelo de usuario: define la forma de los datos persistidos y sus tipos principales.
 import { Schema, model } from 'mongoose';
 
-/**
- * Modelo de usuario para el sistema de tracking interno.
- * Representa a empleados, motoristas y administradores.
- */
+// Modelo de empleados que usan el sistema: usuarios, motoristas y administradores.
 const usuarioSchema = new Schema(
   {
     nombre: { type: String, required: true, trim: true },

@@ -1,3 +1,4 @@
+// Rutas de incidencia: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { IncidenciaControlador } from '../controladores/incidencia.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

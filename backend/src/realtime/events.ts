@@ -1,3 +1,4 @@
+// Soporte de tiempo real para publicar eventos de events hacia clientes conectados.
 export const EventosRealtime = {
   DashboardActualizado: 'dashboard:updated',
   PaqueteCreado: 'package:created',

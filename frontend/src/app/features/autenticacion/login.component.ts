@@ -1,3 +1,4 @@
+// Pantalla de login: maneja datos, acciones de usuario y estado visual de la vista.
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';

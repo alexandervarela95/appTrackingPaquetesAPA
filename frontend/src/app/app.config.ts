@@ -1,3 +1,4 @@
+// Configura proveedores globales de Angular, rutas, HTTP e interceptores de la aplicacion.
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';

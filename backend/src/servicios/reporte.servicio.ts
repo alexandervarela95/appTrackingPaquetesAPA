@@ -1,3 +1,4 @@
+// Servicio de reporte: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { IncidenciaModelo } from '../modelos/incidencia.model';
 import { PaqueteModelo } from '../modelos/paquete.model';
 import { TrackingModelo } from '../modelos/tracking.model';
@@ -13,6 +14,7 @@ interface FiltrosReporte {
   estadoIncidencia?: string;
 }
 
+// Arma filtros de fecha reutilizables para no repetir la misma condicion en cada reporte.
 const filtroFechas = (campo: string, filtros: FiltrosReporte): Record<string, unknown> => {
   if (!filtros.fechaInicio && !filtros.fechaFin) return {};
   return {
@@ -23,8 +25,10 @@ const filtroFechas = (campo: string, filtros: FiltrosReporte): Record<string, un
   };
 };
 
+// Reportes simples para administracion. Salen de MongoDB y respetan filtros opcionales.
 export class ReporteServicio {
   public static async paquetesPorEstado(filtros: FiltrosReporte) {
+    // Agrupamos por estado para mostrar cuantos paquetes hay en cada etapa.
     return PaqueteModelo.aggregate([
       {
         $match: {

@@ -1,3 +1,4 @@
+// Controlador de usuario: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response, NextFunction } from 'express';
 import { UsuarioServicio } from '../servicios/usuario.servicio';
 import { AuditLogServicio } from '../servicios/auditLog.servicio';

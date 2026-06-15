@@ -1,3 +1,4 @@
+REM Respalda la base de datos MongoDB del proyecto para conservar una copia recuperable.
 @echo off
 setlocal
 
@@ -15,4 +16,3 @@ set DESTINO=%BACKUP_DIR%\backup-%FECHA%-%HORA%
 
 mongodump --uri="%MONGODB_URI%" --out="%DESTINO%"
 echo Backup generado en %DESTINO%
-

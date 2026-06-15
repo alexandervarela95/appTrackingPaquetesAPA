@@ -1,3 +1,4 @@
+// Pantalla de evidencias: maneja datos, acciones de usuario y estado visual de la vista.
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +7,7 @@ import { Paquete } from '../../core/modelos/paquete.model';
 import { EvidenciaServicio } from '../../core/servicios/evidencia.servicio';
 import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
 
+// Pantalla de comprobantes. Sube archivos reales y los relaciona con una guia.
 @Component({
   selector: 'app-evidencias',
   standalone: true,
@@ -148,6 +150,7 @@ export class EvidenciasComponent implements OnInit {
   }
 
   protected seleccionarPaquete(paqueteId: string): void {
+    // La guia se toma del paquete seleccionado para mantener el comprobante bien amarrado.
     const paquete = this.paquetes.find((registro) => this.obtenerId(registro) === paqueteId);
     this.formulario.numeroGuia = paquete?.numeroGuia || '';
   }

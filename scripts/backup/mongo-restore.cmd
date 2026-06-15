@@ -1,3 +1,4 @@
+REM Restaura una copia de MongoDB generada por el proceso de respaldo del proyecto.
 @echo off
 setlocal
 
@@ -13,4 +14,3 @@ if "%~1"=="" (
 
 mongorestore --uri="%MONGODB_URI%" --drop "%~1"
 echo Restauracion finalizada desde %~1
-

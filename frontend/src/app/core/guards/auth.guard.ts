@@ -1,3 +1,4 @@
+// Guard de auth: protege rutas y decide si el usuario puede entrar.
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../servicios/auth.service';

@@ -1,3 +1,4 @@
+// Genera el manual tecnico HTML con capturas y secciones operativas del sistema.
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');

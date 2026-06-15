@@ -70,7 +70,7 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4300,
+            "port": 3180,
             "proxyConfig": "proxy.conf.json"
           }
         },

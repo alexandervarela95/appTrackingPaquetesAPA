@@ -1,3 +1,4 @@
+// Validador de camposComunes: revisa entradas con esquemas antes de ejecutar la regla de negocio.
 import { z } from 'zod';
 
 export const textoRequerido = (mensaje: string) =>
