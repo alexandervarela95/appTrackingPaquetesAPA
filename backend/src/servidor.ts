@@ -1,3 +1,4 @@
+// Crea el servidor HTTP y conecta Express con los servicios de tiempo real.
 import { createServer } from 'http';
 import { crearApp } from './app';
 import { conectarMongo } from './config/conexionMongo';

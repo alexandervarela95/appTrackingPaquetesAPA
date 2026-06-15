@@ -1,10 +1,11 @@
+// Validador de evidenciaValidador: revisa entradas con esquemas antes de ejecutar la regla de negocio.
 import { z } from 'zod';
 import { textoOpcional, textoRequerido } from './camposComunes';
-import { objectIdSchema } from './mongoIdValidador';
+import { numeroGuiaSchema, objectIdSchema } from './mongoIdValidador';
 
 export const crearEvidenciaSchema = z.object({
   paqueteId: objectIdSchema,
-  numeroGuia: textoRequerido('El numero de guia es obligatorio'),
+  numeroGuia: numeroGuiaSchema,
   tipoEvidencia: textoRequerido('El tipo de evidencia es obligatorio'),
   descripcion: textoOpcional(),
   rutaArchivo: textoOpcional(),
@@ -13,7 +14,7 @@ export const crearEvidenciaSchema = z.object({
 
 export const subirEvidenciaSchema = z.object({
   paqueteId: objectIdSchema,
-  numeroGuia: textoRequerido('El numero de guia es obligatorio'),
+  numeroGuia: numeroGuiaSchema,
   tipoEvidencia: textoRequerido('El tipo de evidencia es obligatorio'),
   descripcion: textoOpcional()
 });

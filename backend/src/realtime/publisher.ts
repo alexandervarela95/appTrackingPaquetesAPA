@@ -1,3 +1,4 @@
+// Soporte de tiempo real para publicar eventos de publisher hacia clientes conectados.
 import { Server } from 'socket.io';
 import { EventoRealtime } from './events';
 

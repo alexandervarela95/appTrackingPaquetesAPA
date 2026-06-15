@@ -1,3 +1,4 @@
+// Rutas de reporte: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { ReporteControlador } from '../controladores/reporte.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

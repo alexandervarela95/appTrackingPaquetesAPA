@@ -48,6 +48,15 @@
 - `fechaCreacion`
 - `fechaActualizacion`
 
+Formato de `numeroGuia`: `APA-000001`. La guia se genera en backend con un contador atomico y no debe escribirse manualmente desde el frontend.
+
+## Counter
+
+- `_id`
+- `seq`
+
+Se usa para mantener la secuencia de guias de paquetes. El documento principal es `_id: paquetes`.
+
 ## Tracking
 
 - `paqueteId`

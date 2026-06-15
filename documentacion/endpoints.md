@@ -38,14 +38,19 @@
 - `GET /api/paquetes/:id`
 - `GET /api/paquetes/guia/:numeroGuia`
 - `POST /api/paquetes`
+- `POST /api/paquetes/bulk`
 - `PUT /api/paquetes/:id`
 - `DELETE /api/paquetes/:id`
+
+Formato de `:numeroGuia`: `APA-000001`.
 
 ## Tracking
 
 - `GET /api/tracking/paquete/:paqueteId`
 - `GET /api/tracking/guia/:numeroGuia`
 - `POST /api/tracking`
+
+Formato de `:numeroGuia`: `APA-000001`.
 
 ## Incidencias
 

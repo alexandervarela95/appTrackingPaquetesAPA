@@ -1,3 +1,4 @@
+// Modelo de incidencia: define la forma de los datos persistidos y sus tipos principales.
 export interface Incidencia {
   _id?: string;
   id?: string;

@@ -1,3 +1,4 @@
+// Rutas de evidencia: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { EvidenciaControlador } from '../controladores/evidencia.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

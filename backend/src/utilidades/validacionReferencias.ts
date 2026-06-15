@@ -1,3 +1,4 @@
+// Utilidad de validacionReferencias: funcion auxiliar compartida por varias partes del backend.
 import { LugarModelo } from '../modelos/lugar.model';
 import { UsuarioModelo } from '../modelos/usuario.model';
 import { EstadoModelo } from '../modelos/estado.model';

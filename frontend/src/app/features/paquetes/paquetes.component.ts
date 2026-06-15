@@ -1,3 +1,4 @@
+// Pantalla de paquetes: maneja datos, acciones de usuario y estado visual de la vista.
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
 import { PaqueteServicio } from '../../core/servicios/paquete.servicio';
 import { RealtimeService } from '../../core/servicios/realtime.service';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
+import { esNumeroGuiaValido, MENSAJE_FORMATO_GUIA_INVALIDO, normalizarNumeroGuia } from '../../core/utilidades/numero-guia';
 
 // Listado principal de paquetes. Desde aqui se busca por guia y se abre el detalle.
 @Component({
@@ -27,7 +29,7 @@ import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
         </div>
         <div class="toolbar">
           <form class="toolbar" (ngSubmit)="buscarPorGuia()">
-            <input class="search-input" name="numeroGuiaBusqueda" [(ngModel)]="numeroGuiaBusqueda" placeholder="Buscar por guia" />
+            <input class="search-input" name="numeroGuiaBusqueda" [(ngModel)]="numeroGuiaBusqueda" placeholder="APA-000001" />
             <button class="button-secondary" type="submit"><i class="pi pi-search"></i>Buscar</button>
           </form>
           <a class="button-primary" routerLink="/paquetes/nuevo"><i class="pi pi-plus"></i>Registrar paquete</a>
@@ -168,12 +170,17 @@ export class PaquetesComponent implements OnInit, OnDestroy {
   }
 
   protected buscarPorGuia(): void {
-    const numeroGuia = this.numeroGuiaBusqueda.trim();
+    const numeroGuia = normalizarNumeroGuia(this.numeroGuiaBusqueda);
     this.paqueteEncontrado = undefined;
     if (!numeroGuia) {
       this.mostrarError('Ingresa una guia para buscar el paquete.');
       return;
     }
+    if (!esNumeroGuiaValido(numeroGuia)) {
+      this.mostrarError(MENSAJE_FORMATO_GUIA_INVALIDO);
+      return;
+    }
+    this.numeroGuiaBusqueda = numeroGuia;
 
     this.paqueteServicio.obtenerPorGuia(numeroGuia).subscribe({
       next: (paquete) => {

@@ -1,3 +1,4 @@
+// Genera el diagrama de base de datos usado por la documentacion tecnica.
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');

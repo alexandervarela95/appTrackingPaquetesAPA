@@ -1,3 +1,4 @@
+// Rutas de dashboard: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { DashboardControlador } from '../controladores/dashboard.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

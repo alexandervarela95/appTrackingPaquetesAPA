@@ -1,3 +1,4 @@
+// Pantalla de paquete detalle: maneja datos, acciones de usuario y estado visual de la vista.
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';

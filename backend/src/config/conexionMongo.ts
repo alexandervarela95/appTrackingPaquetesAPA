@@ -1,3 +1,4 @@
+// Configura conexionMongo para que el backend use entorno, base de datos o cache de forma centralizada.
 import mongoose from 'mongoose';
 import { configuracionEntorno } from './configuracionEntorno';
 

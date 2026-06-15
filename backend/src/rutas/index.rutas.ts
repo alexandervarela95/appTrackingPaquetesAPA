@@ -1,3 +1,4 @@
+// Rutas de index: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { authRutas } from './auth.rutas';
 import { usuarioRutas } from './usuario.rutas';

@@ -1,3 +1,4 @@
+// Prueba automatizada que valida el flujo de health y evita regresiones en backend.
 import request from 'supertest';
 import { crearApp } from '../app';
 

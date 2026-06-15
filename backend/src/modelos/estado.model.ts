@@ -1,3 +1,4 @@
+// Modelo de estado: define la forma de los datos persistidos y sus tipos principales.
 import { Schema, model } from 'mongoose';
 
 /**

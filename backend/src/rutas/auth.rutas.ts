@@ -1,3 +1,4 @@
+// Rutas de auth: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { AuthControlador } from '../controladores/auth.controlador';
 import { loginRateLimit } from '../middlewares/rateLimitMiddleware';

@@ -1,3 +1,4 @@
+// Datos semilla de datosIniciales: prepara informacion inicial necesaria para usar el sistema.
 import bcrypt from 'bcryptjs';
 import { LugarModelo } from '../modelos/lugar.model';
 import { EstadoModelo } from '../modelos/estado.model';

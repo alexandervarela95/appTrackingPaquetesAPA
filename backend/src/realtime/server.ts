@@ -1,3 +1,4 @@
+// Soporte de tiempo real para publicar eventos de server hacia clientes conectados.
 import { Server } from 'http';
 import jwt from 'jsonwebtoken';
 import { Server as SocketServer } from 'socket.io';

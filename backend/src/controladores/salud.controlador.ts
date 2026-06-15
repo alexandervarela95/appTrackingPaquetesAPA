@@ -1,3 +1,4 @@
+// Controlador de salud: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response } from 'express';
 
 /**

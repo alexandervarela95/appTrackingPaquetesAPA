@@ -1,6 +1,6 @@
 # Endpoints API
 
-Base local: `http://localhost:4300/api`
+Base local: `http://localhost:3180/api`
 
 ## Publicos
 
@@ -12,7 +12,7 @@ Base local: `http://localhost:4300/api`
 Body login:
 
 ```json
-{ "correo": "sistemas@pajaroazul.local", "contrasena": "Sistemas*2026" }
+{ "correo": "sistemas@pajaroazul.com", "contrasena": "Sistemas*2026" }
 ```
 
 ## Protegidos
@@ -37,6 +37,7 @@ Todos requieren `Authorization: Bearer <token>`.
 | GET | `/paquetes` | autenticado |
 | GET | `/paquetes/guia/:numeroGuia` | autenticado |
 | POST | `/paquetes` | administrador, usuario |
+| POST | `/paquetes/bulk` | administrador, usuario |
 | PUT | `/paquetes/:id` | administrador, motorista |
 | DELETE | `/paquetes/:id` | administrador |
 | GET | `/tracking/guia/:numeroGuia` | autenticado |
@@ -46,6 +47,8 @@ Todos requieren `Authorization: Bearer <token>`.
 | GET | `/evidencias` | autenticado |
 | POST | `/evidencias/upload` | administrador, usuario, motorista |
 | GET | `/evidencias/archivo/:id` | autenticado |
+
+Nota: los parametros `:numeroGuia` aceptan el formato secuencial `APA-000001`. Otros formatos de guia se rechazan con validacion.
 
 ## Respuesta de validacion
 

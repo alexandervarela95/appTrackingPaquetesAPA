@@ -89,15 +89,18 @@ El workflow `.github/workflows/ci.yml` ejecuta instalacion, build backend, prueb
 
 1. Login con `Sistemas / Sistemas*2026`.
 2. Revisar dashboard.
-3. Entrar a paquetes y abrir `APA-DEMO-2026`.
+3. Entrar a paquetes y abrir `APA-000001`.
 4. Crear paquete nuevo.
-5. Buscar por numero de guia.
-6. Revisar tracking.
-7. Crear incidencia.
-8. Subir evidencia PDF/JPG/PNG.
-9. Revisar usuarios, lugares y estados.
-10. Revisar reportes.
-11. Revisar reportes. Auditoria queda oculta para roles normales y solo se habilita para roles tecnicos.
+5. Consolidar varios paquetes desde `/paquetes/consolidar`.
+6. Buscar por numero de guia.
+7. Revisar tracking.
+8. Crear incidencia.
+9. Subir evidencia PDF/JPG/PNG.
+10. Revisar usuarios, lugares y estados.
+11. Revisar reportes.
+12. Auditoria queda oculta para roles normales y solo se habilita para roles tecnicos.
+
+La consolidacion permite armar una lista temporal de paquetes en frontend y guardarlos todos al final. Cada paquete se crea como registro individual y recibe su propia guia secuencial `APA-000001`.
 
 ## Estado actual
 

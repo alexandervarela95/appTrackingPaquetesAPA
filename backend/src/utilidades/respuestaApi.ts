@@ -1,3 +1,4 @@
+// Utilidad de respuestaApi: funcion auxiliar compartida por varias partes del backend.
 export interface RespuestaApi<T = unknown> {
   exito: boolean;
   mensaje: string;

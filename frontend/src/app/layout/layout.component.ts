@@ -1,3 +1,4 @@
+// Componente de layout layout: organiza la estructura comun usada por pantallas autenticadas.
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './sidebar.component';

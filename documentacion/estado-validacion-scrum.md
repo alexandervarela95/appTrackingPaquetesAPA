@@ -1,23 +1,23 @@
 # Estado de Validación y Próximos Pasos
 
-Fecha de validación: 11 de junio de 2026.
+Fecha de validación: 14 de junio de 2026.
 
 ## Resumen ejecutivo
 
-`appTrackingPaquetesAPA` se encuentra en estado funcional para pruebas locales y demostración académica avanzada. El backend compila, las pruebas automatizadas disponibles pasan correctamente y el frontend genera build de producción. La aplicación ya tiene autenticación, dashboard, CRUD operativo, tracking por guía, incidencias, evidencias con carga de archivos y datos demo idempotentes.
+`appTrackingPaquetesAPA` se encuentra en estado funcional para pruebas locales y demostración académica. El backend compila, las pruebas automatizadas disponibles pasan correctamente y el frontend genera build de producción. La aplicación ya tiene autenticación, dashboard, CRUD operativo, tracking por guía, incidencias, evidencias con carga de archivos, reportes, hoja imprimible de envío y datos demo idempotentes.
 
-La validación confirma que el código base está estable para continuar pruebas funcionales. El punto que requiere atención no es de lógica de negocio, sino de entorno: Docker Desktop debe estar activo para levantar MongoDB y Redis mediante `docker compose`.
+La validación confirma que el código base está estable para continuar pruebas funcionales. MongoDB sí es obligatorio para operar. Redis ayuda con caché y tiempo real, pero si está apagado el backend usa fallback y no se cae.
 
 ## Validación ejecutada
 
 | Área | Comando / revisión | Resultado |
 | --- | --- | --- |
-| Backend | `npm.cmd run build` | Correcto. TypeScript compila sin errores. |
-| Backend | `npm.cmd test -- --runInBand` | Correcto. 4 suites y 7 pruebas pasaron. |
-| Frontend | `npm.cmd run build` | Correcto. Build generado. |
-| Frontend | Presupuesto de bundle Angular | Correcto. Se ajusto el presupuesto a un valor razonable para Angular, PrimeNG, Zone.js y Socket.IO. |
-| Git | `main...origin/main` | Sin cambios pendientes al iniciar la validación. |
-| Docker | `docker ps` | Docker Desktop no estaba disponible durante esta validación. |
+| Backend | `npm run build` | Correcto. TypeScript compila sin errores. |
+| Backend | `npm test -- --runInBand` | Correcto. 4 suites y 7 pruebas pasaron. |
+| Frontend | `npm run build` | Correcto. Build generado. |
+| Frontend | Presupuesto SCSS | Correcto con advertencias no bloqueantes en sidebar y hoja imprimible. |
+| MongoDB | Conexión local | Correcto en `27017`. |
+| Redis | Conexión local | No disponible en esta máquina; el fallback funcionó correctamente. |
 
 ## Alcance funcional validado
 
@@ -29,6 +29,7 @@ La validación confirma que el código base está estable para continuar pruebas
 - Historial de tracking por paquete y por guía.
 - Gestión de incidencias.
 - Gestión de evidencias con carga y descarga de archivos.
+- Hoja imprimible del paquete en carta horizontal.
 - Semilla demo para disponer de datos iniciales.
 - Redis configurado como caché con tolerancia a fallo.
 
@@ -36,16 +37,16 @@ La validación confirma que el código base está estable para continuar pruebas
 
 Para una prueba funcional completa, el entorno debe cumplir estas condiciones:
 
-- Docker Desktop iniciado.
 - MongoDB escuchando en `27017`.
-- Redis escuchando en `6379`.
-- Backend levantado en `4300`.
-- Frontend levantado en `3180`.
+- Redis escuchando en `6379` si se quiere cache/adapter distribuido. Si no está, el backend sigue funcionando.
+- Backend levantado en `3180`.
+- Frontend levantado en `4300`.
 - Archivo `backend/.env` creado a partir de `backend/.env.example`.
 
 Credenciales demo:
 
-- Correo: `sistemas@pajaroazul.local`
+- Usuario visible: `Sistemas`
+- Correo: `sistemas@pajaroazul.com`
 - Contraseña: `Sistemas*2026`
 - Rol esperado: `administrador`
 
@@ -67,18 +68,18 @@ Credenciales demo:
 
 ### Prioridad baja
 
-1. Agregar auditoría de acciones sensibles: creación, edición, eliminación y cambios de estado.
-2. Refinar permisos por propiedad del recurso, no solo por rol general.
+1. Refinar permisos por propiedad del recurso en más pantallas del frontend.
+2. Agregar más casos de auditoría si se amplían flujos sensibles.
 3. Documentar métricas operativas para monitoreo: errores, latencia, paquetes activos, incidencias abiertas y uso de almacenamiento.
 
 ## Criterio de listo para pruebas
 
 El proyecto se considera listo para pruebas locales cuando:
 
-- `docker compose up -d` levanta MongoDB y Redis sin conflicto de puertos.
-- `npm.cmd run seed:demo` finaliza correctamente.
-- `npm.cmd run dev` en backend deja disponible `http://localhost:4300/api/salud`.
-- `npm.cmd start` en frontend deja disponible `http://localhost:3180/login`.
+- MongoDB está activo en `27017`.
+- `npm run seed:demo` finaliza correctamente.
+- `npm run dev` en backend deja disponible `http://localhost:3180/api/salud`.
+- `npm start` en frontend deja disponible `http://localhost:4300/login`.
 - El login demo permite entrar al dashboard.
 - Las pantallas principales cargan información sin requerir interacción manual adicional.
 
@@ -94,4 +95,3 @@ El proyecto todavía no debe considerarse listo para producción estricta hasta 
 - Almacenamiento externo para evidencias.
 - Pruebas end-to-end.
 - Política de permisos fina por recurso.
-

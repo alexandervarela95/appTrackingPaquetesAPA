@@ -1,3 +1,4 @@
+// Genera el manual de usuario con capturas reales del frontend y pasos de uso.
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');

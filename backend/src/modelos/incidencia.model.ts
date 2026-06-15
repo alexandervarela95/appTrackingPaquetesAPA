@@ -1,12 +1,12 @@
+// Modelo de incidencia: define la forma de los datos persistidos y sus tipos principales.
 import { Schema, model } from 'mongoose';
 
-/**
- * Modelo de incidencias para eventos que requieren investigacion o seguimiento.
- */
+// Modelo de problemas reportados sobre un paquete.
+// Sirve para saber que guia requiere investigacion o seguimiento.
 const incidenciaSchema = new Schema(
   {
     paqueteId: { type: Schema.Types.ObjectId, ref: 'Paquete', required: true },
-    numeroGuia: { type: String, required: true, trim: true },
+    numeroGuia: { type: String, required: true, trim: true, uppercase: true, match: /^APA-\d{6}$/ },
     tipoIncidencia: { type: String, required: true, trim: true },
     descripcion: { type: String, trim: true, default: '' },
     estadoIncidencia: { type: String, required: true, enum: ['abierta', 'en proceso', 'cerrada'], default: 'abierta' },

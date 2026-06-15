@@ -1,3 +1,4 @@
+// Servicio de paquete: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { PaqueteModelo } from '../modelos/paquete.model';
 import { TrackingServicio } from './tracking.servicio';
 import { generarNumeroGuia } from '../utilidades/generarNumeroGuia';
@@ -5,6 +6,8 @@ import { EstadoModelo } from '../modelos/estado.model';
 import { obtenerClienteRedis } from '../config/conexionRedis';
 import { TokenPayload } from '../middlewares/auth.middleware';
 import { AccesoPaqueteServicio } from './accesoPaquete.servicio';
+import mongoose, { ClientSession } from 'mongoose';
+import { ContadorModelo } from '../modelos/contador.model';
 
 const CLAVE_CACHE_GUIA = (numeroGuia: string) => `paquete:guia:${numeroGuia}`;
 
@@ -23,6 +26,7 @@ export class PaqueteServicio {
   }
 
   public static async obtenerPaquetePorGuia(numeroGuia: string) {
+    numeroGuia = numeroGuia.trim().toUpperCase();
     const clienteRedis = obtenerClienteRedis();
     const clave = CLAVE_CACHE_GUIA(numeroGuia);
     const paqueteCache = await clienteRedis.get(clave);
@@ -41,49 +45,75 @@ export class PaqueteServicio {
   }
 
   public static async crearPaquete(datos: any) {
-    let numeroGuia = datos.numeroGuia?.trim();
-
-    if (!numeroGuia) {
-      // La guia se genera aqui para evitar que el usuario la escriba manualmente.
-      numeroGuia = generarNumeroGuia();
-    }
-
     const estadoInicial = await EstadoModelo.findOne({ nombre: 'Creado', estado: true });
     if (!estadoInicial) {
       throw new Error('Estado inicial Creado no encontrado');
     }
+    await this.sincronizarContadorGuias();
 
-    const paquete = new PaqueteModelo({
-      numeroGuia,
-      descripcion: datos.descripcion || '',
-      tipoPaquete: datos.tipoPaquete,
-      prioridad: datos.prioridad || 'media',
-      estadoActualId: datos.estadoActualId || estadoInicial._id,
-      lugarOrigenId: datos.lugarOrigenId,
-      lugarDestinoId: datos.lugarDestinoId,
-      usuarioRemitenteId: datos.usuarioRemitenteId,
-      usuarioDestinatarioId: datos.usuarioDestinatarioId,
-      motoristaAsignadoId: datos.motoristaAsignadoId,
-      observaciones: datos.observaciones || ''
-    });
-
-    const paqueteGuardado = await paquete.save();
-
-    // Todo paquete nuevo arranca con un movimiento inicial para que el historial no quede vacio.
-    await TrackingServicio.crearRegistroTracking({
-      paqueteId: paqueteGuardado._id,
-      numeroGuia: paqueteGuardado.numeroGuia,
-      estadoId: paqueteGuardado.estadoActualId,
-      descripcion: 'Registro inicial del paquete',
-      lugarActualId: paqueteGuardado.lugarOrigenId,
-      usuarioResponsableId: paqueteGuardado.usuarioRemitenteId
-    });
+    const paqueteGuardado = await this.guardarPaqueteConTracking(datos, estadoInicial);
 
     const clienteRedis = obtenerClienteRedis();
     await clienteRedis.set(CLAVE_CACHE_GUIA(paqueteGuardado.numeroGuia), JSON.stringify(paqueteGuardado), { EX: 30 });
     await clienteRedis.del('dashboard:resumen');
 
     return paqueteGuardado;
+  }
+
+  public static async crearPaquetesBulk(datos: any) {
+    const estadoInicial = await EstadoModelo.findOne({ nombre: 'Creado', estado: true });
+    if (!estadoInicial) {
+      throw new Error('Estado inicial Creado no encontrado');
+    }
+    await this.sincronizarContadorGuias();
+
+    const comunes = {
+      prioridad: datos.prioridad || 'media',
+      estadoActualId: estadoInicial._id,
+      lugarOrigenId: datos.lugarOrigenId,
+      lugarDestinoId: datos.lugarDestinoId,
+      usuarioRemitenteId: datos.usuarioRemitenteId,
+      usuarioDestinatarioId: datos.usuarioDestinatarioId,
+      motoristaAsignadoId: datos.motoristaAsignadoId,
+    };
+    const paquetes = datos.paquetes.map((paquete: any) => ({
+      ...comunes,
+      tipoPaquete: paquete.tipoPaquete,
+      descripcion: paquete.descripcion,
+      observaciones: [datos.observacionGeneral, paquete.observaciones].filter(Boolean).join(' | '),
+    }));
+
+    const clienteRedis = obtenerClienteRedis();
+    const limpiarCache = async (creados: any[]) => {
+      await clienteRedis.del('dashboard:resumen');
+      await Promise.all(creados.map((paquete) => clienteRedis.set(CLAVE_CACHE_GUIA(paquete.numeroGuia), JSON.stringify(paquete), { EX: 30 })));
+    };
+
+    const session = await mongoose.startSession();
+    try {
+      let creados: any[] = [];
+      await session.withTransaction(async () => {
+        creados = [];
+        for (const paquete of paquetes) {
+          creados.push(await this.guardarPaqueteConTracking(paquete, estadoInicial, session));
+        }
+      });
+      await limpiarCache(creados);
+      return { paquetes: creados, parcial: false };
+    } catch (error: any) {
+      if (!this.esErrorTransaccionNoSoportada(error)) {
+        throw error;
+      }
+
+      const creados: any[] = [];
+      for (const paquete of paquetes) {
+        creados.push(await this.guardarPaqueteConTracking(paquete, estadoInicial));
+      }
+      await limpiarCache(creados);
+      return { paquetes: creados, parcial: false, advertencia: 'MongoDB local no soporta transacciones; se valido el lote antes de guardar.' };
+    } finally {
+      await session.endSession();
+    }
   }
 
   public static async actualizarPaquete(id: string, datos: any) {
@@ -138,5 +168,72 @@ export class PaqueteServicio {
       await clienteRedis.del('dashboard:resumen');
     }
     return paqueteEliminado;
+  }
+
+  private static async guardarPaqueteConTracking(datos: any, estadoInicial: any, session?: ClientSession) {
+    let paqueteGuardado: any = null;
+
+    for (let intento = 0; intento < 5; intento += 1) {
+      const numeroGuia = await generarNumeroGuia();
+      const paquete = new PaqueteModelo({
+        numeroGuia,
+        descripcion: datos.descripcion || '',
+        tipoPaquete: datos.tipoPaquete,
+        prioridad: datos.prioridad || 'media',
+        estadoActualId: datos.estadoActualId || estadoInicial._id,
+        lugarOrigenId: datos.lugarOrigenId,
+        lugarDestinoId: datos.lugarDestinoId,
+        usuarioRemitenteId: datos.usuarioRemitenteId,
+        usuarioDestinatarioId: datos.usuarioDestinatarioId,
+        motoristaAsignadoId: datos.motoristaAsignadoId,
+        observaciones: datos.observaciones || ''
+      });
+
+      try {
+        paqueteGuardado = await paquete.save({ session });
+        break;
+      } catch (error: any) {
+        if (error?.code === 11000 && error?.keyPattern?.numeroGuia) {
+          continue;
+        }
+        throw error;
+      }
+    }
+
+    if (!paqueteGuardado) {
+      throw new Error('No se pudo generar una guia unica para el paquete');
+    }
+
+    await TrackingServicio.crearRegistroTracking({
+      paqueteId: paqueteGuardado._id,
+      numeroGuia: paqueteGuardado.numeroGuia,
+      estadoId: paqueteGuardado.estadoActualId,
+      descripcion: 'Registro inicial del paquete',
+      lugarActualId: paqueteGuardado.lugarOrigenId,
+      usuarioResponsableId: paqueteGuardado.usuarioRemitenteId
+    }, session);
+
+    return paqueteGuardado;
+  }
+
+  private static esErrorTransaccionNoSoportada(error: any): boolean {
+    const mensaje = String(error?.message || '');
+    return mensaje.includes('Transaction numbers are only allowed') || mensaje.includes('replica set member or mongos');
+  }
+
+  private static async sincronizarContadorGuias() {
+    const ultimoPaquete = await PaqueteModelo.findOne({ numeroGuia: /^APA-\d{6}$/ }).sort({ numeroGuia: -1 }).select('numeroGuia').lean();
+    if (!ultimoPaquete?.numeroGuia) {
+      return;
+    }
+
+    const secuenciaActual = Number(ultimoPaquete.numeroGuia.replace('APA-', ''));
+    if (Number.isInteger(secuenciaActual) && secuenciaActual > 0) {
+      await ContadorModelo.findOneAndUpdate(
+        { _id: 'paquetes' },
+        { $max: { seq: secuenciaActual } },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
+    }
   }
 }

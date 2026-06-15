@@ -1,8 +1,10 @@
+// Servicio de tracking: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { TrackingModelo } from '../modelos/tracking.model';
+import { ClientSession } from 'mongoose';
 
 // Servicio del historial del paquete. Cada registro cuenta que paso, donde y quien lo hizo.
 export class TrackingServicio {
-  public static async crearRegistroTracking(datos: any) {
+  public static async crearRegistroTracking(datos: any, session?: ClientSession) {
     const registro = new TrackingModelo({
       paqueteId: datos.paqueteId,
       numeroGuia: datos.numeroGuia,
@@ -12,7 +14,7 @@ export class TrackingServicio {
       usuarioResponsableId: datos.usuarioResponsableId,
       fechaEvento: datos.fechaEvento || new Date()
     });
-    return registro.save();
+    return registro.save({ session });
   }
 
   public static async listarTrackingPorPaquete(paqueteId: string) {

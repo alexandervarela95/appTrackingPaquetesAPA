@@ -1,5 +1,7 @@
+// Servicio de incidencia: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { IncidenciaModelo } from '../modelos/incidencia.model';
 
+// Servicio de incidencias. Guarda problemas reales asociados a una guia.
 export class IncidenciaServicio {
   public static async listarIncidencias() {
     return IncidenciaModelo.find().lean();
@@ -10,6 +12,7 @@ export class IncidenciaServicio {
   }
 
   public static async crearIncidencia(datos: any) {
+    // Por defecto una incidencia nace abierta para que aparezca como pendiente en dashboard.
     const incidencia = new IncidenciaModelo({
       paqueteId: datos.paqueteId,
       numeroGuia: datos.numeroGuia,

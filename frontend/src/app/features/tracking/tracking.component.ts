@@ -1,3 +1,4 @@
+// Pantalla de tracking: maneja datos, acciones de usuario y estado visual de la vista.
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import { LugarServicio } from '../../core/servicios/lugar.servicio';
 import { TrackingServicio } from '../../core/servicios/tracking.servicio';
 import { UsuarioServicio } from '../../core/servicios/usuario.servicio';
 import { RealtimeService } from '../../core/servicios/realtime.service';
+import { esNumeroGuiaValido, MENSAJE_FORMATO_GUIA_INVALIDO, normalizarNumeroGuia } from '../../core/utilidades/numero-guia';
 
 @Component({
   selector: 'app-tracking',
@@ -25,7 +27,7 @@ import { RealtimeService } from '../../core/servicios/realtime.service';
           <h1>Seguimiento</h1>
         </div>
         <form class="toolbar" (ngSubmit)="buscarPorGuia()">
-          <input class="search-input" name="numeroGuia" [(ngModel)]="numeroGuia" placeholder="Numero de guia" />
+          <input class="search-input" name="numeroGuia" [(ngModel)]="numeroGuia" placeholder="APA-000001" />
           <button class="button-primary" type="submit"><i class="pi pi-search"></i>Buscar</button>
         </form>
       </header>
@@ -98,12 +100,12 @@ export class TrackingComponent implements OnInit, OnDestroy {
 
     const numeroGuiaRuta = this.route.snapshot.paramMap.get('numeroGuia');
     if (numeroGuiaRuta) {
-      this.numeroGuia = numeroGuiaRuta;
-      this.realtimeService.unirseAGuia(numeroGuiaRuta);
+      this.numeroGuia = normalizarNumeroGuia(numeroGuiaRuta);
+      this.realtimeService.unirseAGuia(this.numeroGuia);
       this.buscarPorGuia();
     }
     this.realtimeService.escuchar('tracking:created').pipe(takeUntil(this.destruir$)).subscribe((evento) => {
-      if (!this.numeroGuia || evento.numeroGuia === this.numeroGuia.trim()) {
+      if (!this.numeroGuia || evento.numeroGuia === normalizarNumeroGuia(this.numeroGuia)) {
         this.buscarPorGuia();
       }
     });
@@ -115,13 +117,18 @@ export class TrackingComponent implements OnInit, OnDestroy {
   }
 
   protected buscarPorGuia(): void {
-    const numeroGuia = this.numeroGuia.trim();
+    const numeroGuia = normalizarNumeroGuia(this.numeroGuia);
     this.historial = [];
     this.mensaje = '';
     if (!numeroGuia) {
       this.mostrarError('Ingresa una guia para buscar el paquete.');
       return;
     }
+    if (!esNumeroGuiaValido(numeroGuia)) {
+      this.mostrarError(MENSAJE_FORMATO_GUIA_INVALIDO);
+      return;
+    }
+    this.numeroGuia = numeroGuia;
     this.realtimeService.unirseAGuia(numeroGuia);
     this.cargando = true;
     this.trackingServicio.listarPorGuia(numeroGuia).subscribe({

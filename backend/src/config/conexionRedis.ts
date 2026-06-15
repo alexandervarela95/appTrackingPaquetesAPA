@@ -1,3 +1,4 @@
+// Configura conexionRedis para que el backend use entorno, base de datos o cache de forma centralizada.
 import { createClient, RedisClientType } from 'redis';
 import { configuracionEntorno } from './configuracionEntorno';
 

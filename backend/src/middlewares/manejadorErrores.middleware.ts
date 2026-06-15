@@ -1,3 +1,4 @@
+// Middleware de manejadorErrores: aplica una regla transversal antes de que la peticion llegue al controlador.
 import { Request, Response, NextFunction } from 'express';
 import { configuracionEntorno } from '../config/configuracionEntorno';
 

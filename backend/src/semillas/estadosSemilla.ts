@@ -1,3 +1,4 @@
+// Datos semilla de estadosSemilla: prepara informacion inicial necesaria para usar el sistema.
 import { EstadoModelo } from '../modelos/estado.model';
 
 /**

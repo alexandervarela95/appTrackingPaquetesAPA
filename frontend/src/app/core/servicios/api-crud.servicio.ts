@@ -1,3 +1,4 @@
+// Servicio de api crud: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { RespuestaApi } from '../modelos/respuesta-api.model';

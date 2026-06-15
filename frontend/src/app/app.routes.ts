@@ -1,3 +1,4 @@
+// Define el mapa de navegacion del frontend y que pantallas se cargan por ruta.
 import { inject } from '@angular/core';
 import { Routes, Router } from '@angular/router';
 import { LoginComponent } from './features/autenticacion/login.component';
@@ -5,6 +6,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { PaquetesComponent } from './features/paquetes/paquetes.component';
 import { PaqueteNuevoComponent } from './features/paquetes/paquete-nuevo.component';
+import { PaqueteConsolidarComponent } from './features/paquetes/paquete-consolidar.component';
 import { PaqueteDetalleComponent } from './features/paquetes/paquete-detalle.component';
 import { PaqueteImprimirComponent } from './features/paquetes/paquete-imprimir.component';
 import { TrackingComponent } from './features/tracking/tracking.component';
@@ -38,6 +40,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'paquetes', component: PaquetesComponent },
       { path: 'paquetes/nuevo', component: PaqueteNuevoComponent },
+      { path: 'paquetes/consolidar', component: PaqueteConsolidarComponent },
       { path: 'paquetes/:id/imprimir', component: PaqueteImprimirComponent },
       { path: 'paquetes/:id', component: PaqueteDetalleComponent },
       { path: 'tracking', component: TrackingComponent },

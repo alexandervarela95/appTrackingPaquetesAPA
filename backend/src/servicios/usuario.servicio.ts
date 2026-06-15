@@ -1,3 +1,4 @@
+// Servicio de usuario: concentra la regla de negocio y las operaciones de datos reutilizables.
 import bcrypt from 'bcryptjs';
 import { UsuarioModelo } from '../modelos/usuario.model';
 

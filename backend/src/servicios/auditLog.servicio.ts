@@ -1,3 +1,4 @@
+// Servicio de auditLog: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { Request } from 'express';
 import { AuditLogModelo } from '../modelos/auditLog.model';
 import { TokenPayload } from '../middlewares/auth.middleware';

@@ -1,3 +1,4 @@
+// Componente raiz Angular que aloja el router principal de la aplicacion.
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 

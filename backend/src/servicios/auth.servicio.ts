@@ -1,3 +1,4 @@
+// Servicio de auth: concentra la regla de negocio y las operaciones de datos reutilizables.
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { UsuarioModelo } from '../modelos/usuario.model';

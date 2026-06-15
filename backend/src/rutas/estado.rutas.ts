@@ -1,3 +1,4 @@
+// Rutas de estado: conecta endpoints, validaciones, seguridad y controlador correspondiente.
 import { Router } from 'express';
 import { EstadoControlador } from '../controladores/estado.controlador';
 import { authMiddleware } from '../middlewares/auth.middleware';

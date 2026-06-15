@@ -1,3 +1,4 @@
+// Servicio de dashboard: concentra la regla de negocio y las operaciones de datos reutilizables.
 import { EstadoModelo } from '../modelos/estado.model';
 import { PaqueteModelo } from '../modelos/paquete.model';
 import { IncidenciaModelo } from '../modelos/incidencia.model';

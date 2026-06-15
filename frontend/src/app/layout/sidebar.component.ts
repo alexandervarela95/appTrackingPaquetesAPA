@@ -1,3 +1,4 @@
+// Componente de layout sidebar: organiza la estructura comun usada por pantallas autenticadas.
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthUser } from '../core/modelos/auth-user.model';
@@ -19,6 +20,7 @@ export class SidebarComponent implements OnInit {
     { etiqueta: 'Inicio', icono: 'pi pi-chart-line', ruta: '/dashboard' },
     { etiqueta: 'Paquetes', icono: 'pi pi-box', ruta: '/paquetes' },
     { etiqueta: 'Registrar paquete', icono: 'pi pi-plus-circle', ruta: '/paquetes/nuevo' },
+    { etiqueta: 'Consolidar paquetes', icono: 'pi pi-list-check', ruta: '/paquetes/consolidar' },
     { etiqueta: 'Seguimiento', icono: 'pi pi-map-marker', ruta: '/tracking' },
     { etiqueta: 'Problemas', icono: 'pi pi-exclamation-triangle', ruta: '/incidencias' },
     { etiqueta: 'Comprobantes', icono: 'pi pi-file', ruta: '/evidencias' },
@@ -62,7 +64,7 @@ export class SidebarComponent implements OnInit {
 
     if (item.ruta === '/paquetes') {
       // Detalle de paquete cuenta como Paquetes, pero Registrar paquete tiene su propio item.
-      return rutaActual === '/paquetes' || (rutaActual.startsWith('/paquetes/') && rutaActual !== '/paquetes/nuevo');
+      return rutaActual === '/paquetes' || (rutaActual.startsWith('/paquetes/') && !['/paquetes/nuevo', '/paquetes/consolidar'].includes(rutaActual));
     }
 
     if (item.ruta === '/tracking') {

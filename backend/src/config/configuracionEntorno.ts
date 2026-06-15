@@ -1,3 +1,4 @@
+// Configura configuracionEntorno para que el backend use entorno, base de datos o cache de forma centralizada.
 import dotenv from 'dotenv';
 import path from 'path';
 

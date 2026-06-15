@@ -1,9 +1,11 @@
+// Controlador de incidencia: recibe la peticion HTTP, coordina el servicio y devuelve la respuesta API.
 import { Request, Response, NextFunction } from 'express';
 import { IncidenciaServicio } from '../servicios/incidencia.servicio';
 import { AuditLogServicio } from '../servicios/auditLog.servicio';
 import { RealtimePublisher } from '../realtime/publisher';
 import { EventosRealtime } from '../realtime/events';
 
+// Controlador de problemas/incidencias. Registra auditoria y avisa al dashboard en tiempo real.
 export class IncidenciaControlador {
   public static async listar(req: Request, res: Response, next: NextFunction) {
     try {
@@ -29,6 +31,7 @@ export class IncidenciaControlador {
   public static async crear(req: Request, res: Response, next: NextFunction) {
     try {
       const incidencia = await IncidenciaServicio.crearIncidencia(req.body);
+      // Cada incidencia queda registrada para que la administracion vea quien la reporto.
       await AuditLogServicio.registrar({
         req,
         accion: 'incidencia.creada',

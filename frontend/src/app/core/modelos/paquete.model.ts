@@ -1,3 +1,4 @@
+// Modelo de paquete: define la forma de los datos persistidos y sus tipos principales.
 export interface Paquete {
   _id?: string;
   id?: string;
