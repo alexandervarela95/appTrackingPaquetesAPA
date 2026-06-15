@@ -26,15 +26,15 @@ cd backend
 npm install
 cp .env.example .env
 npm run seed:demo
-npm run dev
+npm start
 
 cd ../frontend
 npm install
-npm start
+ng serve
 ```
 
-Backend: `http://localhost:3180`
-Frontend: `http://localhost:4300/login`
+Backend: `http://localhost:4300`
+Frontend: `http://localhost:3180/login`
 
 Credenciales demo:
 
@@ -52,7 +52,9 @@ npm run build
 npm run seed
 npm run seed:demo
 npm run test
+npm start
 npm run dev
+npm run start:prod
 ```
 
 Frontend:
@@ -60,6 +62,7 @@ Frontend:
 ```bash
 npm run build
 npm start
+ng serve
 npm run e2e
 ```
 

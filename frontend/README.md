@@ -7,6 +7,7 @@ Aplicacion Angular para operar el sistema de tracking.
 ```bash
 npm install
 npm start
+ng serve
 npm run build
 ```
 
@@ -28,7 +29,7 @@ URL local: `http://localhost:3180/login`
 
 ## Conexion API
 
-El proxy de desarrollo redirige `/api` al backend. Usar backend en `PUERTO=4300` para coincidir con la configuracion final.
+El proxy de desarrollo redirige `/api` al backend. Usar backend en `PUERTO=4300` y frontend en `http://localhost:3180`.
 
 ## UX
 
