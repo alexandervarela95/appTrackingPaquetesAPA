@@ -7,15 +7,15 @@ const raizProyecto = path.resolve(__dirname, '..', '..');
 const requireFrontend = createRequire(path.join(raizProyecto, 'frontend', 'package.json'));
 const { chromium, request } = requireFrontend('@playwright/test');
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4300';
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3180';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3180';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4300';
 const USUARIO_DEMO = process.env.USUARIO_DEMO || 'sistemas@pajaroazul.com';
 const PASSWORD_DEMO = process.env.PASSWORD_DEMO || 'Sistemas*2026';
 
-const salidaDir = path.join(raizProyecto, 'documentacion', 'manual-usuario-detallado');
-const capturasDir = path.join(salidaDir, 'capturas');
-const htmlPath = path.join(salidaDir, 'manual-usuario-detallado.html');
-const pdfPath = path.join(salidaDir, 'manual-usuario-detallado.pdf');
+const salidaDir = path.join(raizProyecto, 'documentacion', 'manual-usuario');
+const capturasDir = path.join(salidaDir, 'capturas-detallado');
+const htmlPath = path.join(salidaDir, 'manual-usuario-detallado-appTrackingPaquetesAPA.html');
+const pdfPath = path.join(salidaDir, 'manual-usuario-detallado-appTrackingPaquetesAPA.pdf');
 
 const esperar = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -161,7 +161,7 @@ function pasos(items) {
 function tabla(filas) {
   return `
     <table>
-      <thead><tr><th>Elemento</th><th>Explicacion sencilla</th><th>Uso para supervision o gerencia</th></tr></thead>
+      <thead><tr><th>Parte del sistema</th><th>Qué significa en palabras sencillas</th><th>Para qué le sirve a supervisión o gerencia</th></tr></thead>
       <tbody>
         ${filas.map((fila) => `<tr><td>${escapar(fila[0])}</td><td>${escapar(fila[1])}</td><td>${escapar(fila[2])}</td></tr>`).join('')}
       </tbody>
@@ -177,7 +177,7 @@ function construirHtml(capturas, paqueteDemo) {
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Manual de usuario detallado - appTrackingPaquetesAPA</title>
+  <title>Manual de uso - appTrackingPaquetesAPA</title>
   <style>
     @page { size: Letter; margin: 0.62in 0.56in 0.68in; }
     * { box-sizing: border-box; }
@@ -188,15 +188,13 @@ function construirHtml(capturas, paqueteDemo) {
       line-height: 1.48;
       background: #ffffff;
     }
-    .cover {
-      min-height: 9.4in;
-      display: grid;
-      align-content: center;
-      gap: 0.22in;
-      padding: 0.5in 0.35in;
-      page-break-after: always;
-      border-left: 12px solid #1448a8;
-      background: linear-gradient(135deg, #f8fbff 0%, #ffffff 72%);
+    .doc-header {
+      margin-bottom: 0.24in;
+      padding: 0.18in 0.2in;
+      border-left: 8px solid #1448a8;
+      border-radius: 8px;
+      background: #f8fbff;
+      page-break-after: avoid;
     }
     .kicker { color: #1448a8; font-size: 11pt; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
     h1 { margin: 0; color: #07133d; font-size: 30pt; line-height: 1.05; }
@@ -260,35 +258,35 @@ function construirHtml(capturas, paqueteDemo) {
   </style>
 </head>
 <body>
-  <main class="cover">
+  <section class="doc-header">
     <div class="kicker">Almacen Pajaro Azul</div>
-    <h1>Manual de usuario detallado<br />appTrackingPaquetesAPA</h1>
-    <p class="subtitle">Guia practica para usar el sistema de control y seguimiento interno de paquetes. Esta version incluye capturas reales tomadas del frontend funcionando.</p>
+    <h1>Manual de uso<br />appTrackingPaquetesAPA</h1>
+    <p class="subtitle">Guía práctica para registrar, buscar y dar seguimiento a paquetes internos. Está escrita para que la pueda usar personal de bodega, oficina, supervisión y gerencia.</p>
     <div class="meta-grid">
       <div class="meta"><span>Sistema</span><strong>appTrackingPaquetesAPA</strong></div>
-      <div class="meta"><span>Fecha de generacion</span><strong>${escapar(fecha)}</strong></div>
-      <div class="meta"><span>Frontend</span><strong>${escapar(FRONTEND_URL)}</strong></div>
-      <div class="meta"><span>Usuario demo</span><strong>${escapar(USUARIO_DEMO)}</strong></div>
+      <div class="meta"><span>Fecha del documento</span><strong>${escapar(fecha)}</strong></div>
+      <div class="meta"><span>Acceso al sistema</span><strong>${escapar(FRONTEND_URL)}</strong></div>
+      <div class="meta"><span>Responsable</span><strong>Ing. Alexander Varela</strong></div>
     </div>
-    <p class="note">Este manual esta escrito en lenguaje claro. La idea es que una persona que sabe leer pueda seguir los pasos, y que un gerente tambien pueda entender el valor operativo y de control de cada pantalla.</p>
-  </main>
+    <p class="note">Este documento explica qué hacer en cada pantalla, dónde presionar y qué revisar antes de guardar información.</p>
+  </section>
 
   <section>
     <h2>Indice</h2>
     <ol class="toc">
-      <li>Para que sirve el sistema</li>
+      <li>Para qué sirve el sistema</li>
       <li>Roles y permisos</li>
-      <li>Reglas basicas de uso</li>
-      <li>Inicio de sesion</li>
-      <li>Dashboard</li>
+      <li>Reglas básicas de uso</li>
+      <li>Inicio de sesión</li>
+      <li>Pantalla de inicio</li>
       <li>Menu lateral</li>
       <li>Paquetes</li>
       <li>Registrar paquete</li>
       <li>Consolidar paquetes</li>
-      <li>Detalle e impresion</li>
+      <li>Detalle e impresión</li>
       <li>Seguimiento</li>
-      <li>Problemas e incidencias</li>
-      <li>Comprobantes y evidencias</li>
+      <li>Problemas reportados</li>
+      <li>Comprobantes y archivos de respaldo</li>
       <li>Personal, ubicaciones y estados</li>
       <li>Informes</li>
       <li>Errores comunes</li>
@@ -297,134 +295,134 @@ function construirHtml(capturas, paqueteDemo) {
   </section>
 
   <section>
-    <h2>1. Para que sirve el sistema</h2>
-    <p>appTrackingPaquetesAPA sirve para registrar paquetes internos, darles seguimiento por numero de guia, consultar su estado, reportar problemas, subir comprobantes y revisar informacion administrativa.</p>
-    <p>Una guia es el codigo que identifica un paquete. El formato actual es <strong>APA-000001</strong>. La guia la genera el sistema; el usuario no debe escribirla manualmente.</p>
-    <div class="note">Idea sencilla: si el paquete fuera una persona en una fila, la guia seria su numero de turno. Con ese numero se puede encontrar rapidamente en el sistema.</div>
+    <h2>1. Para qué sirve el sistema</h2>
+    <p>appTrackingPaquetesAPA ayuda a llevar control de los paquetes internos: quién los envía, hacia dónde van, en qué estado están, qué problema tuvieron y qué comprobante se adjuntó.</p>
+    <p>La guía es el número que identifica cada paquete. El formato actual es <strong>APA-000001</strong>. El sistema crea ese número automáticamente; el usuario no debe inventarlo ni escribirlo a mano.</p>
+    <div class="note">Forma sencilla de entenderlo: la guía es como el número de turno del paquete. Con ese número se busca rápido y se evita confundir un paquete con otro.</div>
   </section>
 
   <section>
     <h2>2. Roles y permisos</h2>
     ${tabla([
-      ['Administrador', 'Puede revisar y administrar casi todo el sistema.', 'Permite control de usuarios, catalogos, reportes y supervision general.'],
-      ['Usuario', 'Puede registrar y consultar paquetes segun permisos.', 'Sirve para operacion diaria en oficina, bodega o departamento.'],
-      ['Motorista', 'Puede consultar paquetes asignados y registrar avances.', 'Apoya el control de entrega y trazabilidad de movimientos.'],
+      ['Administrador', 'Puede revisar y mantener la mayor parte del sistema.', 'Ayuda a controlar usuarios, lugares, reportes y el trabajo general.'],
+      ['Usuario', 'Puede registrar y consultar paquetes según los permisos asignados.', 'Sirve para el trabajo diario en bodega, oficina o cualquier área que envía paquetes.'],
+      ['Motorista', 'Puede revisar paquetes asignados y registrar avances de entrega.', 'Ayuda a saber por dónde va el paquete y qué pasó durante el traslado.'],
     ])}
   </section>
 
   <section>
-    <h2>3. Reglas basicas de uso</h2>
+    <h2>3. Reglas básicas de uso</h2>
     ${pasos([
-      'No comparta su usuario ni contrasena.',
-      'Revise bien origen, destino, remitente y destinatario antes de guardar.',
-      'Use descripciones claras. Ejemplo: Factura original de proveedor, no solo Documento.',
-      'Si hay un problema, registre una incidencia.',
-      'Si tiene una foto, PDF o comprobante, subalo como evidencia.',
-      'Al terminar, cierre sesion desde la burbuja inferior del usuario.',
+      'No comparta su usuario ni contraseña.',
+      'Revise bien de dónde sale el paquete, hacia dónde va, quién lo envía y quién lo recibe antes de guardar.',
+      'Use descripciones claras. Ejemplo: Factura original de proveedor, no escriba solo Documento.',
+      'Si algo sale mal, registre el problema en el sistema.',
+      'Si tiene una foto, PDF o comprobante, súbalo como respaldo.',
+      'Al terminar, cierre sesión desde el botón de usuario.',
     ])}
   </section>
 
   <div class="page-break"></div>
-  ${figura(capturas.login, 'Inicio de sesion', 'Pantalla donde el usuario ingresa sus credenciales para entrar al sistema.', [
-    { x: 62, y: 36, texto: 'Campo para escribir correo o usuario.' },
-    { x: 62, y: 49, texto: 'Campo para escribir la contrasena.' },
-    { x: 62, y: 64, texto: 'Boton para entrar al sistema.' },
+  ${figura(capturas.login, 'Inicio de sesión', 'Pantalla donde se escribe el usuario y la contraseña para entrar.', [
+    { x: 62, y: 36, texto: 'Aquí se escribe el correo o usuario asignado.' },
+    { x: 62, y: 49, texto: 'Aquí se escribe la contraseña.' },
+    { x: 62, y: 64, texto: 'Botón para entrar al sistema.' },
   ])}
   <section>
-    <h2>4. Como iniciar sesion</h2>
+    <h2>4. Cómo iniciar sesión</h2>
     ${pasos([
       'Abra el navegador.',
       `Entre a ${FRONTEND_URL}/login.`,
       'Escriba el correo asignado.',
-      'Escriba la contrasena.',
-      'Presione el boton de inicio de sesion.',
-      'Si los datos son correctos, vera la pantalla de inicio o dashboard.',
+      'Escriba la contraseña.',
+      'Presione el botón de inicio de sesión.',
+      'Si los datos son correctos, verá la pantalla de inicio.',
     ])}
   </section>
 
-  ${figura(capturas.dashboard, 'Dashboard o pantalla de inicio', 'Resumen rapido de la operacion. Ayuda a ver cantidad de paquetes, problemas y comprobantes.', [
-    { x: 16, y: 18, texto: 'Menu lateral con todas las pantallas principales.' },
-    { x: 42, y: 28, texto: 'Tarjetas con indicadores principales.' },
-    { x: 58, y: 60, texto: 'Resumen y distribucion de paquetes.' },
+  ${figura(capturas.dashboard, 'Pantalla de inicio', 'Resumen rápido del trabajo: paquetes registrados, problemas y comprobantes.', [
+    { x: 16, y: 18, texto: 'Menú lateral para entrar a las demás pantallas.' },
+    { x: 42, y: 28, texto: 'Cuadros con números importantes del día.' },
+    { x: 58, y: 60, texto: 'Resumen visual para revisar cómo va la operación.' },
   ])}
   <section>
-    <h2>5. Como leer el dashboard</h2>
-    <p>Para una persona operativa, esta pantalla responde: cuantos paquetes hay, cuantos problemas existen y si hay comprobantes cargados.</p>
-    <p>Para gerencia, esta pantalla sirve como vista rapida de volumen de trabajo, incidencias pendientes y actividad general.</p>
+    <h2>5. Cómo leer la pantalla de inicio</h2>
+    <p>Para bodega u operación, esta pantalla ayuda a saber cuántos paquetes hay, cuántos problemas se han reportado y si existen comprobantes cargados.</p>
+    <p>Para supervisión o gerencia, sirve como una vista rápida del movimiento de paquetes y de los puntos que necesitan atención.</p>
   </section>
 
   <div class="page-break"></div>
-  ${figura(capturas.paquetes, 'Listado de paquetes', 'Pantalla principal para consultar paquetes, buscar por guia y abrir detalle o seguimiento.', [
-    { x: 28, y: 23, texto: 'Titulo de la pantalla.' },
-    { x: 55, y: 23, texto: 'Buscador por numero de guia.' },
-    { x: 80, y: 23, texto: 'Acciones para registrar o actualizar.' },
-    { x: 82, y: 58, texto: 'Acciones por paquete: detalle y seguimiento.' },
+  ${figura(capturas.paquetes, 'Lista de paquetes', 'Pantalla principal para buscar paquetes y abrir su información.', [
+    { x: 28, y: 23, texto: 'Nombre de la pantalla en la que está trabajando.' },
+    { x: 55, y: 23, texto: 'Buscador para escribir la guía del paquete.' },
+    { x: 80, y: 23, texto: 'Botones para registrar o actualizar información.' },
+    { x: 82, y: 58, texto: 'Opciones para ver el paquete o revisar sus movimientos.' },
   ])}
   <section>
     <h2>6. Paquetes</h2>
     ${pasos([
-      'Entre al menu Paquetes.',
+      'Entre al menú Paquetes.',
       'Revise la lista de paquetes registrados.',
-      `Para buscar un paquete, escriba una guia como ${guiaDemo}.`,
-      'Use Ver detalle para revisar toda la informacion.',
+      `Para buscar un paquete, escriba una guía como ${guiaDemo}.`,
+      'Use Ver detalle para revisar toda la información.',
       'Use Seguimiento para ver los movimientos del paquete.',
     ])}
   </section>
 
-  ${figura(capturas.paqueteNuevo, 'Registrar paquete individual', 'Formulario para crear un solo paquete.', [
-    { x: 31, y: 33, texto: 'Tipo, prioridad y descripcion.' },
-    { x: 52, y: 53, texto: 'Origen, destino, remitente y destinatario.' },
-    { x: 50, y: 82, texto: 'Boton para registrar el paquete.' },
+  ${figura(capturas.paqueteNuevo, 'Registrar un paquete', 'Formulario para crear un paquete nuevo.', [
+    { x: 31, y: 33, texto: 'Tipo de paquete, prioridad y descripción.' },
+    { x: 52, y: 53, texto: 'De dónde sale, hacia dónde va, quién envía y quién recibe.' },
+    { x: 50, y: 82, texto: 'Botón para guardar el paquete.' },
   ])}
   <section>
     <h2>7. Registrar un paquete</h2>
     ${pasos([
       'Presione Registrar paquete.',
-      'Seleccione tipo de paquete y prioridad.',
-      'Escriba una descripcion clara.',
+      'Seleccione el tipo de paquete y la prioridad.',
+      'Escriba una descripción clara.',
       'Seleccione origen y destino.',
       'Seleccione remitente y destinatario.',
       'Seleccione motorista si aplica.',
       'Presione Registrar paquete.',
-      'El sistema guarda el paquete y genera su guia automaticamente.',
+      'El sistema guarda el paquete y crea su guía automáticamente.',
     ])}
   </section>
 
   <div class="page-break"></div>
-  ${figura(capturas.consolidar, 'Consolidar paquetes', 'Pantalla para armar una lista temporal y guardar varios paquetes al final.', [
-    { x: 28, y: 34, texto: 'Datos comunes para todos los paquetes del lote.' },
+  ${figura(capturas.consolidar, 'Registrar varios paquetes juntos', 'Pantalla para preparar varios paquetes y guardarlos al final.', [
+    { x: 28, y: 34, texto: 'Datos que se repetirán en todos los paquetes.' },
     { x: 29, y: 66, texto: 'Formulario para agregar cada paquete a la lista.' },
-    { x: 78, y: 36, texto: 'Resumen del lote temporal.' },
-    { x: 48, y: 84, texto: 'Tabla temporal: se puede editar, quitar o guardar todo.' },
+    { x: 78, y: 36, texto: 'Resumen de lo que se está preparando.' },
+    { x: 48, y: 84, texto: 'Lista temporal: permite revisar, editar o quitar antes de guardar.' },
   ])}
   <section>
-    <h2>8. Consolidar paquetes</h2>
-    <p>Use esta pantalla cuando varios paquetes comparten datos, por ejemplo mismo destino y mismo destinatario. El sistema no guarda nada en MongoDB mientras usted solo agrega a la lista temporal.</p>
+    <h2>8. Registrar varios paquetes juntos</h2>
+    <p>Use esta pantalla cuando varios paquetes tienen datos parecidos, por ejemplo el mismo destino o la misma persona que recibe. Mientras solo agregue paquetes a la lista, todavía no quedan guardados de forma definitiva.</p>
     ${pasos([
-      'Seleccione los datos comunes: origen, destino, remitente, destinatario y prioridad.',
-      'Escriba tipo, descripcion y observaciones del primer paquete.',
+      'Seleccione los datos que se repetirán: origen, destino, remitente, destinatario y prioridad.',
+      'Escriba tipo, descripción y observaciones del primer paquete.',
       'Presione Agregar a lista.',
       'Repita el proceso para cada paquete adicional.',
-      'Revise la tabla temporal.',
-      'Si un dato esta mal, use Editar. Si no debe ir, use Quitar.',
-      'Presione Guardar todos cuando la lista este correcta.',
-      'El backend crea cada paquete por separado y genera una guia para cada uno.',
+      'Revise la lista antes de guardar.',
+      'Si un dato está mal, use Editar. Si un paquete no debe ir, use Quitar.',
+      'Presione Guardar todos cuando la lista esté correcta.',
+      'El sistema crea cada paquete por separado y genera una guía para cada uno.',
     ])}
-    <div class="note">Ejemplo: si guarda tres paquetes, el sistema puede responder con APA-000001, APA-000002 y APA-000003. Cada guia se puede buscar despues en Paquetes o Seguimiento.</div>
+    <div class="note">Ejemplo: si guarda tres paquetes, el sistema puede crear APA-000001, APA-000002 y APA-000003. Cada guía se busca después por separado.</div>
   </section>
 
   ${figura(capturas.detalle, 'Detalle del paquete', 'Vista completa de un paquete ya registrado.', [
-    { x: 29, y: 20, texto: 'Numero de guia y datos principales.' },
-    { x: 74, y: 19, texto: 'Accesos para seguimiento o impresion.' },
-    { x: 48, y: 58, texto: 'Datos operativos del envio.' },
+    { x: 29, y: 20, texto: 'Número de guía y datos principales.' },
+    { x: 74, y: 19, texto: 'Botones para ver movimientos o imprimir.' },
+    { x: 48, y: 58, texto: 'Datos importantes del envío.' },
   ])}
   <section>
     <h2>9. Detalle del paquete</h2>
-    <p>El detalle sirve para confirmar toda la informacion de un paquete. Desde aqui se puede revisar la guia, prioridad, origen, destino, usuarios relacionados y observaciones.</p>
+    <p>El detalle sirve para confirmar toda la información de un paquete. Desde aquí se revisa la guía, prioridad, origen, destino, personas relacionadas y observaciones.</p>
   </section>
 
-  ${figura(capturas.imprimir, 'Hoja imprimible', 'Formato limpio para imprimir la hoja de envio interno.', [
-    { x: 53, y: 18, texto: 'Encabezado con logo y guia.' },
+  ${figura(capturas.imprimir, 'Hoja para imprimir', 'Formato limpio para imprimir la hoja del envío interno.', [
+    { x: 53, y: 18, texto: 'Encabezado con logo y guía.' },
     { x: 46, y: 45, texto: 'Datos de origen y destino.' },
     { x: 53, y: 76, texto: 'Detalle del envio y firmas.' },
   ])}
@@ -433,92 +431,92 @@ function construirHtml(capturas, paqueteDemo) {
     ${pasos([
       'Abra el detalle del paquete.',
       'Presione la opcion de impresion si esta disponible.',
-      'Revise que la guia, origen, destino y descripcion sean correctos.',
+      'Revise que la guía, origen, destino y descripción sean correctos.',
       'Presione Imprimir.',
-      'En la impresion no deben salir menu lateral ni botones del sistema.',
+      'En la impresión no deben salir menú lateral ni botones del sistema.',
     ])}
   </section>
 
   <div class="page-break"></div>
-  ${figura(capturas.tracking, 'Seguimiento por guia', 'Historial de movimientos del paquete.', [
-    { x: 40, y: 23, texto: 'Campo para buscar por guia.' },
+  ${figura(capturas.tracking, 'Seguimiento por guía', 'Historial de movimientos del paquete.', [
+    { x: 40, y: 23, texto: 'Campo para buscar por guía.' },
     { x: 28, y: 48, texto: 'Fecha del movimiento.' },
-    { x: 58, y: 48, texto: 'Estado y ubicacion del paquete.' },
-    { x: 78, y: 48, texto: 'Descripcion del evento.' },
+    { x: 58, y: 48, texto: 'Estado y ubicación del paquete.' },
+    { x: 78, y: 48, texto: 'Descripción del evento.' },
   ])}
   <section>
     <h2>11. Seguimiento</h2>
-    <p>Seguimiento responde a la pregunta: que ha pasado con este paquete. Cada movimiento queda ordenado por fecha.</p>
+    <p>Seguimiento responde a la pregunta: qué ha pasado con este paquete. Cada movimiento queda ordenado por fecha.</p>
     ${pasos([
       'Entre a Seguimiento.',
-      `Escriba una guia, por ejemplo ${guiaDemo}.`,
+      `Escriba una guía, por ejemplo ${guiaDemo}.`,
       'Presione Buscar.',
       'Revise la tabla de movimientos.',
     ])}
   </section>
 
-  ${figura(capturas.incidencias, 'Problemas o incidencias', 'Pantalla para reportar problemas encontrados con un paquete.', [
-    { x: 26, y: 30, texto: 'Formulario o filtros de incidencia.' },
-    { x: 54, y: 58, texto: 'Listado de problemas registrados.' },
-    { x: 82, y: 33, texto: 'Acciones segun permisos.' },
+  ${figura(capturas.incidencias, 'Problemas reportados', 'Pantalla para registrar y revisar problemas encontrados con un paquete.', [
+    { x: 26, y: 30, texto: 'Campos para buscar o registrar un problema.' },
+    { x: 54, y: 58, texto: 'Lista de problemas registrados.' },
+    { x: 82, y: 33, texto: 'Acciones disponibles según el permiso del usuario.' },
   ])}
   <section>
     <h2>12. Problemas</h2>
-    <p>Registre una incidencia cuando algo no va normal: paquete demorado, dato incorrecto, entrega incompleta, extravio o dano.</p>
+    <p>Registre un problema cuando algo no vaya normal: paquete demorado, dato incorrecto, entrega incompleta, extravío o daño.</p>
   </section>
 
-  ${figura(capturas.evidencias, 'Comprobantes y evidencias', 'Pantalla para consultar o subir archivos relacionados con un paquete.', [
-    { x: 28, y: 30, texto: 'Datos para asociar evidencia al paquete.' },
+  ${figura(capturas.evidencias, 'Comprobantes y archivos de respaldo', 'Pantalla para consultar o subir archivos relacionados con un paquete.', [
+    { x: 28, y: 30, texto: 'Datos para relacionar el archivo con el paquete.' },
     { x: 54, y: 58, texto: 'Listado de comprobantes existentes.' },
-    { x: 82, y: 33, texto: 'Carga o descarga de archivos.' },
+    { x: 82, y: 33, texto: 'Botones para cargar o descargar archivos.' },
   ])}
   <section>
     <h2>13. Comprobantes</h2>
-    <p>Use comprobantes para respaldar una entrega, un problema o una recepcion. Los archivos permitidos son JPG, JPEG, PNG y PDF, con limite de 5 MB.</p>
+    <p>Use comprobantes para respaldar una entrega, un problema o una recepción. Los archivos permitidos son JPG, JPEG, PNG y PDF, con límite de 5 MB.</p>
   </section>
 
   <div class="page-break"></div>
-  ${figura(capturas.usuarios, 'Personal', 'Administracion de usuarios del sistema.', [
-    { x: 26, y: 28, texto: 'Formulario o resumen de usuario.' },
+  ${figura(capturas.usuarios, 'Personal', 'Pantalla para mantener las personas que usan el sistema.', [
+    { x: 26, y: 28, texto: 'Formulario o resumen de la persona.' },
     { x: 55, y: 58, texto: 'Lista de personal registrado.' },
     { x: 82, y: 30, texto: 'Acciones de mantenimiento.' },
   ])}
-  ${figura(capturas.lugares, 'Ubicaciones', 'Catalogo de sucursales, bodegas o departamentos.', [
-    { x: 28, y: 30, texto: 'Datos de la ubicacion.' },
+  ${figura(capturas.lugares, 'Ubicaciones', 'Lista de sucursales, bodegas o departamentos.', [
+    { x: 28, y: 30, texto: 'Datos de la ubicación.' },
     { x: 54, y: 58, texto: 'Listado de ubicaciones.' },
   ])}
-  ${figura(capturas.estados, 'Estados del paquete', 'Catalogo de etapas que puede tener un paquete.', [
+  ${figura(capturas.estados, 'Estados del paquete', 'Lista de etapas que puede tener un paquete.', [
     { x: 28, y: 30, texto: 'Nombre y orden del estado.' },
     { x: 54, y: 58, texto: 'Listado de estados configurados.' },
   ])}
   <section>
     <h2>14. Personal, ubicaciones y estados</h2>
-    <p>Estas pantallas son de mantenimiento. Mantenerlas ordenadas ayuda a que los paquetes tengan datos correctos desde el registro.</p>
+    <p>Estas pantallas sirven para mantener ordenada la información base. Si estos datos están bien, al registrar paquetes se cometen menos errores.</p>
     ${tabla([
-      ['Personal', 'Registra usuarios, motoristas y administradores.', 'Controla quienes pueden entrar y que rol tienen.'],
-      ['Ubicaciones', 'Registra lugares de origen, destino o trabajo.', 'Permite analizar movimientos por area o sucursal.'],
-      ['Estados', 'Define etapas del paquete.', 'Estandariza el seguimiento y evita nombres distintos para el mismo estado.'],
+      ['Personal', 'Registra usuarios, motoristas y administradores.', 'Controla quiénes pueden entrar y qué rol tienen.'],
+      ['Ubicaciones', 'Registra lugares de origen, destino o trabajo.', 'Permite revisar movimientos por área o sucursal.'],
+      ['Estados', 'Define las etapas del paquete.', 'Evita que cada persona escriba un estado diferente para la misma situación.'],
     ])}
   </section>
 
   <div class="page-break"></div>
-  ${figura(capturas.reportes, 'Informes', 'Pantalla para consultar salidas administrativas.', [
-    { x: 30, y: 28, texto: 'Resumen de reportes disponibles.' },
-    { x: 56, y: 58, texto: 'Resultados de paquetes, incidencias o actividad.' },
+  ${figura(capturas.reportes, 'Informes', 'Pantalla para revisar resúmenes útiles de la operación.', [
+    { x: 30, y: 28, texto: 'Opciones de informes disponibles.' },
+    { x: 56, y: 58, texto: 'Resultados de paquetes, problemas o actividad.' },
   ])}
   <section>
-    <h2>15. Informes para supervision</h2>
-    <p>Los informes sirven para revisar datos agrupados. Para un gerente, esta pantalla ayuda a detectar volumen de paquetes, problemas pendientes y actividad reciente.</p>
+    <h2>15. Informes para supervisión</h2>
+    <p>Los informes muestran información reunida en un solo lugar. Para gerencia, ayudan a ver cuántos paquetes se mueven, qué problemas siguen pendientes y qué actividad reciente existe.</p>
   </section>
 
   <section>
     <h2>16. Errores comunes y que hacer</h2>
     ${tabla([
-      ['Formato de guia invalido', 'La guia debe verse como APA-000001.', 'Evita busquedas sobre codigos viejos o mal escritos.'],
-      ['Datos invalidos', 'Falta un campo obligatorio o el dato no cumple formato.', 'Garantiza calidad de datos antes de guardar.'],
-      ['No tiene permisos', 'El usuario no puede ejecutar esa accion.', 'Protege operaciones administrativas o sensibles.'],
-      ['Paquete no encontrado', 'La guia o id no existe para el usuario actual.', 'Puede indicar error de escritura o falta de acceso.'],
-      ['Archivo no permitido', 'Solo se aceptan JPG, JPEG, PNG o PDF hasta 5 MB.', 'Controla riesgos y uso de almacenamiento.'],
+      ['Guía mal escrita', 'La guía debe verse como APA-000001.', 'Evita búsquedas con códigos viejos o mal escritos.'],
+      ['Datos incompletos', 'Falta un campo obligatorio o el dato no tiene el formato correcto.', 'Ayuda a guardar información limpia y confiable.'],
+      ['No tiene permiso', 'El usuario no puede hacer esa acción.', 'Protege pantallas administrativas o delicadas.'],
+      ['Paquete no encontrado', 'La guía no existe o el usuario no tiene acceso a ese paquete.', 'Puede indicar error al escribir la guía o falta de permiso.'],
+      ['Archivo no permitido', 'Solo se aceptan JPG, JPEG, PNG o PDF hasta 5 MB.', 'Evita archivos pesados o formatos que no corresponden.'],
     ])}
   </section>
 
@@ -526,29 +524,29 @@ function construirHtml(capturas, paqueteDemo) {
     <h2>17. Buenas practicas</h2>
     <div class="two-col">
       <div class="card">
-        <h3>Para usuarios operativos</h3>
+        <h3>Para bodega y usuarios operativos</h3>
         ${pasos([
-          'Escriba descripciones claras.',
+          'Escriba descripciones claras y fáciles de entender.',
           'Revise destino y destinatario antes de guardar.',
-          'Use consolidacion cuando son varios paquetes para la misma persona.',
-          'Suba comprobantes cuando exista evidencia util.',
-          'Cierre sesion al terminar.',
+          'Use Registrar varios paquetes juntos cuando son varios paquetes para la misma persona.',
+          'Suba comprobantes cuando tenga una foto, PDF o respaldo útil.',
+          'Cierre sesión al terminar.',
         ])}
       </div>
       <div class="card">
-        <h3>Para supervision y gerencia</h3>
+        <h3>Para supervisión y gerencia</h3>
         ${pasos([
-          'Revise dashboard e informes con frecuencia.',
-          'Observe incidencias abiertas.',
+          'Revise la pantalla de inicio e informes con frecuencia.',
+          'Observe problemas abiertos.',
           'Mantenga usuarios y ubicaciones actualizados.',
           'Pida que cada movimiento importante quede registrado.',
-          'Use las guias para auditar entregas y tiempos.',
+          'Use las guías para revisar entregas y tiempos.',
         ])}
       </div>
     </div>
   </section>
 
-  <footer>Manual generado con capturas reales del sistema appTrackingPaquetesAPA.</footer>
+  <footer>appTrackingPaquetesAPA | Manual de usuario</footer>
 </body>
 </html>`;
 }
@@ -585,7 +583,7 @@ async function main() {
   const html = construirHtml(capturas, paqueteDemo);
   fs.writeFileSync(htmlPath, html, 'utf8');
 
-  await page.setContent(html, { waitUntil: 'networkidle' });
+  await page.goto(`file://${htmlPath.replaceAll(path.sep, '/')}`, { waitUntil: 'networkidle' });
   await page.pdf({ path: pdfPath, format: 'Letter', printBackground: true });
 
   await context.close();

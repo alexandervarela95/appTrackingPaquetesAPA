@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Manual de uso - appTrackingPaquetesAPA</title>
+  <style>
+    @page { size: Letter; margin: 0.62in 0.56in 0.68in; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: #172033;
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.48;
+      background: #ffffff;
+    }
+    .doc-header {
+      margin-bottom: 0.24in;
+      padding: 0.18in 0.2in;
+      border-left: 8px solid #1448a8;
+      border-radius: 8px;
+      background: #f8fbff;
+      page-break-after: avoid;
+    }
+    .kicker { color: #1448a8; font-size: 11pt; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
+    h1 { margin: 0; color: #07133d; font-size: 30pt; line-height: 1.05; }
+    h2 {
+      margin: 0.32in 0 0.12in;
+      padding-bottom: 0.05in;
+      color: #0f172a;
+      font-size: 17pt;
+      border-bottom: 2px solid #1448a8;
+      page-break-after: avoid;
+    }
+    h3 { margin: 0.22in 0 0.08in; color: #123f91; font-size: 12.8pt; page-break-after: avoid; }
+    p { margin: 0 0 0.1in; font-size: 10.3pt; }
+    li { margin-bottom: 0.05in; font-size: 10.15pt; }
+    .subtitle { max-width: 7in; color: #46556f; font-size: 12.5pt; }
+    .meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.12in; margin-top: 0.15in; }
+    .meta { border: 1px solid #d9e2ef; border-radius: 8px; padding: 0.12in; background: #fbfdff; }
+    .meta span { display: block; color: #64748b; font-size: 8.2pt; font-weight: 800; text-transform: uppercase; }
+    .meta strong { display: block; margin-top: 0.03in; color: #111827; font-size: 10.5pt; }
+    .note {
+      margin: 0.12in 0;
+      padding: 0.12in 0.15in;
+      border-left: 5px solid #1448a8;
+      border-radius: 7px;
+      background: #eef5ff;
+      color: #17335f;
+      font-size: 10pt;
+    }
+    .warning { border-left-color: #d97706; background: #fffbeb; color: #78350f; }
+    .toc { columns: 2; column-gap: 0.32in; }
+    table { width: 100%; border-collapse: collapse; margin: 0.12in 0 0.18in; font-size: 9.3pt; page-break-inside: avoid; }
+    th { background: #1448a8; color: #ffffff; text-align: left; padding: 0.08in; }
+    td { border: 1px solid #d7dee8; padding: 0.08in; vertical-align: top; }
+    .shot { margin: 0.2in 0 0.26in; page-break-inside: avoid; }
+    .shot figcaption { display: grid; gap: 0.03in; margin-bottom: 0.08in; color: #334155; font-size: 9.6pt; }
+    .shot figcaption strong { color: #0f172a; font-size: 10.8pt; }
+    .shot-frame { position: relative; border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: #f8fafc; box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12); }
+    .shot-frame img { display: block; width: 100%; height: auto; }
+    .pin {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 10pt;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.32);
+    }
+    .callouts { margin: 0.09in 0 0; padding: 0.1in 0.18in 0.08in 0.32in; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+    .steps { padding-left: 0.24in; }
+    .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.17in; }
+    .card { border: 1px solid #dbe4ee; border-radius: 8px; padding: 0.12in; background: #fbfdff; page-break-inside: avoid; }
+    .page-break { page-break-before: always; }
+    footer { margin-top: 0.25in; color: #64748b; font-size: 8.5pt; text-align: center; }
+  </style>
+</head>
+<body>
+  <section class="doc-header">
+    <div class="kicker">Almacen Pajaro Azul</div>
+    <h1>Manual de uso<br />appTrackingPaquetesAPA</h1>
+    <p class="subtitle">Guía práctica para registrar, buscar y dar seguimiento a paquetes internos. Está escrita para que la pueda usar personal de bodega, oficina, supervisión y gerencia.</p>
+    <div class="meta-grid">
+      <div class="meta"><span>Sistema</span><strong>appTrackingPaquetesAPA</strong></div>
+      <div class="meta"><span>Fecha del documento</span><strong>15 de junio de 2026 a las 4:22 p. m.</strong></div>
+      <div class="meta"><span>Acceso al sistema</span><strong>http://localhost:3180</strong></div>
+      <div class="meta"><span>Responsable</span><strong>Ing. Alexander Varela</strong></div>
+    </div>
+    <p class="note">Este documento explica qué hacer en cada pantalla, dónde presionar y qué revisar antes de guardar información.</p>
+  </section>
+
+  <section>
+    <h2>Indice</h2>
+    <ol class="toc">
+      <li>Para qué sirve el sistema</li>
+      <li>Roles y permisos</li>
+      <li>Reglas básicas de uso</li>
+      <li>Inicio de sesión</li>
+      <li>Pantalla de inicio</li>
+      <li>Menu lateral</li>
+      <li>Paquetes</li>
+      <li>Registrar paquete</li>
+      <li>Consolidar paquetes</li>
+      <li>Detalle e impresión</li>
+      <li>Seguimiento</li>
+      <li>Problemas reportados</li>
+      <li>Comprobantes y archivos de respaldo</li>
+      <li>Personal, ubicaciones y estados</li>
+      <li>Informes</li>
+      <li>Errores comunes</li>
+      <li>Buenas practicas</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>1. Para qué sirve el sistema</h2>
+    <p>appTrackingPaquetesAPA ayuda a llevar control de los paquetes internos: quién los envía, hacia dónde van, en qué estado están, qué problema tuvieron y qué comprobante se adjuntó.</p>
+    <p>La guía es el número que identifica cada paquete. El formato actual es <strong>APA-000001</strong>. El sistema crea ese número automáticamente; el usuario no debe inventarlo ni escribirlo a mano.</p>
+    <div class="note">Forma sencilla de entenderlo: la guía es como el número de turno del paquete. Con ese número se busca rápido y se evita confundir un paquete con otro.</div>
+  </section>
+
+  <section>
+    <h2>2. Roles y permisos</h2>
+    
+    <table>
+      <thead><tr><th>Parte del sistema</th><th>Qué significa en palabras sencillas</th><th>Para qué le sirve a supervisión o gerencia</th></tr></thead>
+      <tbody>
+        <tr><td>Administrador</td><td>Puede revisar y mantener la mayor parte del sistema.</td><td>Ayuda a controlar usuarios, lugares, reportes y el trabajo general.</td></tr><tr><td>Usuario</td><td>Puede registrar y consultar paquetes según los permisos asignados.</td><td>Sirve para el trabajo diario en bodega, oficina o cualquier área que envía paquetes.</td></tr><tr><td>Motorista</td><td>Puede revisar paquetes asignados y registrar avances de entrega.</td><td>Ayuda a saber por dónde va el paquete y qué pasó durante el traslado.</td></tr>
+      </tbody>
+    </table>
+  
+  </section>
+
+  <section>
+    <h2>3. Reglas básicas de uso</h2>
+    <ol class="steps"><li>No comparta su usuario ni contraseña.</li><li>Revise bien de dónde sale el paquete, hacia dónde va, quién lo envía y quién lo recibe antes de guardar.</li><li>Use descripciones claras. Ejemplo: Factura original de proveedor, no escriba solo Documento.</li><li>Si algo sale mal, registre el problema en el sistema.</li><li>Si tiene una foto, PDF o comprobante, súbalo como respaldo.</li><li>Al terminar, cierre sesión desde el botón de usuario.</li></ol>
+  </section>
+
+  <div class="page-break"></div>
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Inicio de sesión</strong>
+        <span>Pantalla donde se escribe el usuario y la contraseña para entrar.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/01-login.png" alt="Inicio de sesión" />
+        <span class="pin" style="left:62%;top:36%">1</span><span class="pin" style="left:62%;top:49%">2</span><span class="pin" style="left:62%;top:64%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Aquí se escribe el correo o usuario asignado.</li><li><strong>2.</strong> Aquí se escribe la contraseña.</li><li><strong>3.</strong> Botón para entrar al sistema.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>4. Cómo iniciar sesión</h2>
+    <ol class="steps"><li>Abra el navegador.</li><li>Entre a http://localhost:3180/login.</li><li>Escriba el correo asignado.</li><li>Escriba la contraseña.</li><li>Presione el botón de inicio de sesión.</li><li>Si los datos son correctos, verá la pantalla de inicio.</li></ol>
+  </section>
+
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Pantalla de inicio</strong>
+        <span>Resumen rápido del trabajo: paquetes registrados, problemas y comprobantes.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/02-dashboard.png" alt="Pantalla de inicio" />
+        <span class="pin" style="left:16%;top:18%">1</span><span class="pin" style="left:42%;top:28%">2</span><span class="pin" style="left:58%;top:60%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Menú lateral para entrar a las demás pantallas.</li><li><strong>2.</strong> Cuadros con números importantes del día.</li><li><strong>3.</strong> Resumen visual para revisar cómo va la operación.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>5. Cómo leer la pantalla de inicio</h2>
+    <p>Para bodega u operación, esta pantalla ayuda a saber cuántos paquetes hay, cuántos problemas se han reportado y si existen comprobantes cargados.</p>
+    <p>Para supervisión o gerencia, sirve como una vista rápida del movimiento de paquetes y de los puntos que necesitan atención.</p>
+  </section>
+
+  <div class="page-break"></div>
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Lista de paquetes</strong>
+        <span>Pantalla principal para buscar paquetes y abrir su información.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/03-paquetes.png" alt="Lista de paquetes" />
+        <span class="pin" style="left:28%;top:23%">1</span><span class="pin" style="left:55%;top:23%">2</span><span class="pin" style="left:80%;top:23%">3</span><span class="pin" style="left:82%;top:58%">4</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Nombre de la pantalla en la que está trabajando.</li><li><strong>2.</strong> Buscador para escribir la guía del paquete.</li><li><strong>3.</strong> Botones para registrar o actualizar información.</li><li><strong>4.</strong> Opciones para ver el paquete o revisar sus movimientos.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>6. Paquetes</h2>
+    <ol class="steps"><li>Entre al menú Paquetes.</li><li>Revise la lista de paquetes registrados.</li><li>Para buscar un paquete, escriba una guía como APA-DEMO-2026.</li><li>Use Ver detalle para revisar toda la información.</li><li>Use Seguimiento para ver los movimientos del paquete.</li></ol>
+  </section>
+
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Registrar un paquete</strong>
+        <span>Formulario para crear un paquete nuevo.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/04-registrar-paquete.png" alt="Registrar un paquete" />
+        <span class="pin" style="left:31%;top:33%">1</span><span class="pin" style="left:52%;top:53%">2</span><span class="pin" style="left:50%;top:82%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Tipo de paquete, prioridad y descripción.</li><li><strong>2.</strong> De dónde sale, hacia dónde va, quién envía y quién recibe.</li><li><strong>3.</strong> Botón para guardar el paquete.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>7. Registrar un paquete</h2>
+    <ol class="steps"><li>Presione Registrar paquete.</li><li>Seleccione el tipo de paquete y la prioridad.</li><li>Escriba una descripción clara.</li><li>Seleccione origen y destino.</li><li>Seleccione remitente y destinatario.</li><li>Seleccione motorista si aplica.</li><li>Presione Registrar paquete.</li><li>El sistema guarda el paquete y crea su guía automáticamente.</li></ol>
+  </section>
+
+  <div class="page-break"></div>
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Registrar varios paquetes juntos</strong>
+        <span>Pantalla para preparar varios paquetes y guardarlos al final.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/05-consolidar-paquetes.png" alt="Registrar varios paquetes juntos" />
+        <span class="pin" style="left:28%;top:34%">1</span><span class="pin" style="left:29%;top:66%">2</span><span class="pin" style="left:78%;top:36%">3</span><span class="pin" style="left:48%;top:84%">4</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Datos que se repetirán en todos los paquetes.</li><li><strong>2.</strong> Formulario para agregar cada paquete a la lista.</li><li><strong>3.</strong> Resumen de lo que se está preparando.</li><li><strong>4.</strong> Lista temporal: permite revisar, editar o quitar antes de guardar.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>8. Registrar varios paquetes juntos</h2>
+    <p>Use esta pantalla cuando varios paquetes tienen datos parecidos, por ejemplo el mismo destino o la misma persona que recibe. Mientras solo agregue paquetes a la lista, todavía no quedan guardados de forma definitiva.</p>
+    <ol class="steps"><li>Seleccione los datos que se repetirán: origen, destino, remitente, destinatario y prioridad.</li><li>Escriba tipo, descripción y observaciones del primer paquete.</li><li>Presione Agregar a lista.</li><li>Repita el proceso para cada paquete adicional.</li><li>Revise la lista antes de guardar.</li><li>Si un dato está mal, use Editar. Si un paquete no debe ir, use Quitar.</li><li>Presione Guardar todos cuando la lista esté correcta.</li><li>El sistema crea cada paquete por separado y genera una guía para cada uno.</li></ol>
+    <div class="note">Ejemplo: si guarda tres paquetes, el sistema puede crear APA-000001, APA-000002 y APA-000003. Cada guía se busca después por separado.</div>
+  </section>
+
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Detalle del paquete</strong>
+        <span>Vista completa de un paquete ya registrado.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/06-detalle-paquete.png" alt="Detalle del paquete" />
+        <span class="pin" style="left:29%;top:20%">1</span><span class="pin" style="left:74%;top:19%">2</span><span class="pin" style="left:48%;top:58%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Número de guía y datos principales.</li><li><strong>2.</strong> Botones para ver movimientos o imprimir.</li><li><strong>3.</strong> Datos importantes del envío.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>9. Detalle del paquete</h2>
+    <p>El detalle sirve para confirmar toda la información de un paquete. Desde aquí se revisa la guía, prioridad, origen, destino, personas relacionadas y observaciones.</p>
+  </section>
+
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Hoja para imprimir</strong>
+        <span>Formato limpio para imprimir la hoja del envío interno.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/07-hoja-imprimible.png" alt="Hoja para imprimir" />
+        <span class="pin" style="left:53%;top:18%">1</span><span class="pin" style="left:46%;top:45%">2</span><span class="pin" style="left:53%;top:76%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Encabezado con logo y guía.</li><li><strong>2.</strong> Datos de origen y destino.</li><li><strong>3.</strong> Detalle del envio y firmas.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>10. Imprimir hoja de envio</h2>
+    <ol class="steps"><li>Abra el detalle del paquete.</li><li>Presione la opcion de impresion si esta disponible.</li><li>Revise que la guía, origen, destino y descripción sean correctos.</li><li>Presione Imprimir.</li><li>En la impresión no deben salir menú lateral ni botones del sistema.</li></ol>
+  </section>
+
+  <div class="page-break"></div>
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Seguimiento por guía</strong>
+        <span>Historial de movimientos del paquete.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/08-seguimiento.png" alt="Seguimiento por guía" />
+        <span class="pin" style="left:40%;top:23%">1</span><span class="pin" style="left:28%;top:48%">2</span><span class="pin" style="left:58%;top:48%">3</span><span class="pin" style="left:78%;top:48%">4</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Campo para buscar por guía.</li><li><strong>2.</strong> Fecha del movimiento.</li><li><strong>3.</strong> Estado y ubicación del paquete.</li><li><strong>4.</strong> Descripción del evento.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>11. Seguimiento</h2>
+    <p>Seguimiento responde a la pregunta: qué ha pasado con este paquete. Cada movimiento queda ordenado por fecha.</p>
+    <ol class="steps"><li>Entre a Seguimiento.</li><li>Escriba una guía, por ejemplo APA-DEMO-2026.</li><li>Presione Buscar.</li><li>Revise la tabla de movimientos.</li></ol>
+  </section>
+
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Problemas reportados</strong>
+        <span>Pantalla para registrar y revisar problemas encontrados con un paquete.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/09-problemas.png" alt="Problemas reportados" />
+        <span class="pin" style="left:26%;top:30%">1</span><span class="pin" style="left:54%;top:58%">2</span><span class="pin" style="left:82%;top:33%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Campos para buscar o registrar un problema.</li><li><strong>2.</strong> Lista de problemas registrados.</li><li><strong>3.</strong> Acciones disponibles según el permiso del usuario.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>12. Problemas</h2>
+    <p>Registre un problema cuando algo no vaya normal: paquete demorado, dato incorrecto, entrega incompleta, extravío o daño.</p>
+  </section>
+
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Comprobantes y archivos de respaldo</strong>
+        <span>Pantalla para consultar o subir archivos relacionados con un paquete.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/10-comprobantes.png" alt="Comprobantes y archivos de respaldo" />
+        <span class="pin" style="left:28%;top:30%">1</span><span class="pin" style="left:54%;top:58%">2</span><span class="pin" style="left:82%;top:33%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Datos para relacionar el archivo con el paquete.</li><li><strong>2.</strong> Listado de comprobantes existentes.</li><li><strong>3.</strong> Botones para cargar o descargar archivos.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>13. Comprobantes</h2>
+    <p>Use comprobantes para respaldar una entrega, un problema o una recepción. Los archivos permitidos son JPG, JPEG, PNG y PDF, con límite de 5 MB.</p>
+  </section>
+
+  <div class="page-break"></div>
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Personal</strong>
+        <span>Pantalla para mantener las personas que usan el sistema.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/11-personal.png" alt="Personal" />
+        <span class="pin" style="left:26%;top:28%">1</span><span class="pin" style="left:55%;top:58%">2</span><span class="pin" style="left:82%;top:30%">3</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Formulario o resumen de la persona.</li><li><strong>2.</strong> Lista de personal registrado.</li><li><strong>3.</strong> Acciones de mantenimiento.</li></ol>
+    </figure>
+  
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Ubicaciones</strong>
+        <span>Lista de sucursales, bodegas o departamentos.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/12-ubicaciones.png" alt="Ubicaciones" />
+        <span class="pin" style="left:28%;top:30%">1</span><span class="pin" style="left:54%;top:58%">2</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Datos de la ubicación.</li><li><strong>2.</strong> Listado de ubicaciones.</li></ol>
+    </figure>
+  
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Estados del paquete</strong>
+        <span>Lista de etapas que puede tener un paquete.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/13-estados-paquete.png" alt="Estados del paquete" />
+        <span class="pin" style="left:28%;top:30%">1</span><span class="pin" style="left:54%;top:58%">2</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Nombre y orden del estado.</li><li><strong>2.</strong> Listado de estados configurados.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>14. Personal, ubicaciones y estados</h2>
+    <p>Estas pantallas sirven para mantener ordenada la información base. Si estos datos están bien, al registrar paquetes se cometen menos errores.</p>
+    
+    <table>
+      <thead><tr><th>Parte del sistema</th><th>Qué significa en palabras sencillas</th><th>Para qué le sirve a supervisión o gerencia</th></tr></thead>
+      <tbody>
+        <tr><td>Personal</td><td>Registra usuarios, motoristas y administradores.</td><td>Controla quiénes pueden entrar y qué rol tienen.</td></tr><tr><td>Ubicaciones</td><td>Registra lugares de origen, destino o trabajo.</td><td>Permite revisar movimientos por área o sucursal.</td></tr><tr><td>Estados</td><td>Define las etapas del paquete.</td><td>Evita que cada persona escriba un estado diferente para la misma situación.</td></tr>
+      </tbody>
+    </table>
+  
+  </section>
+
+  <div class="page-break"></div>
+  
+    <figure class="shot">
+      <figcaption>
+        <strong>Informes</strong>
+        <span>Pantalla para revisar resúmenes útiles de la operación.</span>
+      </figcaption>
+      <div class="shot-frame">
+        <img src="capturas-detallado/14-informes.png" alt="Informes" />
+        <span class="pin" style="left:30%;top:28%">1</span><span class="pin" style="left:56%;top:58%">2</span>
+      </div>
+      <ol class="callouts"><li><strong>1.</strong> Opciones de informes disponibles.</li><li><strong>2.</strong> Resultados de paquetes, problemas o actividad.</li></ol>
+    </figure>
+  
+  <section>
+    <h2>15. Informes para supervisión</h2>
+    <p>Los informes muestran información reunida en un solo lugar. Para gerencia, ayudan a ver cuántos paquetes se mueven, qué problemas siguen pendientes y qué actividad reciente existe.</p>
+  </section>
+
+  <section>
+    <h2>16. Errores comunes y que hacer</h2>
+    
+    <table>
+      <thead><tr><th>Parte del sistema</th><th>Qué significa en palabras sencillas</th><th>Para qué le sirve a supervisión o gerencia</th></tr></thead>
+      <tbody>
+        <tr><td>Guía mal escrita</td><td>La guía debe verse como APA-000001.</td><td>Evita búsquedas con códigos viejos o mal escritos.</td></tr><tr><td>Datos incompletos</td><td>Falta un campo obligatorio o el dato no tiene el formato correcto.</td><td>Ayuda a guardar información limpia y confiable.</td></tr><tr><td>No tiene permiso</td><td>El usuario no puede hacer esa acción.</td><td>Protege pantallas administrativas o delicadas.</td></tr><tr><td>Paquete no encontrado</td><td>La guía no existe o el usuario no tiene acceso a ese paquete.</td><td>Puede indicar error al escribir la guía o falta de permiso.</td></tr><tr><td>Archivo no permitido</td><td>Solo se aceptan JPG, JPEG, PNG o PDF hasta 5 MB.</td><td>Evita archivos pesados o formatos que no corresponden.</td></tr>
+      </tbody>
+    </table>
+  
+  </section>
+
+  <section>
+    <h2>17. Buenas practicas</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Para bodega y usuarios operativos</h3>
+        <ol class="steps"><li>Escriba descripciones claras y fáciles de entender.</li><li>Revise destino y destinatario antes de guardar.</li><li>Use Registrar varios paquetes juntos cuando son varios paquetes para la misma persona.</li><li>Suba comprobantes cuando tenga una foto, PDF o respaldo útil.</li><li>Cierre sesión al terminar.</li></ol>
+      </div>
+      <div class="card">
+        <h3>Para supervisión y gerencia</h3>
+        <ol class="steps"><li>Revise la pantalla de inicio e informes con frecuencia.</li><li>Observe problemas abiertos.</li><li>Mantenga usuarios y ubicaciones actualizados.</li><li>Pida que cada movimiento importante quede registrado.</li><li>Use las guías para revisar entregas y tiempos.</li></ol>
+      </div>
+    </div>
+  </section>
+
+  <footer>appTrackingPaquetesAPA | Manual de usuario</footer>
+</body>
+</html>

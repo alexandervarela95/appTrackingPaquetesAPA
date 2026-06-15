@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Presentación Proyecto Final - appTrackingPaquetesAPA</title>
+  <style>
+    @page { size: 13.333in 7.5in; margin: 0; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0b1228;
+      color: #111827;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    .slide {
+      width: 13.333in;
+      height: 7.5in;
+      padding: 0.52in 0.62in;
+      page-break-after: always;
+      background: #f8fafc;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide.dark {
+      background: #07133d;
+      color: #ffffff;
+    }
+    .kicker {
+      color: #1d4ed8;
+      font-size: 0.18in;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.14in;
+    }
+    .dark .kicker { color: #93c5fd; }
+    h1 {
+      margin: 0;
+      font-size: 0.58in;
+      line-height: 1.03;
+      letter-spacing: 0;
+      color: #0f172a;
+      max-width: 10.8in;
+    }
+    .dark h1 { color: #ffffff; }
+    h2 {
+      margin: 0;
+      font-size: 0.42in;
+      line-height: 1.08;
+      color: #0f172a;
+      max-width: 10.9in;
+    }
+    .dark h2 { color: #ffffff; }
+    p {
+      font-size: 0.22in;
+      line-height: 1.42;
+      color: #334155;
+      max-width: 10.3in;
+    }
+    .dark p { color: #dbeafe; }
+    .hero-note {
+      margin-top: 0.45in;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.18in;
+    }
+    .metric {
+      border: 1px solid rgba(148, 163, 184, 0.38);
+      border-radius: 0.08in;
+      padding: 0.18in;
+      background: #ffffff;
+    }
+    .dark .metric {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.22);
+    }
+    .metric strong {
+      display: block;
+      font-size: 0.38in;
+      line-height: 1;
+      color: #1d4ed8;
+    }
+    .dark .metric strong { color: #bfdbfe; }
+    .metric span {
+      display: block;
+      margin-top: 0.08in;
+      color: #475569;
+      font-size: 0.16in;
+      line-height: 1.3;
+    }
+    .dark .metric span { color: #e0f2fe; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.28in; margin-top: 0.34in; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.18in; margin-top: 0.34in; }
+    .box {
+      background: #ffffff;
+      border: 1px solid #dbe4ee;
+      border-radius: 0.07in;
+      padding: 0.2in;
+      min-height: 1.05in;
+    }
+    .box h3 {
+      margin: 0 0 0.08in;
+      color: #0f172a;
+      font-size: 0.22in;
+    }
+    .box p, .box li {
+      margin: 0;
+      color: #475569;
+      font-size: 0.17in;
+      line-height: 1.35;
+    }
+    ul { margin: 0.12in 0 0; padding-left: 0.22in; }
+    li { margin-bottom: 0.07in; font-size: 0.19in; line-height: 1.34; color: #334155; }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.1in;
+      margin-top: 0.42in;
+      align-items: stretch;
+    }
+    .step {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 0.07in;
+      padding: 0.16in;
+      min-height: 1.2in;
+    }
+    .step strong { display: block; color: #1d4ed8; font-size: 0.24in; margin-bottom: 0.07in; }
+    .step span { color: #334155; font-size: 0.16in; line-height: 1.28; }
+    .footer {
+      position: absolute;
+      left: 0.62in;
+      right: 0.62in;
+      bottom: 0.28in;
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 0.13in;
+    }
+    .dark .footer { color: #bfdbfe; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.28in; font-size: 0.16in; }
+    th { background: #1d4ed8; color: #ffffff; text-align: left; padding: 0.1in; }
+    td { border: 1px solid #dbe4ee; padding: 0.1in; vertical-align: top; color: #334155; background: #ffffff; }
+    .diagram {
+      margin-top: 0.32in;
+      display: grid;
+      grid-template-columns: 1.1fr 0.85fr 1.1fr;
+      gap: 0.2in;
+      align-items: center;
+    }
+    .lane {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.07in;
+      padding: 0.22in;
+      min-height: 3.7in;
+    }
+    .lane h3 { margin: 0 0 0.14in; color: #0f172a; font-size: 0.25in; }
+    .lane p { font-size: 0.17in; margin: 0 0 0.1in; }
+    .arrow { text-align: center; color: #1d4ed8; font-size: 0.42in; font-weight: 800; }
+  </style>
+</head>
+<body>
+  <section class="slide dark">
+    <div class="kicker">Proyecto final</div>
+    <h1>appTrackingPaquetesAPA controla paquetes internos con trazabilidad completa.</h1>
+    <p>Sistema web cliente-servidor para Almacén Pájaro Azul: registra paquetes, genera guía, muestra seguimiento, permite reportar problemas y adjuntar comprobantes.</p>
+    <div class="hero-note">
+      <div class="metric"><strong>Angular</strong><span>Frontend para usuarios operativos, bodega, supervisión y gerencia.</span></div>
+      <div class="metric"><strong>Express</strong><span>Backend TypeScript con API REST, JWT, roles y validaciones.</span></div>
+      <div class="metric"><strong>MongoDB</strong><span>Persistencia documental para paquetes, tracking, problemas y comprobantes.</span></div>
+    </div>
+    <div class="footer"><span>Ing. Alexander Varela</span><span>Avance 3 | Defensa final</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Problema</div>
+    <h2>El control manual dificulta saber dónde está cada paquete y quién debe responder.</h2>
+    <div class="grid3">
+      <div class="box"><h3>Información dispersa</h3><p>Sin guía centralizada, cada área consulta por mensajes o llamadas.</p></div>
+      <div class="box"><h3>Poca trazabilidad</h3><p>No siempre queda claro cuándo cambió el estado o quién atendió el paquete.</p></div>
+      <div class="box"><h3>Sin respaldo ordenado</h3><p>Los comprobantes o fotos pueden perderse si no se asocian al paquete.</p></div>
+    </div>
+    <div class="footer"><span>Necesidad del cliente</span><span>2</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Solución</div>
+    <h2>El sistema concentra el ciclo completo del paquete desde el registro hasta la revisión gerencial.</h2>
+    <div class="flow">
+      <div class="step"><strong>1</strong><span>Registrar paquete o varios paquetes juntos.</span></div>
+      <div class="step"><strong>2</strong><span>Generar guía automática con formato APA-000001.</span></div>
+      <div class="step"><strong>3</strong><span>Consultar detalle y seguimiento por guía.</span></div>
+      <div class="step"><strong>4</strong><span>Reportar problemas y subir comprobantes.</span></div>
+      <div class="step"><strong>5</strong><span>Revisar dashboard, reportes y auditoría.</span></div>
+    </div>
+    <div class="footer"><span>Flujo funcional</span><span>3</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Arquitectura</div>
+    <h2>La aplicación separa cliente, servidor y datos para facilitar mantenimiento y defensa técnica.</h2>
+    <div class="diagram">
+      <div class="lane"><h3>Frontend Angular</h3><p>Pantallas, formularios, rutas protegidas, servicios HTTP y conexión Socket.IO.</p><p>Puerto local: 3180.</p></div>
+      <div class="arrow">→</div>
+      <div class="lane"><h3>Backend Express</h3><p>Rutas, controladores, servicios, validadores, middlewares, modelos y tiempo real.</p><p>Puerto local: 4300.</p></div>
+    </div>
+    <div class="footer"><span>Arquitectura cliente-servidor</span><span>4</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Base de datos</div>
+    <h2>MongoDB organiza el paquete como colección central y conserva el historial operativo.</h2>
+    <table>
+      <thead><tr><th>Colección</th><th>Función</th><th>Relación principal</th></tr></thead>
+      <tbody>
+        <tr><td>paquetes</td><td>Registro central del envío interno.</td><td>Usuarios, lugares y estado actual.</td></tr>
+        <tr><td>trackings</td><td>Movimientos del paquete.</td><td>Paquete, estado, lugar y responsable.</td></tr>
+        <tr><td>incidencias</td><td>Problemas reportados.</td><td>Paquete y usuario que reporta.</td></tr>
+        <tr><td>evidencias</td><td>Comprobantes y archivos.</td><td>Paquete y usuario que adjunta.</td></tr>
+        <tr><td>usuarios, lugares, estados</td><td>Catálogos de soporte.</td><td>Controlan permisos, origen, destino y flujo.</td></tr>
+      </tbody>
+    </table>
+    <div class="footer"><span>Diagrama incluido en la documentación final</span><span>5</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Roles</div>
+    <h2>Los permisos separan administración, operación y traslado.</h2>
+    <div class="grid3">
+      <div class="box"><h3>Administrador</h3><p>Gestiona usuarios, lugares, estados, paquetes, reportes y auditoría.</p></div>
+      <div class="box"><h3>Usuario</h3><p>Registra y consulta paquetes según los permisos de operación.</p></div>
+      <div class="box"><h3>Motorista</h3><p>Consulta paquetes asignados y registra avances de entrega.</p></div>
+    </div>
+    <div class="footer"><span>Funcionalidades por rol</span><span>6</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Tiempo real</div>
+    <h2>Socket.IO permite actualizar pantallas abiertas cuando cambia la operación.</h2>
+    <ul>
+      <li>Eventos para dashboard, paquetes, tracking, problemas, comprobantes, catálogos y auditoría.</li>
+      <li>Rooms por usuario, rol, paquete y guía para enviar avisos a quien corresponde.</li>
+      <li>Redis ayuda como adapter cuando está disponible; si no, el backend conserva funcionamiento local.</li>
+    </ul>
+    <div class="footer"><span>Criterio de tiempo real</span><span>7</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Calidad</div>
+    <h2>La entrega incluye pruebas, build y CI/CD básico para sostener la defensa.</h2>
+    <div class="grid2">
+      <div class="box"><h3>Validación local</h3><p>Backend build, pruebas Jest/Supertest, frontend build, login demo, seed idempotente y servicios Docker.</p></div>
+      <div class="box"><h3>GitHub Actions</h3><p>Pipeline con instalación, build backend, pruebas backend y build frontend en push o pull request hacia main.</p></div>
+    </div>
+    <div class="footer"><span>Testing y CI/CD</span><span>8</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Documentación</div>
+    <h2>La carpeta final deja evidencia directa para cada requisito del Avance 3.</h2>
+    <table>
+      <thead><tr><th>Documento</th><th>Qué demuestra</th></tr></thead>
+      <tbody>
+        <tr><td>Informe digital final</td><td>Contexto, alcance, arquitectura, pruebas, beneficios y conclusión.</td></tr>
+        <tr><td>Manual técnico</td><td>Tecnologías, instalación, plataforma, hardware, respaldos y estructura.</td></tr>
+        <tr><td>Manual de usuario</td><td>Funcionalidad de cada interfaz con capturas reales.</td></tr>
+        <tr><td>Diagrama de base de datos</td><td>Colecciones MongoDB, relaciones y auditoría.</td></tr>
+        <tr><td>Matriz de cumplimiento</td><td>Relación entre requisitos del PDF y evidencia del proyecto.</td></tr>
+      </tbody>
+    </table>
+    <div class="footer"><span>Entrega documental</span><span>9</span></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="kicker">Cierre</div>
+    <h1>El proyecto está listo para defensa académica y pruebas locales.</h1>
+    <p>La aplicación cumple con el flujo principal, roles, base de datos, reportes, tiempo real, pruebas básicas, CI/CD y documentación final. Para producción real quedarían dominio, TLS, monitoreo, secretos formales y almacenamiento externo de archivos.</p>
+    <div class="footer"><span>appTrackingPaquetesAPA</span><span>10</span></div>
+  </section>
+</body>
+</html>
